@@ -1,11 +1,12 @@
 package validation.api.demo.validation;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import validation.api.demo.SystemMessage;
 import validation.api.demo.validation.result.ValidationResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -16,13 +17,30 @@ public abstract class AbstractChainFunction<P> implements ChainFunction {
     protected @NonNull P param;
 
     protected PredicateCluster cluster = new PredicateCluster();
-    private List<PredicateCluster> clusters = Arrays.asList(cluster);
+    protected List<PredicateCluster> clusters = new ArrayList<>(List.of(this.cluster));
 
     @Override
     public abstract AbstractChainFunction<P> and();
 
     @Override
     public abstract AbstractChainFunction<P> or();
+
+    @Override
+    public void validate() {
+        List<SystemMessage> messages = new ArrayList<>();
+
+        for (PredicateCluster predicateCluster : this.clusters) {
+            List<SystemMessage> errors = predicateCluster.computeErrors();
+
+            if (errors.isEmpty()) {
+                return;
+            }
+
+            messages.addAll(errors);
+        }
+
+        throwOnErrors(messages);
+    }
 
     @Override
     public void failFast() {
@@ -36,14 +54,18 @@ public abstract class AbstractChainFunction<P> implements ChainFunction {
     }
 
     @Override
-    public void computeAndFail() {
+    public void computeFails() {
         List<SystemMessage> messages = this.clusters.stream()
                                                     .map(PredicateCluster::computeErrors)
                                                     .flatMap(Collection::stream)
                                                     .collect(Collectors.toList());
 
+        throwOnErrors(messages);
+    }
+
+    private void throwOnErrors(List<SystemMessage> messages) {
         if (!messages.isEmpty()) {
-            throw new RuntimeException("bulk message");
+            throw new RuntimeException(messages.stream().map(SystemMessage::getReasonCode).collect(Collectors.joining("\n")));
         }
     }
 

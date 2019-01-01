@@ -6,7 +6,9 @@ public interface ChainFunction<P> {
 
    ChainFunction<P> or();
 
+    void validate();
+
     void failFast();
 
-    void computeAndFail();
+    void computeFails();
 }

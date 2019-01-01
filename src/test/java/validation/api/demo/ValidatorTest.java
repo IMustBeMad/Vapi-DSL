@@ -15,9 +15,9 @@ public class ValidatorTest {
         String issueNumber = "IR20180203123";
 
         BaseChainFunction.assertThat(issueNumber)
-                         .matches("^IR\\d{11,}")
-                         .and()
-                         .isDate(nmbr -> nmbr.substring(2, 10), "yyyMMdd")
-                         .failFast();
+                         .matches("^IRM\\d{11,}")
+                         .or()
+                         .isDate(nmbr -> nmbr.substring(2, 11), "yyyMMdd")
+                         .computeFails();
     }
 }

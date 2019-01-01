@@ -23,6 +23,7 @@ public class BaseChainFunction<P> extends AbstractChainFunction<P> implements St
     @Override
     public BaseChainFunction<P> or() {
         this.cluster = new PredicateCluster();
+        this.clusters.add(this.cluster);
 
         return this;
     }
