@@ -57,12 +57,15 @@ public abstract class AbstractChainFunction<P> implements ChainFunction {
         }
 
         SystemMessage getFirstError() {
-            return this.validations.stream()
-                                   .map(it -> it.test(param))
-                                   .filter(it -> !it.isValid())
-                                   .findFirst()
-                                   .map(ValidationResult::getReason)
-                                   .orElse(null);
+            for (Validation<P> validation : this.validations) {
+                ValidationResult result = validation.test(param);
+
+                if (!result.isValid()) {
+                    return result.getReason();
+                }
+            }
+
+            return null;
         }
 
         List<SystemMessage> computeErrors() {

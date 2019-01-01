@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
-//@RequiredArgsConstructor(staticName = "assertThat")
-public class BaseChainFunction<P> extends AbstractChainFunction<P> {
+public class BaseChainFunction<P> extends AbstractChainFunction<P> implements StringChainFunctionHolder<P> {
 
     private BaseChainFunction(P param) {
         super();
@@ -18,36 +17,39 @@ public class BaseChainFunction<P> extends AbstractChainFunction<P> {
 
     @Override
     public BaseChainFunction<P> and() {
-        return mySelf();
+        return this;
     }
 
     @Override
     public BaseChainFunction<P> or() {
         this.cluster = new PredicateCluster();
 
-        return mySelf();
-    }
-
-    private BaseChainFunction<P> mySelf() {
         return this;
     }
 
-    public BaseChainFunction<P> matches(String pattern) {
+    @Override
+    public BaseChainFunction<String> matches(String pattern) {
         this.cluster.push(param -> ((String) param).matches(pattern), "error.pattern.not.matched");
 
         return mySelf();
     }
 
-    public BaseChainFunction<P> isDate(String byPattern) {
+    @Override
+    public BaseChainFunction<String> isDate(String byPattern) {
         this.cluster.push(param -> isDate((String) param, byPattern), "error.is.not.a.date.by.pattern");
 
         return mySelf();
     }
 
-    public BaseChainFunction<P> isDate(Function<P, P> mutator, String byPattern) {
-        this.cluster.push(param -> isDate(((String) mutator.apply(param)), byPattern), "error.is.not.a.date.by.pattern");
+    @Override
+    public BaseChainFunction<P> isDate(Function<P, String> mutator, String byPattern) {
+        this.cluster.push(param -> isDate(mutator.apply(param), byPattern), "error.is.not.a.date.by.pattern");
 
-        return mySelf();
+        return this;
+    }
+
+    private <T> BaseChainFunction<T> mySelf() {
+        return (BaseChainFunction<T>) this;
     }
 
     private boolean isDate(String param, String byPattern) {
