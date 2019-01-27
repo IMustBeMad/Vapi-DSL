@@ -1,6 +1,6 @@
 package validation.api.demo.validation.result;
 
-import validation.api.demo.SystemMessage;
+import validation.api.demo.exception.SystemMessage;
 
 public interface ValidationResult {
 
