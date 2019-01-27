@@ -2,10 +2,12 @@ package validation.api.demo.validation.domain;
 
 import validation.api.demo.common.Condition;
 import validation.api.demo.common.ConditionCluster;
+import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.result.ValidationResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,10 +24,34 @@ public abstract class ValidationHolder<T> {
                 ValidationResult result = this.test(condition);
 
                 if (!result.isValid()) {
-                    throw new ValidationException(result.getReason());
+                    throw ValidationException.withError(result.getReason());
                 }
             }
         }
+    }
+
+    public void computeFails() {
+        List<SystemMessage> systemMessages = this.perform();
+
+        if (!systemMessages.isEmpty()) {
+            throw ValidationException.withError(systemMessages);
+        }
+    }
+
+    public List<SystemMessage> perform() {
+        List<SystemMessage> systemMessages = new ArrayList<>();
+
+        for (ConditionCluster<T> cluster : this.conditionClusters) {
+            for (Condition<T> condition : cluster.getConditions()) {
+                ValidationResult result = this.test(condition);
+
+                if (!result.isValid()) {
+                    systemMessages.add(result.getReason());
+                }
+            }
+        }
+
+        return systemMessages;
     }
 
     protected void memoize(Condition<T> condition) {

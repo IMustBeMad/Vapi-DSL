@@ -11,8 +11,6 @@ import validation.api.demo.validation.Validation;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ValidatorTest {
@@ -21,7 +19,8 @@ public class ValidatorTest {
     public void test() {
         String issueNumber = "IR20180203123";
 
-        assertThat(issueNumber);
+        Validation.verifyIf(issueNumber)
+                  .matches("IR\\.*", "does not match");
     }
 
     @Test
@@ -31,8 +30,9 @@ public class ValidatorTest {
         Validation.verifyIf(testObj)
                   .isNotNull("Object is null")
                   .isEqualTo(testObj, "Does not equal")
+//                  .inspecting(TestObject::getName, it -> matches("Fancy\\.*"))
+
 //                  .inspecting(TestObject::getId, id -> Validation.assertThat(id).isNumber().isGt(43L))
-//                  .inspecting(TestObject::getName, matches("Fancy\\.*"))
                   .failFast();
     }
 

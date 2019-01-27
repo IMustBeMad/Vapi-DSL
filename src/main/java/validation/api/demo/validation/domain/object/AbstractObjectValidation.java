@@ -7,7 +7,7 @@ import validation.api.demo.validation.domain.ValidationHolder;
 import java.util.Objects;
 
 @AllArgsConstructor
-public abstract class AbstractObjectValidation extends ValidationHolder<Object> {
+public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation isNull(String onError) {
         memoize(new Condition<>(Objects::isNull, onError));
