@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 @AllArgsConstructor
 public abstract class AbstractStringValidation extends AbstractObjectValidation<String> {
 
@@ -24,12 +27,22 @@ public abstract class AbstractStringValidation extends AbstractObjectValidation<
     }
 
     @Override
-    public AbstractStringValidation isEqualTo(String otherObj, String onError) {
-        return (AbstractStringValidation) super.isEqualTo(otherObj, onError);
+    public AbstractStringValidation isEqualTo(String otherString, String onError) {
+        return (AbstractStringValidation) super.isEqualTo(otherString, onError);
     }
 
     @Override
-    public AbstractStringValidation isNotEqualTo(String otherObj, String onError) {
-        return (AbstractStringValidation) super.isNotEqualTo(otherObj, onError);
+    public AbstractStringValidation isNotEqualTo(String otherString, String onError) {
+        return (AbstractStringValidation) super.isNotEqualTo(otherString, onError);
+    }
+
+    @Override
+    public AbstractStringValidation withTerm(Predicate<String> predicate, String onError) {
+        return (AbstractStringValidation) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractStringValidation inspecting(Function<String, R> mapper, Predicate<R> predicate, String onError) {
+        return (AbstractStringValidation) super.inspecting(mapper, predicate, onError);
     }
 }

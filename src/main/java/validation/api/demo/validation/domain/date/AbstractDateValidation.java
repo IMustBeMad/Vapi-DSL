@@ -5,6 +5,8 @@ import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.time.LocalDate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @AllArgsConstructor
 public abstract class AbstractDateValidation extends AbstractObjectValidation<LocalDate> {
@@ -26,12 +28,22 @@ public abstract class AbstractDateValidation extends AbstractObjectValidation<Lo
     }
 
     @Override
-    public AbstractDateValidation isEqualTo(LocalDate otherObj, String onError) {
-        return (AbstractDateValidation) super.isEqualTo(otherObj, onError);
+    public AbstractDateValidation isEqualTo(LocalDate otherDate, String onError) {
+        return (AbstractDateValidation) super.isEqualTo(otherDate, onError);
     }
 
     @Override
-    public AbstractDateValidation isNotEqualTo(LocalDate otherObj, String onError) {
-        return (AbstractDateValidation) super.isNotEqualTo(otherObj, onError);
+    public AbstractDateValidation isNotEqualTo(LocalDate otherDate, String onError) {
+        return (AbstractDateValidation) super.isNotEqualTo(otherDate, onError);
+    }
+
+    @Override
+    public AbstractDateValidation withTerm(Predicate<LocalDate> predicate, String onError) {
+        return (AbstractDateValidation) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractDateValidation inspecting(Function<LocalDate, R> mapper, Predicate<R> predicate, String onError) {
+        return (AbstractDateValidation) super.inspecting(mapper, predicate, onError);
     }
 }

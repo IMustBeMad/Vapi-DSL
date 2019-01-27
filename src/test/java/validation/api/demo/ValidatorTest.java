@@ -23,12 +23,12 @@ public class ValidatorTest {
                   .isNull("test")
                   .isEqualTo(43L, "")
                   .isGt(45L, "")
-                  .perform();
+                  .examine();
 
         Validation.verifyIf(issueNumber)
                   .isEqualTo("test", "lala")
                   .matches("IR\\.*", "does not match")
-                  .perform();
+                  .examine();
     }
 
     @Test
@@ -38,10 +38,15 @@ public class ValidatorTest {
         Validation.verifyIf(testObj)
                   .isNotNull("Object is null")
                   .isEqualTo(testObj, "Does not equal")
-//                  .inspecting(TestObject::getName, it -> matches("Fancy\\.*"))
-
+                  .withTerm(this::isSavedInRepository, "does not saved")
+                  .inspecting(TestObject::getName, it -> it.matches("Fancy.*"), "not matches")
 //                  .inspecting(TestObject::getId, id -> Validation.assertThat(id).isNumber().isGt(43L))
                   .failFast();
+    }
+
+    private boolean isSavedInRepository(TestObject testObject) {
+//        repository check for instance
+        return true;
     }
 
     private TestObject getTestObj() {

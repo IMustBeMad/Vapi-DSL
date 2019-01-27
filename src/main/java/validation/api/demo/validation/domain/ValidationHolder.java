@@ -30,15 +30,15 @@ public abstract class ValidationHolder<T> {
         }
     }
 
-    public void computeFails() {
-        List<SystemMessage> systemMessages = this.perform();
+    public void failSafe() {
+        List<SystemMessage> systemMessages = this.examine();
 
         if (!systemMessages.isEmpty()) {
             throw ValidationException.withError(systemMessages);
         }
     }
 
-    public List<SystemMessage> perform() {
+    public List<SystemMessage> examine() {
         List<SystemMessage> systemMessages = new ArrayList<>();
 
         for (ConditionCluster<T> cluster : this.conditionClusters) {
