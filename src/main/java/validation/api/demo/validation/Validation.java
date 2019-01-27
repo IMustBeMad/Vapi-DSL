@@ -27,7 +27,7 @@ public class Validation {
         return new LongValidation(aLong);
     }
 
-    public static AbstractObjectValidation verifyIf(Object obj) {
+    public static AbstractObjectValidation<Object> verifyIf(Object obj) {
         return new ObjectValidation(obj);
     }
 

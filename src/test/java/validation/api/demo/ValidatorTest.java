@@ -19,8 +19,16 @@ public class ValidatorTest {
     public void test() {
         String issueNumber = "IR20180203123";
 
+        Validation.verifyIf(42L)
+                  .isNull("test")
+                  .isEqualTo(43L, "")
+                  .isGt(45L, "")
+                  .perform();
+
         Validation.verifyIf(issueNumber)
-                  .matches("IR\\.*", "does not match");
+                  .isEqualTo("test", "lala")
+                  .matches("IR\\.*", "does not match")
+                  .perform();
     }
 
     @Test

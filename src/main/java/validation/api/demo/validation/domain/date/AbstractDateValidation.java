@@ -14,4 +14,24 @@ public abstract class AbstractDateValidation extends AbstractObjectValidation<Lo
 
         return this;
     }
+
+    @Override
+    public AbstractDateValidation isNull(String onError) {
+        return (AbstractDateValidation) super.isNull(onError);
+    }
+
+    @Override
+    public AbstractDateValidation isNotNull(String onError) {
+        return (AbstractDateValidation) super.isNotNull(onError);
+    }
+
+    @Override
+    public AbstractDateValidation isEqualTo(LocalDate otherObj, String onError) {
+        return (AbstractDateValidation) super.isEqualTo(otherObj, onError);
+    }
+
+    @Override
+    public AbstractDateValidation isNotEqualTo(LocalDate otherObj, String onError) {
+        return (AbstractDateValidation) super.isNotEqualTo(otherObj, onError);
+    }
 }

@@ -9,25 +9,25 @@ import java.util.Objects;
 @AllArgsConstructor
 public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
-    public AbstractObjectValidation isNull(String onError) {
+    public AbstractObjectValidation<T> isNull(String onError) {
         memoize(new Condition<>(Objects::isNull, onError));
 
         return this;
     }
 
-    public AbstractObjectValidation isNotNull(String onError) {
+    public AbstractObjectValidation<T> isNotNull(String onError) {
         memoize(new Condition<>(Objects::nonNull, onError));
 
         return this;
     }
 
-    public AbstractObjectValidation isEqualTo(Object otherObj, String onError) {
+    public AbstractObjectValidation<T> isEqualTo(T otherObj, String onError) {
         memoize(new Condition<>(it -> it.equals(otherObj), onError));
 
         return this;
     }
 
-    public AbstractObjectValidation isNotEqualTo(Object otherObj, String onError) {
+    public AbstractObjectValidation<T> isNotEqualTo(T otherObj, String onError) {
         memoize(new Condition<>(it -> !it.equals(otherObj), onError));
 
         return this;

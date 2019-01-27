@@ -12,4 +12,24 @@ public abstract class AbstractLongValidation extends AbstractObjectValidation<Lo
 
         return this;
     }
+
+    @Override
+    public AbstractLongValidation isNull(String onError) {
+        return (AbstractLongValidation) super.isNull(onError);
+    }
+
+    @Override
+    public AbstractLongValidation isNotNull(String onError) {
+        return (AbstractLongValidation) super.isNotNull(onError);
+    }
+
+    @Override
+    public AbstractLongValidation isEqualTo(Long otherObj, String onError) {
+        return (AbstractLongValidation) super.isEqualTo(otherObj, onError);
+    }
+
+    @Override
+    public AbstractLongValidation isNotEqualTo(Long otherObj, String onError) {
+        return (AbstractLongValidation) super.isNotEqualTo(otherObj, onError);
+    }
 }
