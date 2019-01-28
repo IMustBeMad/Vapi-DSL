@@ -10,8 +10,8 @@ import java.util.function.Predicate;
 
 public abstract class AbstractListValidation<T> extends AbstractObjectValidation<List<T>> {
 
-    public AbstractListValidation<T> contains(T obj, String onError) {
-        memoize(new Condition<>(it -> it.contains(obj), onError));
+    public AbstractListValidation<T> contains(T element, String onError) {
+        memoize(new Condition<>(it -> it.contains(element), onError));
 
         return this;
     }
