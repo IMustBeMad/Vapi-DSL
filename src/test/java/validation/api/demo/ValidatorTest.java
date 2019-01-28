@@ -62,7 +62,7 @@ public class ValidatorTest {
                   .isNotNull(ERROR_IS_NULL)
                   .contains("Rick", ERROR_NOT_CONTAINS)
                   .hasNoDuplicates(ERROR_HAS_DUPLICATES)
-                  .hasSize(10, ERROR_WRONG_SIZE)
+                  .ofSize(10, ERROR_WRONG_SIZE)
                   .inspecting(list -> list.get(0), name -> name.equals("Mathew"), ERROR_NOT_EQUALS)
                   .failSafe();
     }

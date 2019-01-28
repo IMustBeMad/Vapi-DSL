@@ -16,7 +16,7 @@ public abstract class AbstractListValidation<T> extends AbstractObjectValidation
         return this;
     }
 
-    public AbstractListValidation<T> hasSize(int size, String onError) {
+    public AbstractListValidation<T> ofSize(int size, String onError) {
         memoize(new Condition<>(it -> it.size() == size, onError));
 
         return this;
@@ -24,6 +24,18 @@ public abstract class AbstractListValidation<T> extends AbstractObjectValidation
 
     public AbstractListValidation<T> hasNoDuplicates(String onError) {
         memoize(new Condition<>(it -> new HashSet<>(it).size() == it.size(), onError));
+
+        return this;
+    }
+
+    public AbstractListValidation<T> isEmpty(String onError) {
+        memoize(new Condition<>(List::isEmpty, onError));
+
+        return this;
+    }
+
+    public AbstractListValidation<T> isNotEmpty(String onError) {
+        memoize(new Condition<>(it -> !it.isEmpty(), onError));
 
         return this;
     }
