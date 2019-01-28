@@ -1,6 +1,5 @@
 package validation.api.demo.validation.domain.object;
 
-import lombok.AllArgsConstructor;
 import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.ValidationHolder;
 
@@ -8,7 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@AllArgsConstructor
 public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation<T> isNull(String onError) {

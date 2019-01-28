@@ -1,6 +1,5 @@
 package validation.api.demo.validation.domain.date;
 
-import lombok.AllArgsConstructor;
 import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
@@ -8,11 +7,16 @@ import java.time.LocalDate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@AllArgsConstructor
 public abstract class AbstractDateValidation extends AbstractObjectValidation<LocalDate> {
 
-    public AbstractDateValidation isGt(LocalDate otherDate, String onError) {
+    public AbstractDateValidation isAfter(LocalDate otherDate, String onError) {
         memoize(new Condition<>(it -> it.isAfter(otherDate), onError));
+
+        return this;
+    }
+
+    public AbstractDateValidation isBefore(LocalDate otherDate, String onError) {
+        memoize(new Condition<>(it -> it.isBefore(otherDate), onError));
 
         return this;
     }

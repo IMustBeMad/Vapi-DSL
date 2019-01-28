@@ -15,37 +15,77 @@ import java.util.List;
 @SpringBootTest
 public class ValidatorTest {
 
+    private static final String ERROR_IS_NULL = "is.null";
+    private static final String ERROR_NOT_EQUALS = "not.equals";
+    private static final String ERROR_NOT_MATCHED = "not.matched";
+    private static final String ERROR_NOT_GT = "not.gt";
+    private static final String ERROR_NOT_IN_REPO = "not.in.repo";
+    private static final String ERROR_NOT_CONTAINS = "not.contains";
+    private static final String ERROR_HAS_DUPLICATES = "has.duplicates";
+    private static final String ERROR_WRONG_SIZE = "wrong.size";
+
     @Test
-    public void test() {
+    public void testString() {
         String issueNumber = "IR20180203123";
 
-        Validation.verifyIf(42L)
-                  .isNull("test")
-                  .isEqualTo(43L, "")
-                  .isGt(45L, "")
-                  .examine();
-
         Validation.verifyIf(issueNumber)
-                  .isEqualTo("test", "lala")
-                  .matches("IR\\.*", "does not match")
+                  .isNotNull(ERROR_IS_NULL)
+                  .isEqualTo("test", ERROR_NOT_EQUALS)
+                  .matches("IR\\.*", ERROR_NOT_MATCHED)
                   .examine();
     }
 
     @Test
-    public void testValidation() {
+    public void testDate() {
+        LocalDate now = LocalDate.now();
+
+        Validation.verifyIf(now)
+                  .isEqualTo(now.plusDays(1), ERROR_NOT_EQUALS)
+                  .isAfter(now.minusDays(1), ERROR_NOT_GT)
+                  .failSafe();
+    }
+
+    @Test
+    public void testLong() {
+        Validation.verifyIf(42L)
+                  .isNull(ERROR_IS_NULL)
+                  .isEqualTo(43L, ERROR_NOT_EQUALS)
+                  .isGt(45L, ERROR_NOT_GT)
+                  .examine();
+    }
+
+    @Test
+    public void testList() {
+        List<String> names = List.of("John", "Rick", "Mathew", "Max", "Jamie", "John");
+
+        Validation.verifyIf(names)
+                  .isNotNull(ERROR_IS_NULL)
+                  .contains("Rick", ERROR_NOT_CONTAINS)
+                  .hasNoDuplicates(ERROR_HAS_DUPLICATES)
+                  .hasSize(10, ERROR_WRONG_SIZE)
+                  .inspecting(list -> list.get(0), name -> name.equals("Mathew"), ERROR_NOT_EQUALS)
+                  .failSafe();
+    }
+
+    @Test
+    public void testObject() {
         TestObject testObj = getTestObj();
 
         Validation.verifyIf(testObj)
-                  .isNotNull("Object is null")
-                  .isEqualTo(testObj, "Does not equal")
-                  .withTerm(this::isSavedInRepository, "does not saved")
-                  .inspecting(TestObject::getName, it -> it.matches("Fancy.*"), "not matches")
-//                  .inspecting(TestObject::getId, id -> Validation.assertThat(id).isNumber().isGt(43L))
+                  .isNotNull(ERROR_IS_NULL)
+                  .isEqualTo(testObj, ERROR_NOT_EQUALS)
+                  .withTerm(this::isSavedInRepository, ERROR_NOT_IN_REPO)
+                  .inspecting(TestObject::getName, it -> it.matches("Fancy.*"), ERROR_NOT_MATCHED)
                   .failFast();
     }
 
+    //                  .inspecting(TestObject::getId, id -> Validation.assertThat(id).isNumber().isAfter(43L))
+
+
+
+
+    /*repository check for instance*/
     private boolean isSavedInRepository(TestObject testObject) {
-//        repository check for instance
         return true;
     }
 

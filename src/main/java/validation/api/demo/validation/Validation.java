@@ -2,6 +2,8 @@ package validation.api.demo.validation;
 
 import validation.api.demo.validation.domain.date.AbstractDateValidation;
 import validation.api.demo.validation.domain.date.impl.DateValidation;
+import validation.api.demo.validation.domain.list.AbstractListValidation;
+import validation.api.demo.validation.domain.list.impl.ListValidation;
 import validation.api.demo.validation.domain.number.AbstractLongValidation;
 import validation.api.demo.validation.domain.number.impl.LongValidation;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
@@ -12,6 +14,7 @@ import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.result.impl.ValidationResultImpl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Validation {
 
@@ -25,6 +28,10 @@ public class Validation {
 
     public static AbstractLongValidation verifyIf(Long aLong) {
         return new LongValidation(aLong);
+    }
+
+    public static <T> AbstractListValidation<T> verifyIf(List<T> list) {
+        return new ListValidation<>(list);
     }
 
     public static <T> AbstractObjectValidation<T> verifyIf(T obj) {
