@@ -3,9 +3,11 @@ package validation.api.demo.validation.domain.object;
 import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.ValidationHolder;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
@@ -43,5 +45,20 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
         memoize(new Condition<>(it -> predicate.test(mapper.apply((T) it)), onError));
 
         return this;
+    }
+
+    public <R> AbstractObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+        List<Condition<R>> fails = validator.apply(mapper.apply(this.obj))
+                                            .innerExamine();
+
+        memoize(new Condition<>(it -> fails.isEmpty(), collectMessages(fails)));
+
+        return this;
+    }
+
+    private <R> String collectMessages(List<Condition<R>> fails) {
+        return fails.stream()
+                    .map(Condition::getOnError)
+                    .collect(Collectors.joining("\n"));
     }
 }

@@ -76,13 +76,13 @@ public class ValidatorTest {
                   .isEqualTo(testObj, ERROR_NOT_EQUALS)
                   .withTerm(this::isSavedInRepository, ERROR_NOT_IN_REPO)
                   .inspecting(TestObject::getName, it -> it.matches("Fancy.*"), ERROR_NOT_MATCHED)
+                  .inspecting(
+                          TestObject::getId,
+                          id -> Validation.verifyIf(id)
+                                          .isNull(ERROR_IS_NULL)
+                                          .isGt(41L, ERROR_NOT_GT))
                   .failFast();
     }
-
-    //                  .inspecting(TestObject::getId, id -> Validation.assertThat(id).isNumber().isAfter(43L))
-
-
-
 
     /*repository check for instance*/
     private boolean isSavedInRepository(TestObject testObject) {

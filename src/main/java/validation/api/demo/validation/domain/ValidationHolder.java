@@ -7,9 +7,10 @@ import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.result.ValidationResult;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public abstract class ValidationHolder<T> {
@@ -39,23 +40,26 @@ public abstract class ValidationHolder<T> {
     }
 
     public List<SystemMessage> examine() {
-        List<SystemMessage> systemMessages = new ArrayList<>();
-
-        for (ConditionCluster<T> cluster : this.conditionClusters) {
-            for (Condition<T> condition : cluster.getConditions()) {
-                ValidationResult result = this.test(condition);
-
-                if (!result.isValid()) {
-                    systemMessages.add(result.getReason());
-                }
-            }
-        }
-
-        return systemMessages;
+        return this.conditionClusters.stream()
+                                     .map(ConditionCluster::getConditions)
+                                     .flatMap(Collection::stream)
+                                     .map(this::test)
+                                     .filter(it -> !it.isValid())
+                                     .map(ValidationResult::getReason)
+                                     .collect(Collectors.toList());
     }
 
     protected void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
+    }
+
+    protected List<Condition<T>> innerExamine() {
+        return this.conditionClusters.stream()
+                                     .map(ConditionCluster::getConditions)
+                                     .flatMap(Collection::stream)
+                                     .filter(it -> !this.test(it).isValid())
+                                     .collect(Collectors.toList());
+
     }
 
     private ValidationResult test(Condition<T> condition) {
