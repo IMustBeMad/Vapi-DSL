@@ -75,13 +75,24 @@ public class ValidatorTest {
                   .isNotNull(ERROR_IS_NULL)
                   .isEqualTo(testObj, ERROR_NOT_EQUALS)
                   .withTerm(this::isSavedInRepository, ERROR_NOT_IN_REPO)
-                  .inspecting(TestObject::getName, it -> it.matches("Fancy.*"), ERROR_NOT_MATCHED)
+                  .inspecting(TestObject::getName, name -> name.matches("Fancy.*"), ERROR_NOT_MATCHED)
                   .inspecting(
                           TestObject::getId,
                           id -> Validation.verifyIf(id)
                                           .isNull(ERROR_IS_NULL)
                                           .isGt(41L, ERROR_NOT_GT))
                   .failFast();
+    }
+
+    @Test
+    public void testArray() {
+        String[] strings = {"test", "test2"};
+
+        Validation.verifyIf(strings)
+                  .contains("test", ERROR_NOT_CONTAINS)
+                  .ofSize(2, ERROR_WRONG_SIZE)
+                  .inspecting(array -> array[0], el -> el.equals("test"), ERROR_NOT_EQUALS)
+                  .failSafe();
     }
 
     /*repository check for instance*/

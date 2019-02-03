@@ -1,5 +1,7 @@
 package validation.api.demo.validation;
 
+import validation.api.demo.validation.domain.array.AbstractArrayValidation;
+import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 import validation.api.demo.validation.domain.date.AbstractDateValidation;
 import validation.api.demo.validation.domain.date.impl.DateValidation;
 import validation.api.demo.validation.domain.list.AbstractListValidation;
@@ -36,6 +38,10 @@ public class Validation {
 
     public static <T> AbstractObjectValidation<T> verifyIf(T obj) {
         return new ObjectValidation<>(obj);
+    }
+
+    public static <T> AbstractArrayValidation<T> verifyIf(T[] array) {
+        return new ArrayValidation<>(array);
     }
 
     public static ValidationResult ok() {
