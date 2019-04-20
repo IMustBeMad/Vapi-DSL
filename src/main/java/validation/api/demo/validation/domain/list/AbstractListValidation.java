@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.list;
 
-import validation.api.demo.common.Condition;
+import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 public abstract class AbstractListValidation<T> extends AbstractObjectValidation<List<T>> {
 
     public AbstractListValidation<T> contains(T element, String onError) {
-        memoize(new Condition<>(it -> it.contains(element), onError));
+        memoize(new Condition<>(it -> it.contains(element)));
 
         return this;
     }

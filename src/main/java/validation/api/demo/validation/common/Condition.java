@@ -1,4 +1,4 @@
-package validation.api.demo.common;
+package validation.api.demo.validation.common;
 
 import lombok.*;
 
@@ -10,8 +10,9 @@ import java.util.function.Predicate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Condition<T> {
 
-    private Predicate<T> predicate;
+    private @NonNull Predicate<T> predicate;
     private String onError;
 }

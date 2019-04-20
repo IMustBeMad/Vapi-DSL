@@ -1,10 +1,11 @@
 package validation.api.demo.validation.domain;
 
-import validation.api.demo.common.Condition;
-import validation.api.demo.common.ConditionCluster;
+import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.common.SubConditionCluster;
 import validation.api.demo.validation.result.ValidationResult;
 
 import java.util.Arrays;
@@ -51,6 +52,10 @@ public abstract class ValidationHolder<T> {
 
     protected void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
+    }
+
+    protected void memoize(SubConditionCluster<T> subConditions) {
+        this.currentCluster.add(subConditions);
     }
 
     protected List<Condition<T>> innerExamine() {

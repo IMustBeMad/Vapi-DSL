@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.string;
 
-import validation.api.demo.common.Condition;
+import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.function.Function;

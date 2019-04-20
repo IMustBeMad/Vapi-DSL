@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.array;
 
-import validation.api.demo.common.Condition;
+import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.Arrays;
