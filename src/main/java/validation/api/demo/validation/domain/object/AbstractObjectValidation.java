@@ -57,6 +57,8 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation<T> isAnyOf(Condition<T> condition1, Condition<T> condition2,  String onError) {
         memoize(new SubConditionCluster<>(List.of(condition1, condition2), onError));
+
+        return this;
     }
 
     public AbstractObjectValidation<T> log(String msg, Object... values) {
