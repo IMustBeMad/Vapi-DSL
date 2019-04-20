@@ -42,8 +42,13 @@ public abstract class AbstractArrayValidation<T> extends AbstractObjectValidatio
     }
 
     @Override
-    public AbstractObjectValidation<T[]> withTerm(Predicate<T[]> predicate, String onError) {
-        return super.withTerm(predicate, onError);
+    public AbstractArrayValidation<T> withTerm(Predicate<T[]> predicate, String onError) {
+        return (AbstractArrayValidation<T>) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public AbstractArrayValidation<T> log(String msg, Object... values) {
+        return (AbstractArrayValidation<T>) super.log(msg, values);
     }
 
     @Override

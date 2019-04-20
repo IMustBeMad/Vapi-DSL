@@ -40,7 +40,17 @@ public abstract class AbstractStringValidation extends AbstractObjectValidation<
     }
 
     @Override
+    public AbstractStringValidation log(String msg, Object... values) {
+        return (AbstractStringValidation) super.log(msg, values);
+    }
+
+    @Override
     public <R> AbstractStringValidation inspecting(Function<String, R> mapper, Predicate<R> predicate, String onError) {
         return (AbstractStringValidation) super.inspecting(mapper, predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractStringValidation inspecting(Function<String, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+        return (AbstractStringValidation) super.inspecting(mapper, validator);
     }
 }

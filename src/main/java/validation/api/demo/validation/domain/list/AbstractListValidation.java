@@ -66,7 +66,17 @@ public abstract class AbstractListValidation<T> extends AbstractObjectValidation
     }
 
     @Override
+    public AbstractListValidation<T> log(String msg, Object... values) {
+        return (AbstractListValidation<T>) super.log(msg, values);
+    }
+
+    @Override
     public <R> AbstractListValidation<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate, String onError) {
         return (AbstractListValidation<T>) super.inspecting(mapper, predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractListValidation<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+        return (AbstractListValidation<T>) super.inspecting(mapper, validator);
     }
 }

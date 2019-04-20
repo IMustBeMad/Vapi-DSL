@@ -1,4 +1,4 @@
-package validation.api.demo.common.test;
+package validation.api.demo.data.common;
 
 import lombok.*;
 

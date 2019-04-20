@@ -47,7 +47,17 @@ public abstract class AbstractDateValidation extends AbstractObjectValidation<Lo
     }
 
     @Override
+    public AbstractDateValidation log(String msg, Object... values) {
+        return (AbstractDateValidation) super.log(msg, values);
+    }
+
+    @Override
     public <R> AbstractDateValidation inspecting(Function<LocalDate, R> mapper, Predicate<R> predicate, String onError) {
         return (AbstractDateValidation) super.inspecting(mapper, predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractDateValidation inspecting(Function<LocalDate, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+        return (AbstractDateValidation) super.inspecting(mapper, validator);
     }
 }

@@ -1,5 +1,6 @@
 package validation.api.demo.validation.domain.object;
 
+import lombok.extern.slf4j.Slf4j;
 import validation.api.demo.common.Condition;
 import validation.api.demo.validation.domain.ValidationHolder;
 
@@ -9,6 +10,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation<T> isNull(String onError) {
@@ -37,6 +39,12 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation<T> withTerm(Predicate<T> predicate, String onError) {
         memoize(new Condition<>(predicate, onError));
+
+        return this;
+    }
+
+    public AbstractObjectValidation<T> log(String msg, Object... values) {
+        log.debug(msg, values);
 
         return this;
     }

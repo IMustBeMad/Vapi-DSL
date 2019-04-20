@@ -14,6 +14,12 @@ public abstract class AbstractLongValidation extends AbstractObjectValidation<Lo
         return this;
     }
 
+    public AbstractLongValidation isGte(Long otherLong, String onError) {
+        memoize(new Condition<>(it -> it.compareTo(otherLong) >= 0, onError));
+
+        return this;
+    }
+
     public AbstractLongValidation isLt(Long otherLong, String onError) {
         memoize(new Condition<>(it -> it.compareTo(otherLong) < 0, onError));
 
@@ -46,7 +52,17 @@ public abstract class AbstractLongValidation extends AbstractObjectValidation<Lo
     }
 
     @Override
+    public AbstractLongValidation log(String msg, Object... values) {
+        return (AbstractLongValidation) super.log(msg, values);
+    }
+
+    @Override
     public <R> AbstractLongValidation inspecting(Function<Long, R> mapper, Predicate<R> predicate, String onError) {
         return (AbstractLongValidation) super.inspecting(mapper, predicate, onError);
+    }
+
+    @Override
+    public <R> AbstractLongValidation inspecting(Function<Long, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+        return (AbstractLongValidation) super.inspecting(mapper, validator);
     }
 }

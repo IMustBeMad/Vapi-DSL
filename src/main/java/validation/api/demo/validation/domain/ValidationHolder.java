@@ -59,7 +59,6 @@ public abstract class ValidationHolder<T> {
                                      .flatMap(Collection::stream)
                                      .filter(it -> !this.test(it).isValid())
                                      .collect(Collectors.toList());
-
     }
 
     private ValidationResult test(Condition<T> condition) {

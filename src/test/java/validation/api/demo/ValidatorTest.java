@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import validation.api.demo.common.test.InnerTestObject;
-import validation.api.demo.common.test.TestObject;
+import validation.api.demo.data.common.InnerTestObject;
+import validation.api.demo.data.common.TestObject;
 import validation.api.demo.validation.Validation;
 
 import java.time.LocalDate;
@@ -63,7 +63,7 @@ public class ValidatorTest {
                   .contains("Rick", ERROR_NOT_CONTAINS)
                   .hasNoDuplicates(ERROR_HAS_DUPLICATES)
                   .ofSize(10, ERROR_WRONG_SIZE)
-                  .inspecting(list -> list.get(0), name -> name.equals("Mathew"), ERROR_NOT_EQUALS)
+                  .inspecting(list -> list.get(0), name -> Validation.verifyIf(name).isEqualTo("test", ERROR_NOT_EQUALS))
                   .failSafe();
     }
 
