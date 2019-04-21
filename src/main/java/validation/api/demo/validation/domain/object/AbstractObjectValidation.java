@@ -22,7 +22,7 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
     }
 
     public AbstractObjectValidation<T> isNotNull(String onError) {
-        registerCondition(ObjectConditions.isNotNull(), onError);
+        preTest(ObjectConditions.isNotNull(), onError);
 
         return this;
     }

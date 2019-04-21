@@ -51,6 +51,14 @@ public abstract class ValidationHolder<T> {
                                      .collect(Collectors.toList());
     }
 
+    protected void preTest(SingleCondition<T> condition, String onError) {
+        ValidationResult result = this.test(toSingleCondition(condition, onError));
+
+        if (!result.isValid()) {
+            throw ValidationException.withError(result.getReason());
+        }
+    }
+
     protected void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
     }
@@ -71,11 +79,15 @@ public abstract class ValidationHolder<T> {
     }
 
     protected void registerCondition(SingleCondition<T> condition, String onError) {
+        this.memoize(toSingleCondition(condition, onError));
+    }
+
+    private SingleCondition<T> toSingleCondition(SingleCondition<T> condition, String onError) {
         SingleCondition<T> singleCondition = new SingleCondition<>();
         singleCondition.setPredicate(condition.getPredicate());
         singleCondition.setOnError(onError);
 
-        this.memoize(singleCondition);
+        return singleCondition;
     }
 
     private ValidationResult test(Condition<T> condition) {

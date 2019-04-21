@@ -3,9 +3,12 @@ package validation.api.demo.data.validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
+
+import java.util.Optional;
 
 import static validation.api.demo.validation.domain.number.LongConditions.*;
 
@@ -35,6 +38,9 @@ public class UserValidatorNew {
     }
 
     private Long getClientId(User user) {
-        return user.getClient().getId();
+        return Optional.ofNullable(user)
+                       .map(User::getClient)
+                       .map(Client::getId)
+                       .orElse(null);
     }
 }

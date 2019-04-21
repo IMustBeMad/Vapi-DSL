@@ -1,5 +1,6 @@
 package validation.api.demo.data.validator;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
+import validation.api.demo.exception.ValidationException;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
@@ -20,6 +22,7 @@ import static org.mockito.Mockito.verify;
 public class UserValidatorNewTest {
 
     private static final Long USER_ID = 1L;
+    private static final Long INVAlID_CLIENT_ID = -10L;
     private static final Long CLIENT_ID = 2L;
 
     @Autowired
@@ -30,7 +33,7 @@ public class UserValidatorNewTest {
 
     @Test
     public void should_beNoErrors_when_userClientIdIsEqualToOrderClientId() {
-        Mockito.when(userService.getOne(anyLong())).thenReturn(getUser());
+        Mockito.when(userService.getOne(anyLong())).thenReturn(getUser(CLIENT_ID));
 
         userValidatorNew.verifyUserNew(USER_ID, CLIENT_ID);
     }
@@ -42,10 +45,25 @@ public class UserValidatorNewTest {
         verify(userService, never()).getOne(anyLong());
     }
 
+    @Test
+    public void should_throwError_when_serviceReturnsNull() {
+        Mockito.when(userService.getOne(anyLong())).thenReturn(null);
 
-    private User getUser() {
+        Assertions.assertThatThrownBy(() -> userValidatorNew.verifyUserNew(USER_ID, CLIENT_ID))
+                  .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    public void should_throwError_when_serviceReturnsNegativeClientId() {
+        Mockito.when(userService.getOne(anyLong())).thenReturn(getUser(INVAlID_CLIENT_ID));
+
+        Assertions.assertThatThrownBy(() -> userValidatorNew.verifyUserNew(USER_ID, CLIENT_ID))
+                  .isInstanceOf(ValidationException.class);
+    }
+
+    private User getUser(Long clientId) {
         Client client = new Client();
-        client.setId(CLIENT_ID);
+        client.setId(clientId);
 
         User user = new User();
         user.setClient(client);
