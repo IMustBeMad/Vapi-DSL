@@ -7,8 +7,7 @@ import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
 
-import static validation.api.demo.validation.domain.number.LongConditions.isEqualTo;
-import static validation.api.demo.validation.domain.number.LongConditions.isGte;
+import static validation.api.demo.validation.domain.number.LongConditions.*;
 
 @Slf4j
 @Service
@@ -31,8 +30,6 @@ public class UserValidatorNew {
                           this::getClientId,
                           id -> Validation.verifyIf(id)
                                           .isAnyOf(isGte(1L), isEqualTo(orderClientId), "invalid user")
-                                          .or()
-                                          .allOf(isEqualTo(orderClientId), contains(123L))
                   )
                   .failFast();
     }

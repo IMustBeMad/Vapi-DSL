@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.array;
 
-import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.Arrays;
@@ -10,13 +10,13 @@ import java.util.function.Predicate;
 public abstract class AbstractArrayValidation<T> extends AbstractObjectValidation<T[]> {
 
     public AbstractArrayValidation<T> contains(T element, String onError) {
-        memoize(new Condition<>(array -> Arrays.asList(array).contains(element), onError));
+        memoize(new SingleCondition<>(array -> Arrays.asList(array).contains(element), onError));
 
         return this;
     }
 
     public AbstractArrayValidation<T> ofSize(int size, String onError) {
-        memoize(new Condition<>(array -> array.length == size, onError));
+        memoize(new SingleCondition<>(array -> array.length == size, onError));
 
         return this;
     }

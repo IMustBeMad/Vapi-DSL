@@ -1,31 +1,30 @@
 package validation.api.demo.validation.domain.number;
 
-import validation.api.demo.validation.common.Condition;
-import validation.api.demo.validation.domain.object.ObjectConditions;
+import validation.api.demo.validation.common.SingleCondition;
 
-public class LongConditions extends ObjectConditions {
+public class LongConditions {
 
-    public static Condition<Long> isEqualTo(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) == 0);
+    public static SingleCondition<Long> isEqualTo(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) == 0);
     }
 
-    public static Condition<Long> isNotEqualTo(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) != 0);
+    public static SingleCondition<Long> isNotEqualTo(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) != 0);
     }
 
-    public static Condition<Long> isGt(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) > 0);
+    public static SingleCondition<Long> isGt(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) > 0);
     }
 
-    public static Condition<Long> isGte(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) >= 0);
+    public static SingleCondition<Long> isGte(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) >= 0);
     }
 
-    public static Condition<Long> isLt(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) < 0);
+    public static SingleCondition<Long> isLt(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) < 0);
     }
 
-    public static Condition<Long> isLte(Long otherLong) {
-        return new Condition<>(it -> it.compareTo(otherLong) <= 0);
+    public static SingleCondition<Long> isLte(Long otherLong) {
+        return new SingleCondition<>(it -> it.compareTo(otherLong) <= 0);
     }
 }

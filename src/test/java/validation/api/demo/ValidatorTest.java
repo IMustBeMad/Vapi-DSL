@@ -31,7 +31,7 @@ public class ValidatorTest {
         Validation.verifyIf(issueNumber)
                   .isNotNull(ERROR_IS_NULL)
                   .isEqualTo("test", ERROR_NOT_EQUALS)
-                  .matches("IR\\.*", ERROR_NOT_MATCHED)
+                  .matches("IR.*", ERROR_NOT_MATCHED)
                   .examine();
     }
 

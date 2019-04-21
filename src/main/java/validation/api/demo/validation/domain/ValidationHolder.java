@@ -1,12 +1,13 @@
 package validation.api.demo.validation.domain;
 
-import validation.api.demo.validation.common.Condition;
-import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.exception.ValidationException;
-import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.common.SubConditionCluster;
+import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.ConditionCluster;
+import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.result.ValidationResult;
+import validation.api.demo.validation.tester.impl.LinkedConditionTester;
+import validation.api.demo.validation.tester.impl.SingleConditionTester;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,10 +55,6 @@ public abstract class ValidationHolder<T> {
         this.currentCluster.add(condition);
     }
 
-    protected void memoize(SubConditionCluster<T> subConditions) {
-        this.currentCluster.add(subConditions);
-    }
-
     protected List<Condition<T>> innerExamine() {
         return this.conditionClusters.stream()
                                      .map(ConditionCluster::getConditions)
@@ -66,7 +63,25 @@ public abstract class ValidationHolder<T> {
                                      .collect(Collectors.toList());
     }
 
+    protected void registerCluster() {
+        ConditionCluster<T> conditionCluster = new ConditionCluster<>();
+
+        this.conditionClusters.add(conditionCluster);
+        this.currentCluster = conditionCluster;
+    }
+
+    protected void registerCondition(SingleCondition<T> condition, String onError) {
+        SingleCondition<T> singleCondition = new SingleCondition<>();
+        singleCondition.setPredicate(condition.getPredicate());
+        singleCondition.setOnError(onError);
+
+        this.memoize(singleCondition);
+    }
+
     private ValidationResult test(Condition<T> condition) {
-        return condition.getPredicate().test(this.obj) ? Validation.ok() : Validation.failed(condition.getOnError());
+        boolean singleCondition = condition.getPredicates().size() == 1;
+
+        return singleCondition ? SingleConditionTester.INSTANCE.test(condition, this.obj)
+                               : LinkedConditionTester.INSTANCE.test(condition, this.obj);
     }
 }
