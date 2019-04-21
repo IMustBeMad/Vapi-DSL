@@ -47,6 +47,21 @@ public abstract class AbstractDateValidation extends AbstractObjectValidation<Lo
     }
 
     @Override
+    public AbstractDateValidation isAnyOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
+        return ((AbstractDateValidation) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractDateValidation isAllOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
+        return ((AbstractDateValidation) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractDateValidation or() {
+        return ((AbstractDateValidation) super.or());
+    }
+
+    @Override
     public AbstractDateValidation log(String msg, Object... values) {
         return (AbstractDateValidation) super.log(msg, values);
     }

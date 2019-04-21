@@ -40,6 +40,21 @@ public abstract class AbstractStringValidation extends AbstractObjectValidation<
     }
 
     @Override
+    public AbstractStringValidation isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return ((AbstractStringValidation) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractStringValidation isAllOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return ((AbstractStringValidation) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractStringValidation or() {
+        return ((AbstractStringValidation) super.or());
+    }
+
+    @Override
     public AbstractStringValidation log(String msg, Object... values) {
         return (AbstractStringValidation) super.log(msg, values);
     }

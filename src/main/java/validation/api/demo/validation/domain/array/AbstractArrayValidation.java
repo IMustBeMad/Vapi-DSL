@@ -47,6 +47,21 @@ public abstract class AbstractArrayValidation<T> extends AbstractObjectValidatio
     }
 
     @Override
+    public AbstractArrayValidation<T> isAnyOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
+        return ((AbstractArrayValidation<T>) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractArrayValidation<T> isAllOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
+        return ((AbstractArrayValidation<T>) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractArrayValidation<T> or() {
+        return ((AbstractArrayValidation<T>) super.or());
+    }
+
+    @Override
     public AbstractArrayValidation<T> log(String msg, Object... values) {
         return (AbstractArrayValidation<T>) super.log(msg, values);
     }
