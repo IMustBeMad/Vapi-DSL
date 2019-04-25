@@ -80,7 +80,8 @@ public class ValidatorTest {
                           TestObject::getId,
                           id -> Validation.verifyIf(id)
                                           .isNull(ERROR_IS_NULL)
-                                          .isGt(41L, ERROR_NOT_GT))
+                                          .isGt(41L, ERROR_NOT_GT)
+                  )
                   .failFast();
     }
 

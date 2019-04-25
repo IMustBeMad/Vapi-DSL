@@ -22,13 +22,13 @@ public abstract class ValidationHolder<T> {
     private List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
 
     public void failFast() {
-        for (ConditionCluster<T> cluster : this.conditionClusters) {
-            for (Condition<T> condition : cluster.getConditions()) {
-                ValidationResult result = this.test(condition);
+        List<Condition<T>> conditions = this.currentCluster.getConditions();
 
-                if (!result.isValid()) {
-                    throw ValidationException.withError(result.getReason());
-                }
+        for (Condition<T> condition : conditions) {
+            ValidationResult result = this.test(condition);
+
+            if (!result.isValid()) {
+                throw ValidationException.withError(result.getReason());
             }
         }
     }
@@ -42,13 +42,13 @@ public abstract class ValidationHolder<T> {
     }
 
     public List<SystemMessage> examine() {
-        return this.conditionClusters.stream()
-                                     .map(ConditionCluster::getConditions)
-                                     .flatMap(Collection::stream)
-                                     .map(this::test)
-                                     .filter(it -> !it.isValid())
-                                     .map(ValidationResult::getReason)
-                                     .collect(Collectors.toList());
+        List<Condition<T>> conditions = this.currentCluster.getConditions();
+
+        return conditions.stream()
+                         .map(this::test)
+                         .filter(it -> !it.isValid())
+                         .map(ValidationResult::getReason)
+                         .collect(Collectors.toList());
     }
 
     protected void preTest(SingleCondition<T> condition, String onError) {
