@@ -1,18 +1,11 @@
 package validation.api.demo.validation.common;
 
-import lombok.*;
-
+import java.util.List;
 import java.util.function.Predicate;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class Condition<T> {
+public interface Condition<T> {
 
-    private @NonNull Predicate<T> predicate;
-    private String onError;
+    List<Predicate<T>> getPredicates();
+
+    String getOnError();
 }

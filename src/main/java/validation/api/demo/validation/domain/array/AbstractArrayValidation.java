@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.array;
 
-import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.Arrays;
@@ -10,13 +10,13 @@ import java.util.function.Predicate;
 public abstract class AbstractArrayValidation<T> extends AbstractObjectValidation<T[]> {
 
     public AbstractArrayValidation<T> contains(T element, String onError) {
-        memoize(new Condition<>(array -> Arrays.asList(array).contains(element), onError));
+        memoize(new SingleCondition<>(array -> Arrays.asList(array).contains(element), onError));
 
         return this;
     }
 
     public AbstractArrayValidation<T> ofSize(int size, String onError) {
-        memoize(new Condition<>(array -> array.length == size, onError));
+        memoize(new SingleCondition<>(array -> array.length == size, onError));
 
         return this;
     }
@@ -44,6 +44,21 @@ public abstract class AbstractArrayValidation<T> extends AbstractObjectValidatio
     @Override
     public AbstractArrayValidation<T> withTerm(Predicate<T[]> predicate, String onError) {
         return (AbstractArrayValidation<T>) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public AbstractArrayValidation<T> isAnyOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
+        return ((AbstractArrayValidation<T>) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractArrayValidation<T> isAllOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
+        return ((AbstractArrayValidation<T>) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractArrayValidation<T> or() {
+        return ((AbstractArrayValidation<T>) super.or());
     }
 
     @Override

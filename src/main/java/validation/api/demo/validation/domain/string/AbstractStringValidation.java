@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.string;
 
-import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.util.function.Function;
@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 public abstract class AbstractStringValidation extends AbstractObjectValidation<String> {
 
     public AbstractStringValidation matches(String pattern, String onError) {
-        memoize(new Condition<>(it -> it.matches(pattern), onError));
+        memoize(new SingleCondition<>(it -> it.matches(pattern), onError));
 
         return this;
     }
@@ -37,6 +37,21 @@ public abstract class AbstractStringValidation extends AbstractObjectValidation<
     @Override
     public AbstractStringValidation withTerm(Predicate<String> predicate, String onError) {
         return (AbstractStringValidation) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public AbstractStringValidation isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return ((AbstractStringValidation) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractStringValidation isAllOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return ((AbstractStringValidation) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractStringValidation or() {
+        return ((AbstractStringValidation) super.or());
     }
 
     @Override

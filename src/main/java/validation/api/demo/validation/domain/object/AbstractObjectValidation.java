@@ -2,7 +2,9 @@ package validation.api.demo.validation.domain.object;
 
 import lombok.extern.slf4j.Slf4j;
 import validation.api.demo.validation.common.Condition;
-import validation.api.demo.validation.common.SubConditionCluster;
+import validation.api.demo.validation.common.LinkedCondition;
+import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.Clause;
 import validation.api.demo.validation.domain.ValidationHolder;
 
 import java.util.List;
@@ -14,49 +16,49 @@ import java.util.stream.Collectors;
 public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
 
     public AbstractObjectValidation<T> isNull(String onError) {
-        Condition<T> condition = ObjectConditions.isNull();
-        condition.setOnError(onError);
-
-        memoize(condition);
+        registerCondition(ObjectConditions.isNull(), onError);
 
         return this;
     }
 
     public AbstractObjectValidation<T> isNotNull(String onError) {
-        Condition<T> condition = ObjectConditions.isNotNull();
-        condition.setOnError(onError);
-
-        memoize(condition);
+        preTest(ObjectConditions.isNotNull(), onError);
 
         return this;
     }
 
     public AbstractObjectValidation<T> isEqualTo(T otherObj, String onError) {
-        Condition<T> condition = ObjectConditions.isEqualTo(otherObj);
-        condition.setOnError(onError);
-
-        memoize(condition);
+        registerCondition(ObjectConditions.isEqualTo(otherObj), onError);
 
         return this;
     }
 
     public AbstractObjectValidation<T> isNotEqualTo(T otherObj, String onError) {
-        Condition<T> condition = ObjectConditions.isNotEqualTo(otherObj);
-        condition.setOnError(onError);
-
-        memoize(condition);
+        registerCondition(ObjectConditions.isNotEqualTo(otherObj), onError);
 
         return this;
     }
 
     public AbstractObjectValidation<T> withTerm(Predicate<T> predicate, String onError) {
-        memoize(new Condition<>(predicate, onError));
+        memoize(new SingleCondition<>(predicate, onError));
 
         return this;
     }
 
-    public AbstractObjectValidation<T> isAnyOf(Condition<T> condition1, Condition<T> condition2,  String onError) {
-        memoize(new SubConditionCluster<>(List.of(condition1, condition2), onError));
+    public AbstractObjectValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
+        memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.OR, onError));
+
+        return this;
+    }
+
+    public AbstractObjectValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
+        memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.AND, onError));
+
+        return this;
+    }
+
+    public AbstractObjectValidation<T> or() {
+        registerCluster();
 
         return this;
     }
@@ -68,7 +70,7 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
     }
 
     public <R> AbstractObjectValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
-        memoize(new Condition<>(it -> predicate.test(mapper.apply((T) it)), onError));
+        memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it)), onError));
 
         return this;
     }
@@ -77,7 +79,7 @@ public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
         List<Condition<R>> fails = validator.apply(mapper.apply(this.obj))
                                             .innerExamine();
 
-        memoize(new Condition<>(it -> fails.isEmpty(), collectMessages(fails)));
+        memoize(new SingleCondition<>(it -> fails.isEmpty(), collectMessages(fails)));
 
         return this;
     }

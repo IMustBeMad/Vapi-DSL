@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.date;
 
-import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 
 import java.time.LocalDate;
@@ -10,13 +10,13 @@ import java.util.function.Predicate;
 public abstract class AbstractDateValidation extends AbstractObjectValidation<LocalDate> {
 
     public AbstractDateValidation isAfter(LocalDate otherDate, String onError) {
-        memoize(new Condition<>(it -> it.isAfter(otherDate), onError));
+        memoize(new SingleCondition<>(it -> it.isAfter(otherDate), onError));
 
         return this;
     }
 
     public AbstractDateValidation isBefore(LocalDate otherDate, String onError) {
-        memoize(new Condition<>(it -> it.isBefore(otherDate), onError));
+        memoize(new SingleCondition<>(it -> it.isBefore(otherDate), onError));
 
         return this;
     }
@@ -44,6 +44,21 @@ public abstract class AbstractDateValidation extends AbstractObjectValidation<Lo
     @Override
     public AbstractDateValidation withTerm(Predicate<LocalDate> predicate, String onError) {
         return (AbstractDateValidation) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public AbstractDateValidation isAnyOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
+        return ((AbstractDateValidation) super.isAnyOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractDateValidation isAllOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
+        return ((AbstractDateValidation) super.isAllOf(condition1, condition2, onError));
+    }
+
+    @Override
+    public AbstractDateValidation or() {
+        return ((AbstractDateValidation) super.or());
     }
 
     @Override
