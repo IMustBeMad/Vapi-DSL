@@ -25,6 +25,19 @@ public class ValidatorTest {
     private static final String ERROR_WRONG_SIZE = "wrong.size";
 
     @Test
+    public void test() {
+        Validation.verifyIf(getTestObj())
+                  .isNull(ERROR_IS_NULL)
+                  .or()
+                  .isNotNull(ERROR_IS_NULL)
+                  .examine();
+
+        Validation.verifyIf("test")
+                  .isNotNull(ERROR_IS_NULL)
+                  .failFast();
+    }
+
+    /*@Test
     public void testString() {
         String issueNumber = "IR20180203123";
 
@@ -94,7 +107,7 @@ public class ValidatorTest {
                   .ofSize(2, ERROR_WRONG_SIZE)
                   .inspecting(array -> array[0], el -> el.equals("test"), ERROR_NOT_EQUALS)
                   .failSafe();
-    }
+    }*/
 
     /*repository check for instance*/
     private boolean isSavedInRepository(TestObject testObject) {

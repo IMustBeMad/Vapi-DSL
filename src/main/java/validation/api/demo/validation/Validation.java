@@ -1,16 +1,10 @@
 package validation.api.demo.validation;
 
-import validation.api.demo.validation.domain.array.AbstractArrayValidation;
 import validation.api.demo.validation.domain.array.impl.ArrayValidation;
-import validation.api.demo.validation.domain.date.AbstractDateValidation;
 import validation.api.demo.validation.domain.date.impl.DateValidation;
-import validation.api.demo.validation.domain.list.AbstractListValidation;
 import validation.api.demo.validation.domain.list.impl.ListValidation;
-import validation.api.demo.validation.domain.number.AbstractLongValidation;
 import validation.api.demo.validation.domain.number.impl.LongValidation;
-import validation.api.demo.validation.domain.object.AbstractObjectValidation;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
-import validation.api.demo.validation.domain.string.AbstractStringValidation;
 import validation.api.demo.validation.domain.string.impl.StringValidation;
 import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.result.impl.ValidationResultImpl;
@@ -20,27 +14,27 @@ import java.util.List;
 
 public class Validation {
 
-    public static AbstractDateValidation verifyIf(LocalDate date) {
+    public static DateValidation verifyIf(LocalDate date) {
         return new DateValidation(date);
     }
 
-    public static AbstractStringValidation verifyIf(String value) {
+    public static StringValidation verifyIf(String value) {
         return new StringValidation(value);
     }
 
-    public static AbstractLongValidation verifyIf(Long aLong) {
+    public static LongValidation verifyIf(Long aLong) {
         return new LongValidation(aLong);
     }
 
-    public static <T> AbstractListValidation<T> verifyIf(List<T> list) {
+    public static <T> ListValidation<T> verifyIf(List<T> list) {
         return new ListValidation<>(list);
     }
 
-    public static <T> AbstractObjectValidation<T> verifyIf(T obj) {
+    public static <T> ObjectValidation<T> verifyIf(T obj) {
         return new ObjectValidation<>(obj);
     }
 
-    public static <T> AbstractArrayValidation<T> verifyIf(T[] array) {
+    public static <T> ArrayValidation<T> verifyIf(T[] array) {
         return new ArrayValidation<>(array);
     }
 
