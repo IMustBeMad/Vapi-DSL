@@ -6,8 +6,8 @@ import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.result.ValidationResult;
-import validation.api.demo.validation.tester.impl.LinkedConditionTester;
-import validation.api.demo.validation.tester.impl.SingleConditionTester;
+import validation.api.demo.validation.terminator.impl.TerminatorFacade;
+import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,36 +22,22 @@ public abstract class BaseDataHolder<T> {
     private List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
 
     protected void failFast() {
-        List<Condition<T>> conditions = this.currentCluster.getConditions();
-
-        for (Condition<T> condition : conditions) {
-            ValidationResult result = this.test(condition);
-
-            if (!result.isValid()) {
-                throw ValidationException.withError(result.getReason());
-            }
-        }
+        TerminatorFacade.INSTANCE.failFast(this.conditionClusters, this.obj);
     }
 
     protected void failSafe() {
-        List<SystemMessage> systemMessages = this.examine();
-
-        if (!systemMessages.isEmpty()) {
-            throw ValidationException.withError(systemMessages);
-        }
+        TerminatorFacade.INSTANCE.failSafe(this.conditionClusters, this.obj);
     }
 
     protected List<SystemMessage> examine() {
-        List<Condition<T>> conditions = this.currentCluster.getConditions();
-
-        return conditions.stream()
-                         .map(this::test)
-                         .filter(it -> !it.isValid())
-                         .map(ValidationResult::getReason)
-                         .collect(Collectors.toList());
+        return TerminatorFacade.INSTANCE.examine(this.conditionClusters, this.obj);
     }
 
-    protected void preTest(SingleCondition<T> condition, String onError) {
+    protected void failIfNoneGroupMatch() {
+        TerminatorFacade.INSTANCE.failIfNoneGroupMatch(this.conditionClusters, this.obj);
+    }
+
+    void preTest(SingleCondition<T> condition, String onError) {
         ValidationResult result = this.test(toSingleCondition(condition, onError));
 
         if (!result.isValid()) {
@@ -59,11 +45,11 @@ public abstract class BaseDataHolder<T> {
         }
     }
 
-    protected void memoize(Condition<T> condition) {
+    void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
     }
 
-    protected List<Condition<T>> innerExamine() {
+    List<Condition<T>> innerExamine() {
         return this.conditionClusters.stream()
                                      .map(ConditionCluster::getConditions)
                                      .flatMap(Collection::stream)
@@ -71,7 +57,7 @@ public abstract class BaseDataHolder<T> {
                                      .collect(Collectors.toList());
     }
 
-    protected void registerCluster() {
+    void registerCluster() {
         ConditionCluster<T> conditionCluster = new ConditionCluster<>();
 
         this.conditionClusters.add(conditionCluster);
@@ -91,9 +77,6 @@ public abstract class BaseDataHolder<T> {
     }
 
     private ValidationResult test(Condition<T> condition) {
-        boolean singleCondition = condition.getPredicates().size() == 1;
-
-        return singleCondition ? SingleConditionTester.INSTANCE.test(condition, this.obj)
-                               : LinkedConditionTester.INSTANCE.test(condition, this.obj);
+        return TesterFacade.INSTANCE.test(condition, this.obj);
     }
 }

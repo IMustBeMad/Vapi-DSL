@@ -26,4 +26,9 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected void failIfNoneGroupMatch() {
+        super.failIfNoneGroupMatch();
+    }
 }

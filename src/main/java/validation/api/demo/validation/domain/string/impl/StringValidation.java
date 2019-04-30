@@ -26,4 +26,9 @@ public class StringValidation extends AbstractStringClause {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected void failIfNoneGroupMatch() {
+        super.failIfNoneGroupMatch();
+    }
 }

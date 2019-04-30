@@ -27,4 +27,9 @@ public class DateValidation extends AbstractDateClause {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected void failIfNoneGroupMatch() {
+        super.failIfNoneGroupMatch();
+    }
 }

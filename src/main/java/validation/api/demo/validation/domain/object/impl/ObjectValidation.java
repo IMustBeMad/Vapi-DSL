@@ -28,4 +28,9 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected void failIfNoneGroupMatch() {
+        super.failIfNoneGroupMatch();
+    }
 }
