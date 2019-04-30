@@ -61,7 +61,7 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    protected <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
         return (ObjectValidation<T>) super.inspecting(mapper, condition);
     }
 }

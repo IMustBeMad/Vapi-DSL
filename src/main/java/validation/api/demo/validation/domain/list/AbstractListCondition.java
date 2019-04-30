@@ -7,6 +7,7 @@ import validation.api.demo.validation.domain.list.impl.ListValidation;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
 
@@ -89,5 +90,10 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     @Override
     public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ListValidation<T>) super.inspecting(mapper, validator);
+    }
+
+    @Override
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ListValidation<T>) super.inspecting(mapper, condition);
     }
 }

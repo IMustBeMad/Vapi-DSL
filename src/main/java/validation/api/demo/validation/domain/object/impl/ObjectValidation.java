@@ -30,7 +30,7 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }

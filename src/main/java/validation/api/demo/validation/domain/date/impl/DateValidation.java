@@ -29,7 +29,7 @@ public class DateValidation extends AbstractDateClause {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }

@@ -28,7 +28,7 @@ public class LongValidation extends AbstractLongClause {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }

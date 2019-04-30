@@ -28,7 +28,7 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }

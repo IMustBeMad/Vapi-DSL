@@ -28,7 +28,7 @@ public class StringValidation extends AbstractStringClause {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }

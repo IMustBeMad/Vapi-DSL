@@ -28,7 +28,7 @@ public class ListValidation<T> extends AbstractListClause<T> {
     }
 
     @Override
-    protected void failIfNoneGroupMatch() {
+    public void failIfNoneGroupMatch() {
         super.failIfNoneGroupMatch();
     }
 }
