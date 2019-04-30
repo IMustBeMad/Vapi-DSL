@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
+import validation.api.demo.data.validator.user.UserValidatorNew;
 import validation.api.demo.exception.ValidationException;
 
 import static org.mockito.ArgumentMatchers.anyLong;

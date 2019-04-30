@@ -10,6 +10,7 @@ import validation.api.demo.validation.domain.object.ObjectConditions;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -71,6 +72,12 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
         memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it)), onError));
+
+        return this;
+    }
+
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+        memoize(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it))));
 
         return this;
     }

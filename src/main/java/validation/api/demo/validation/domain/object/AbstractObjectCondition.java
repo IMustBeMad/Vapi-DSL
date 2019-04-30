@@ -6,6 +6,7 @@ import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<T> {
 
@@ -57,5 +58,10 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     @Override
     public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ObjectValidation<T>) super.inspecting(mapper, validator);
+    }
+
+    @Override
+    protected <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ObjectValidation<T>) super.inspecting(mapper, condition);
     }
 }

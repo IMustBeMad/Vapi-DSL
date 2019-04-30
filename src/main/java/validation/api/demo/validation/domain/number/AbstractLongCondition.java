@@ -6,6 +6,7 @@ import validation.api.demo.validation.domain.number.impl.LongValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class AbstractLongCondition extends AbstractBaseValidation<Long> {
 
@@ -64,7 +65,7 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
 
     @Override
     public LongValidation isAnyOf(SingleCondition<Long> condition1, SingleCondition<Long> condition2, String onError) {
-       return (LongValidation) super.isAnyOf(condition1, condition2, onError);
+        return (LongValidation) super.isAnyOf(condition1, condition2, onError);
     }
 
     @Override
@@ -85,5 +86,10 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     @Override
     public <R> LongValidation inspecting(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (LongValidation) super.inspecting(mapper, validator);
+    }
+
+    @Override
+    public <R> LongValidation inspecting(Function<Long, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (LongValidation) super.inspecting(mapper, condition);
     }
 }
