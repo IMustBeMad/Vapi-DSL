@@ -2,6 +2,7 @@ package validation.api.demo.validation.domain.list;
 
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
+import validation.api.demo.validation.domain.list.impl.ListValidation;
 
 import java.util.List;
 import java.util.function.Function;
@@ -9,84 +10,84 @@ import java.util.function.Predicate;
 
 public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
 
-    public AbstractListCondition<T> contains(T element, String onError) {
+    public ListValidation<T> contains(T element, String onError) {
         registerCondition(ListConditions.contains(element), onError);
 
-        return this;
+        return (ListValidation<T>) this;
     }
 
-    public AbstractListCondition<T> ofSize(int size, String onError) {
+    public ListValidation<T> ofSize(int size, String onError) {
         registerCondition(ListConditions.ofSize(size), onError);
 
-        return this;
+        return (ListValidation<T>) this;
     }
 
-    public AbstractListCondition<T> hasNoDuplicates(String onError) {
+    public ListValidation<T> hasNoDuplicates(String onError) {
         registerCondition(ListConditions.hasNoDuplicates(), onError);
 
-        return this;
+        return (ListValidation<T>) this;
     }
 
-    public AbstractListCondition<T> isEmpty(String onError) {
+    public ListValidation<T> isEmpty(String onError) {
         registerCondition(ListConditions.isEmpty(), onError);
 
-        return this;
+        return (ListValidation<T>) this;
     }
 
-    public AbstractListCondition<T> isNotEmpty(String onError) {
+    public ListValidation<T> isNotEmpty(String onError) {
         registerCondition(ListConditions.isNotEmpty(), onError);
 
-        return this;
+        return (ListValidation<T>) this;
     }
 
     @Override
-    public AbstractListCondition<T> isNull(String onError) {
-        return (AbstractListCondition<T>) super.isNull(onError);
+    public ListValidation<T> isNull(String onError) {
+        return (ListValidation<T>) super.isNull(onError);
     }
 
     @Override
-    public AbstractListCondition<T> isNotNull(String onError) {
-        return (AbstractListCondition<T>) super.isNotNull(onError);
+    public ListValidation<T> isNotNull(String onError) {
+        return (ListValidation<T>) super.isNotNull(onError);
     }
 
     @Override
-    public AbstractListCondition<T> isEqualTo(List<T> otherList, String onError) {
-        return (AbstractListCondition<T>) super.isEqualTo(otherList, onError);
+    public ListValidation<T> isEqualTo(List<T> otherList, String onError) {
+        return (ListValidation<T>) super.isEqualTo(otherList, onError);
     }
 
     @Override
-    public AbstractListCondition<T> isNotEqualTo(List<T> otherList, String onError) {
-        return (AbstractListCondition<T>) super.isNotEqualTo(otherList, onError);
+    public ListValidation<T> isNotEqualTo(List<T> otherList, String onError) {
+        return (ListValidation<T>) super.isNotEqualTo(otherList, onError);
     }
 
     @Override
-    public AbstractListCondition<T> withTerm(Predicate<List<T>> predicate, String onError) {
-        return (AbstractListCondition<T>) super.withTerm(predicate, onError);
+    public ListValidation<T> withTerm(Predicate<List<T>> predicate, String onError) {
+        return (ListValidation<T>) super.withTerm(predicate, onError);
     }
 
 
     @Override
-    public AbstractListCondition<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
-        return ((AbstractListCondition<T>) super.isAnyOf(condition1, condition2, onError));
+    public ListValidation<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
+        return (ListValidation<T>) super.isAnyOf(condition1, condition2, onError);
     }
 
     @Override
-    public AbstractListCondition<T> isAllOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
-        return ((AbstractListCondition<T>) super.isAllOf(condition1, condition2, onError));
+    public ListValidation<T> isAllOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
+        return (ListValidation<T>) super.isAllOf(condition1, condition2, onError);
     }
 
     @Override
-    public AbstractListCondition<T> log(String msg, Object... values) {
-        return (AbstractListCondition<T>) super.log(msg, values);
+    public ListValidation<T> log(String msg, Object... values) {
+        return (ListValidation<T>) super.log(msg, values);
     }
 
     @Override
-    public <R> AbstractListCondition<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate, String onError) {
-        return (AbstractListCondition<T>) super.inspecting(mapper, predicate, onError);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate, String onError) {
+        return (ListValidation<T>) super.inspecting(mapper, predicate, onError);
     }
 
     @Override
-    public <R> AbstractListCondition<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (AbstractListCondition<T>) super.inspecting(mapper, validator);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ListValidation<T>) super.inspecting(mapper, validator);
     }
 }

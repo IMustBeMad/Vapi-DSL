@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public abstract class BaseDataHolder<T> {
 
     protected T obj;
-    protected ConditionCluster<T> currentCluster = new ConditionCluster<>();
-    protected List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
+    private ConditionCluster<T> currentCluster = new ConditionCluster<>();
+    private List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
 
-    public void failFast() {
+    protected void failFast() {
         List<Condition<T>> conditions = this.currentCluster.getConditions();
 
         for (Condition<T> condition : conditions) {
@@ -33,7 +33,7 @@ public abstract class BaseDataHolder<T> {
         }
     }
 
-    public void failSafe() {
+    protected void failSafe() {
         List<SystemMessage> systemMessages = this.examine();
 
         if (!systemMessages.isEmpty()) {
@@ -41,7 +41,7 @@ public abstract class BaseDataHolder<T> {
         }
     }
 
-    public List<SystemMessage> examine() {
+    protected List<SystemMessage> examine() {
         List<Condition<T>> conditions = this.currentCluster.getConditions();
 
         return conditions.stream()
@@ -90,7 +90,7 @@ public abstract class BaseDataHolder<T> {
         return singleCondition;
     }
 
-    protected ValidationResult test(Condition<T> condition) {
+    private ValidationResult test(Condition<T> condition) {
         boolean singleCondition = condition.getPredicates().size() == 1;
 
         return singleCondition ? SingleConditionTester.INSTANCE.test(condition, this.obj)

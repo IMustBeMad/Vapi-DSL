@@ -2,77 +2,78 @@ package validation.api.demo.validation.domain.string;
 
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
+import validation.api.demo.validation.domain.string.impl.StringValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class AbstractStringCondition extends AbstractBaseValidation<String> {
 
-    public AbstractStringCondition matches(String pattern, String onError) {
+    public StringValidation matches(String pattern, String onError) {
         registerCondition(StringConditions.matches(pattern), onError);
 
-        return this;
+        return (StringValidation) this;
     }
 
-    public AbstractStringCondition isEmpty(String onError) {
+    public StringValidation isEmpty(String onError) {
         registerCondition(StringConditions.isEmpty(), onError);
 
-        return this;
+        return (StringValidation) this;
     }
 
-    public AbstractStringCondition isNotEmpty(String onError) {
+    public StringValidation isNotEmpty(String onError) {
         registerCondition(StringConditions.isNotEmpty(), onError);
 
-        return this;
+        return (StringValidation) this;
     }
 
     @Override
-    public AbstractStringCondition isNull(String onError) {
-        return (AbstractStringCondition) super.isNull(onError);
+    public StringValidation isNull(String onError) {
+        return (StringValidation) super.isNull(onError);
     }
 
     @Override
-    public AbstractStringCondition isNotNull(String onError) {
-        return (AbstractStringCondition) super.isNotNull(onError);
+    public StringValidation isNotNull(String onError) {
+        return (StringValidation) super.isNotNull(onError);
     }
 
     @Override
-    public AbstractStringCondition isEqualTo(String otherString, String onError) {
-        return (AbstractStringCondition) super.isEqualTo(otherString, onError);
+    public StringValidation isEqualTo(String otherString, String onError) {
+        return (StringValidation) super.isEqualTo(otherString, onError);
     }
 
     @Override
-    public AbstractStringCondition isNotEqualTo(String otherString, String onError) {
-        return (AbstractStringCondition) super.isNotEqualTo(otherString, onError);
+    public StringValidation isNotEqualTo(String otherString, String onError) {
+        return (StringValidation) super.isNotEqualTo(otherString, onError);
     }
 
     @Override
-    public AbstractStringCondition withTerm(Predicate<String> predicate, String onError) {
-        return (AbstractStringCondition) super.withTerm(predicate, onError);
+    public StringValidation withTerm(Predicate<String> predicate, String onError) {
+        return (StringValidation) super.withTerm(predicate, onError);
     }
 
     @Override
-    public AbstractStringCondition isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
-        return ((AbstractStringCondition) super.isAnyOf(condition1, condition2, onError));
+    public StringValidation isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return (StringValidation) super.isAnyOf(condition1, condition2, onError);
     }
 
     @Override
-    public AbstractStringCondition isAllOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
-        return ((AbstractStringCondition) super.isAllOf(condition1, condition2, onError));
+    public StringValidation isAllOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
+        return (StringValidation) super.isAllOf(condition1, condition2, onError);
     }
 
     @Override
-    public AbstractStringCondition log(String msg, Object... values) {
-        return (AbstractStringCondition) super.log(msg, values);
+    public StringValidation log(String msg, Object... values) {
+        return (StringValidation) super.log(msg, values);
     }
 
     @Override
-    public <R> AbstractStringCondition inspecting(Function<String, R> mapper, Predicate<R> predicate, String onError) {
-        return (AbstractStringCondition) super.inspecting(mapper, predicate, onError);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Predicate<R> predicate, String onError) {
+        return (StringValidation) super.inspecting(mapper, predicate, onError);
     }
 
     @Override
-    public <R> AbstractStringCondition inspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (AbstractStringCondition) super.inspecting(mapper, validator);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (StringValidation) super.inspecting(mapper, validator);
     }
 }
