@@ -84,7 +84,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected <R> String collectMessages(List<Condition<R>> fails) {
+    private <R> String collectMessages(List<Condition<R>> fails) {
         return fails.stream()
                     .map(Condition::getOnError)
                     .collect(Collectors.joining("\n"));
