@@ -1,11 +1,11 @@
-package validation.api.demo.validation.domain.object;
+package validation.api.demo.validation.domain;
 
 import lombok.extern.slf4j.Slf4j;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.Clause;
-import validation.api.demo.validation.domain.ValidationHolder;
+import validation.api.demo.validation.domain.object.ObjectConditions;
 
 import java.util.List;
 import java.util.function.Function;
@@ -13,69 +13,69 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
-public abstract class AbstractObjectValidation<T> extends ValidationHolder<T> {
+public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
 
-    protected AbstractObjectValidation<T> isNull(String onError) {
+    protected AbstractBaseValidation<T> isNull(String onError) {
         registerCondition(ObjectConditions.isNull(), onError);
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> isNotNull(String onError) {
+    protected AbstractBaseValidation<T> isNotNull(String onError) {
         preTest(ObjectConditions.isNotNull(), onError);
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> isEqualTo(T otherObj, String onError) {
+    protected AbstractBaseValidation<T> isEqualTo(T otherObj, String onError) {
         registerCondition(ObjectConditions.isEqualTo(otherObj), onError);
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> isNotEqualTo(T otherObj, String onError) {
+    protected AbstractBaseValidation<T> isNotEqualTo(T otherObj, String onError) {
         registerCondition(ObjectConditions.isNotEqualTo(otherObj), onError);
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> withTerm(Predicate<T> predicate, String onError) {
+    protected AbstractBaseValidation<T> withTerm(Predicate<T> predicate, String onError) {
         memoize(new SingleCondition<>(predicate, onError));
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
+    protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
         memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.OR, onError));
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
+    protected AbstractBaseValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
         memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.AND, onError));
 
         return this;
     }
 
-    public AbstractObjectValidation<T> or() {
+    public AbstractBaseValidation<T> or() {
         registerCluster();
 
         return this;
     }
 
-    protected AbstractObjectValidation<T> log(String msg, Object... values) {
+    protected AbstractBaseValidation<T> log(String msg, Object... values) {
         log.debug(msg, values);
 
         return this;
     }
 
-    protected <R> AbstractObjectValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
         memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it)), onError));
 
         return this;
     }
 
-    protected <R> AbstractObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         List<Condition<R>> fails = validator.apply(mapper.apply(this.obj))
                                             .innerExamine();
 

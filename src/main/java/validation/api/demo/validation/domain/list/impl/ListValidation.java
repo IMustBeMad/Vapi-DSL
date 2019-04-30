@@ -1,10 +1,10 @@
 package validation.api.demo.validation.domain.list.impl;
 
-import validation.api.demo.validation.domain.list.AbstractListValidation;
+import validation.api.demo.validation.domain.list.AbstractListClause;
 
 import java.util.List;
 
-public class ListValidation<T> extends AbstractListValidation<T> {
+public class ListValidation<T> extends AbstractListClause<T> {
 
     public ListValidation(List<T> list) {
         super();

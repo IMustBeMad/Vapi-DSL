@@ -1,10 +1,10 @@
 package validation.api.demo.validation.domain.date.impl;
 
-import validation.api.demo.validation.domain.date.AbstractDateValidation;
+import validation.api.demo.validation.domain.date.AbstractDateClause;
 
 import java.time.LocalDate;
 
-public class DateValidation extends AbstractDateValidation {
+public class DateValidation extends AbstractDateClause {
 
     public DateValidation(LocalDate date) {
         super();

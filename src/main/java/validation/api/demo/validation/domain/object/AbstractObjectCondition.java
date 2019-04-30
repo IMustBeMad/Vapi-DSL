@@ -1,13 +1,13 @@
 package validation.api.demo.validation.domain.object;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.domain.Terminator;
+import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class AbstractObjectConditionHolder<T> extends AbstractObjectValidation<T> implements Terminator {
+public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<T> {
 
     @Override
     public ObjectValidation<T> isNull(String onError) {
@@ -55,7 +55,7 @@ public abstract class AbstractObjectConditionHolder<T> extends AbstractObjectVal
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractObjectValidation<R>> validator) {
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ObjectValidation<T>) super.inspecting(mapper, validator);
     }
 }

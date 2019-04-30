@@ -1,8 +1,8 @@
 package validation.api.demo.validation.domain.array.impl;
 
-import validation.api.demo.validation.domain.array.AbstractArrayValidation;
+import validation.api.demo.validation.domain.array.AbstractArrayClause;
 
-public class ArrayValidation<T> extends AbstractArrayValidation<T> {
+public class ArrayValidation<T> extends AbstractArrayClause<T> {
 
     public ArrayValidation(T[] array) {
         super();

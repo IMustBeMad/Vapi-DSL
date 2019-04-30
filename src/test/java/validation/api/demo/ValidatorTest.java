@@ -37,7 +37,7 @@ public class ValidatorTest {
                   .failFast();
     }
 
-    /*@Test
+    @Test
     public void testString() {
         String issueNumber = "IR20180203123";
 
@@ -107,7 +107,7 @@ public class ValidatorTest {
                   .ofSize(2, ERROR_WRONG_SIZE)
                   .inspecting(array -> array[0], el -> el.equals("test"), ERROR_NOT_EQUALS)
                   .failSafe();
-    }*/
+    }
 
     /*repository check for instance*/
     private boolean isSavedInRepository(TestObject testObject) {
