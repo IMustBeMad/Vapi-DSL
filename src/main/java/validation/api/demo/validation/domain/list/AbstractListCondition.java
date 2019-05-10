@@ -42,8 +42,7 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     public ListValidation<T> each(SingleCondition<T> condition, String onError) {
-        SingleCondition<List<T>> listCondition = new SingleCondition<>(list -> list.stream().allMatch(el -> condition.getPredicate().test(el)));
-        registerCondition(listCondition, onError);
+        this.obj.forEach(it -> this.inspect(it, condition.getPredicate(), onError));
 
         return (ListValidation<T>) this;
     }

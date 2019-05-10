@@ -41,6 +41,11 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
+    public ObjectValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
+        return (ObjectValidation<T>) super.withTerm(validator);
+    }
+
+    @Override
     public ObjectValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
         return (ObjectValidation<T>) super.isAnyOf(condition1, condition2, onError);
     }
