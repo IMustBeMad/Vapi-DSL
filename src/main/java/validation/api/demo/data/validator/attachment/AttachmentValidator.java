@@ -1,11 +1,13 @@
 package validation.api.demo.data.validator.attachment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import validation.api.demo.data.common.Attachment;
-import validation.api.demo.data.common.Claim;
-import validation.api.demo.data.common.Doc;
+import validation.api.demo.data.common.*;
+import validation.api.demo.data.service.AttachmentService;
+import validation.api.demo.data.service.ClientService;
+import validation.api.demo.data.service.PdfAValidator;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.exception.SystemMessage;
 
@@ -19,8 +21,10 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
+@Service
 public class AttachmentValidator {
 
+    private static final String PDF_SUFFIX = "TEST";
     @Autowired
     private AttachmentService attachmentService;
 
@@ -30,7 +34,9 @@ public class AttachmentValidator {
     @Autowired
     private PdfAValidator pdfAValidator;
 
-    @Override
+    @Autowired
+    private ClientService clientService;
+
     public List<SystemMessage> validate(Claim claim, List<Doc> docs) {
         List<Attachment> attachmentDtoList = attachmentService.getClaimAttachments(claim.getId());
         if (isEmpty(attachmentDtoList)) {
@@ -50,27 +56,30 @@ public class AttachmentValidator {
         return validationErrors;
     }
 
-    @Override
     public List<SystemMessage> verifyAttachmentOnSubmit(Long clientId, File file, Attachment attachment, List<Doc> claimDocs) {
         List<DocType> documentTypes = emptyIfNull(claimDocs).stream()
-                                                            .map(DocType::getType)
+                                                            .map(Doc::getType)
                                                             .collect(Collectors.toList());
 
         return verifyFileByClient(file, attachment.getOriginalName(), documentTypes, clientId, true);
     }
 
+    private List<Doc> emptyIfNull(List<Doc> claimDocs) {
+        return claimDocs == null ? emptyList() : claimDocs;
+    }
+
     public List<SystemMessage> verifyFileByClient(File file, String originalName, List<DocType> documentTypes, Long clientId, boolean formSubmit) {
-        ClientCondifg config = clienService.getClientConfig(clientId);
+        ClientConfig config = clientService.getClientConfig(clientId);
         boolean shouldValidate = config != null
-                                         && CollectionUtils.isNotEmpty(documentTypes)
-                                         && CollectionUtils.isNotEmpty(config.getValidatedDocs())
+                                         && !CollectionUtils.isEmpty(documentTypes)
+                                         && !CollectionUtils.isEmpty(config.getValidatedDocs())
                                          && CollectionUtils.containsAny(config.getValidatedDocs(), documentTypes);
 
         if (shouldValidate) {
             ArrayList<SystemMessage> validationResult = new ArrayList<>();
 
             String allowedExtensions = config.getAllowedExtensions();
-            if (StringUtils.isNotEmpty(allowedExtensions)) {
+            if (!StringUtils.isEmpty(allowedExtensions)) {
                 SystemMessage message = verifyExtensions(originalName, Arrays.asList(allowedExtensions.split(",")), formSubmit);
                 addIfPresent(validationResult, message);
             }
@@ -82,7 +91,7 @@ public class AttachmentValidator {
             }
 
             String pdfaFormat = config.getPdfaFormat();
-            if (originalName.toLowerCase().endsWith(PDF_SUFFIX) && StringUtils.isNotEmpty(pdfaFormat)) {
+            if (originalName.toLowerCase().endsWith(PDF_SUFFIX) && !StringUtils.isEmpty(pdfaFormat)) {
                 SystemMessage message = pdfAValidator.validate(file, originalName, Arrays.asList(pdfaFormat.split(",")), formSubmit);
                 addIfPresent(validationResult, message);
             }
@@ -95,19 +104,23 @@ public class AttachmentValidator {
 
 
     private SystemMessage verifyExtensions(String originalName, List<String> allowedExtensions, boolean formSubmit) {
-        if (!fileExtensionValidator.validate(originalName, allowedExtensions)) {
+        if (!isValidExtension(originalName, allowedExtensions)) {
             return new SystemMessage(
                     SystemMessage.SystemMessageType.ERROR,
                     formSubmit ? "error.file.type.not.allowed.submit" : "error.file.type.not.allowed",
                     originalName,
-                    StringUtils.join(allowedExtensions, ", "));
+                    String.join(", ", allowedExtensions));
         }
 
         return null;
     }
 
+    private boolean isValidExtension(String originalName, List<String> allowedExtensions) {
+        return true;
+    }
+
     private SystemMessage verifySize(File file, String originalName, Long sizeLimit, boolean formSubmit) {
-        if (sizeLimit != null && !fileSizeValidator.validate(file, sizeLimit)) {
+        if (sizeLimit != null && fileIsValid(file)) {
             return new SystemMessage(
                     SystemMessage.SystemMessageType.ERROR,
                     formSubmit ? "error.file.size.exceeds.limit.submit" : "error.file.size.exceeds.limit",
@@ -116,6 +129,10 @@ public class AttachmentValidator {
         }
 
         return null;
+    }
+
+    private boolean fileIsValid(File file) {
+        return true;
     }
 
     private void addIfPresent(List<SystemMessage> list, SystemMessage message) {

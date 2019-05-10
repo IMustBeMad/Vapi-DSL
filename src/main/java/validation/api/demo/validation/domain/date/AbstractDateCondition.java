@@ -7,6 +7,7 @@ import validation.api.demo.validation.domain.date.impl.DateValidation;
 import java.time.LocalDate;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class AbstractDateCondition extends AbstractBaseValidation<LocalDate> {
 
@@ -48,6 +49,11 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
+    public DateValidation withTerm(Supplier<Boolean> supplier, String onError) {
+        return (DateValidation) super.withTerm(supplier, onError);
+    }
+
+    @Override
     public DateValidation isAnyOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
         return (DateValidation) super.isAnyOf(condition1, condition2, onError);
     }
@@ -70,5 +76,10 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     @Override
     public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (DateValidation) super.inspecting(mapper, validator);
+    }
+
+    @Override
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (DateValidation) super.inspecting(mapper, condition);
     }
 }

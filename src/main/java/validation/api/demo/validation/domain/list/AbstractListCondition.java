@@ -41,6 +41,19 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
         return (ListValidation<T>) this;
     }
 
+    public ListValidation<T> each(SingleCondition<T> condition, String onError) {
+        SingleCondition<List<T>> listCondition = new SingleCondition<>(list -> list.stream().allMatch(el -> condition.getPredicate().test(el)));
+        registerCondition(listCondition, onError);
+
+        return (ListValidation<T>) this;
+    }
+
+    public ListValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
+       this.obj.forEach(it -> this.inspect(it, validator));
+
+        return (ListValidation<T>) this;
+    }
+
     @Override
     public ListValidation<T> isNull(String onError) {
         return (ListValidation<T>) super.isNull(onError);
@@ -66,6 +79,10 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
         return (ListValidation<T>) super.withTerm(predicate, onError);
     }
 
+    @Override
+    public ListValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
+        return (ListValidation<T>) super.withTerm(supplier, onError);
+    }
 
     @Override
     public ListValidation<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {

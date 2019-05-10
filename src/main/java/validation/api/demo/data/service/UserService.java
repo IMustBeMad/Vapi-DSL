@@ -9,4 +9,8 @@ public class UserService {
     public User getOne(Long id) {
         return new User();
     }
+
+    public Long getCurrentClientId() {
+        return 42L;
+    }
 }

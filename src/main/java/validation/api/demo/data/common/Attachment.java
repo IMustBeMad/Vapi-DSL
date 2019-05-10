@@ -10,4 +10,5 @@ import lombok.*;
 public class Attachment {
 
     private Long id;
+    private String originalName;
 }

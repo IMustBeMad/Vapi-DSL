@@ -6,6 +6,8 @@ import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T[]> {
 
@@ -56,6 +58,24 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     @Override
     public ArrayValidation<T> withTerm(Predicate<T[]> predicate, String onError) {
         return (ArrayValidation<T>) super.withTerm(predicate, onError);
+    }
+
+    @Override
+    public ArrayValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
+        return (ArrayValidation<T>) super.withTerm(supplier, onError);
+    }
+
+    public ArrayValidation<T> each(SingleCondition<T> condition, String onError) {
+        SingleCondition<T[]> listCondition = new SingleCondition<>(array -> Stream.of(array).allMatch(el -> condition.getPredicate().test(el)));
+        registerCondition(listCondition, onError);
+
+        return (ArrayValidation<T>) this;
+    }
+
+    public ArrayValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
+        Stream.of(this.obj).forEach(it -> this.inspect(it, validator));
+
+        return (ArrayValidation<T>) this;
     }
 
     @Override
