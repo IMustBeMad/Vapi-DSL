@@ -5,36 +5,32 @@ import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.terminator.impl.TerminatorFacade;
 import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public abstract class BaseDataHolder<T> {
 
     protected T obj;
+    protected TerminationMode terminationMode;
+
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
 
-    protected void failFast() {
-        TerminatorFacade.INSTANCE.failFast(this.conditionClusters, this.obj);
+    protected List<SystemMessage> failOn(TerminationMode terminationMode) {
+        return this.failOn(terminationMode, ErrorMode.THROW);
     }
 
-    protected void failSafe() {
-        TerminatorFacade.INSTANCE.failSafe(this.conditionClusters, this.obj);
-    }
+    protected List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        this.terminationMode = terminationMode;
 
-    protected List<SystemMessage> examine() {
-        return TerminatorFacade.INSTANCE.examine(this.conditionClusters, this.obj);
-    }
-
-    protected void failIfNoneGroupMatch() {
-        TerminatorFacade.INSTANCE.failIfNoneGroupMatch(this.conditionClusters, this.obj);
+        return TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
     }
 
     void preTest(SingleCondition<T> condition, String onError) {
@@ -49,12 +45,8 @@ public abstract class BaseDataHolder<T> {
         this.currentCluster.add(condition);
     }
 
-    List<Condition<T>> innerExamine() {
-        return this.conditionClusters.stream()
-                                     .map(ConditionCluster::getConditions)
-                                     .flatMap(Collection::stream)
-                                     .filter(it -> !this.test(it).isValid())
-                                     .collect(Collectors.toList());
+    List<SystemMessage> terminate(TerminationMode terminationMode) {
+        return TerminatorFacade.INSTANCE.terminate(terminationMode, ErrorMode.RETURN, this.conditionClusters, this.obj);
     }
 
     void registerCluster() {

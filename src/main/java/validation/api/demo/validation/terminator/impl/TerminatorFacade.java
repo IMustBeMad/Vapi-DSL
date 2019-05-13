@@ -1,35 +1,56 @@
 package validation.api.demo.validation.terminator.impl;
 
 import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.terminator.Terminator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> void failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+    public <T> List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+        List<SystemMessage> errors = new ArrayList<>();
 
-        getTerminator(conditionClusters).failFast(conditions, obj);
+        switch (terminationMode) {
+            case FIRST_ERROR:
+            case FIRST_GROUP_MATCH:
+                errors = failFast(conditionClusters, obj);
+                break;
+            case ERRORS_COMPUTED:
+                errors = failSafe(conditionClusters, obj);
+                break;
+            case NONE_GROUP_MATCH:
+                errors = failIfNoneGroupMatch(conditionClusters, obj);
+                break;
+        }
+
+        if (errorMode == ErrorMode.THROW && !errors.isEmpty()) {
+            throw ValidationException.withError(errors);
+        }
+
+        return errors;
     }
 
-    public <T> void failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<SystemMessage> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
         List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
 
-        getTerminator(conditionClusters).failSafe(conditions, obj);
+        return getTerminator(conditionClusters).failFast(conditions, obj);
     }
 
-    public <T> void failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        getTerminator(conditionClusters).failIfNoneGroupMatch(conditionClusters, obj);
-    }
-
-    public <T> List<SystemMessage> examine(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<SystemMessage> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
         List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
 
-        return getTerminator(conditionClusters).examine(conditions, obj);
+        return getTerminator(conditionClusters).failSafe(conditions, obj);
+    }
+
+    private <T> List<SystemMessage> failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        return getTerminator(conditionClusters).failIfNoneGroupMatch(conditionClusters, obj);
     }
 
     private <T> List<Condition<T>> getFirstClusterConditions(List<ConditionCluster<T>> conditionClusters) {

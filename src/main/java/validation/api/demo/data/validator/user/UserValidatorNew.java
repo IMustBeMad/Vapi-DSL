@@ -7,6 +7,7 @@ import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.dict.TerminationMode;
 
 import java.util.Optional;
 
@@ -31,10 +32,11 @@ public class UserValidatorNew {
                   .isNotNull("User not found")
                   .inspecting(
                           this::getClientId,
+                          TerminationMode.ERRORS_COMPUTED,
                           id -> Validation.verifyIf(id)
                                           .isAnyOf(isGte(1L), isEqualTo(orderClientId), "invalid user")
                   )
-                  .failFast();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     private Long getClientId(User user) {

@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.list;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.list.impl.ListValidation;
 
@@ -47,8 +48,8 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
-       this.obj.forEach(it -> this.inspect(it, validator));
+    public ListValidation<T> each(TerminationMode terminationMode, Function<T, AbstractBaseValidation<T>> validator) {
+       this.obj.forEach(it -> this.inspect(it, terminationMode, validator));
 
         return (ListValidation<T>) this;
     }
@@ -104,8 +105,8 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ListValidation<T>) super.inspecting(mapper, validator);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ListValidation<T>) super.inspecting(mapper, terminationMode, validator);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.array;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 
@@ -72,8 +73,8 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
         return (ArrayValidation<T>) this;
     }
 
-    public ArrayValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
-        Stream.of(this.obj).forEach(it -> this.inspect(it, validator));
+    public ArrayValidation<T> each(TerminationMode terminationMode, Function<T, AbstractBaseValidation<T>> validator) {
+        Stream.of(this.obj).forEach(el -> this.inspect(el, terminationMode, validator));
 
         return (ArrayValidation<T>) this;
     }
@@ -99,7 +100,7 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     }
 
     @Override
-    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ArrayValidation<T>) super.inspecting(mapper, validator);
+    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ArrayValidation<T>) super.inspecting(mapper, terminationMode, validator);
     }
 }

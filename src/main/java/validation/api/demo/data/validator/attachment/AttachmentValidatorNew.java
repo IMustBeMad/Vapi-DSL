@@ -7,6 +7,7 @@ import validation.api.demo.data.service.AttachmentService;
 import validation.api.demo.data.service.ClientService;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
 import java.io.File;
@@ -33,29 +34,35 @@ public class AttachmentValidatorNew {
         Validation.verifyIf(attachments)
                   .isEmpty("test")
                   .or()
-                  .each(it -> this.isValid(it, docs))
-                  .failIfNoneGroupMatch();
+                  .each(
+                          TerminationMode.FIRST_ERROR,
+                          attachment -> this.isValidAttachment(attachment, docs)
+                  )
+                  .failOn(TerminationMode.NONE_GROUP_MATCH);
     }
 
-    private ObjectValidation<Attachment> isValid(Attachment attachment, List<Doc> docs) {
+    private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
         return Validation.verifyIf(attachment)
                          .inspecting(this::getAttachmentFile, File::exists, "")
                          .or()
                          .withTerm(() -> noConfig(docs), "error")
                          .or()
-                         .withTerm(this::isValidFormat);
+                         .withTerm(TerminationMode.ERRORS_COMPUTED, this::hasValidFormat);
     }
 
-    private ObjectValidation<Attachment> isValidFormat(Attachment attachment) {
+    private ObjectValidation<Attachment> hasValidFormat(Attachment attachment) {
         Long clientId = userService.getCurrentClientId();
         ClientConfig config = clientService.getClientConfig(clientId);
 
         return Validation.verifyIf(attachment)
                          .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()), "error")
-                         .inspecting(attachmentService::getAttachmentFile, file -> Validation.verifyIf(file)
-                                                                                             .withTerm(() -> config.getSizeLimit() == null, "error")
-                                                                                             .or()
-                                                                                             .withTerm(this::isValidFile, "error")
+                         .inspecting(
+                                 attachmentService::getAttachmentFile,
+                                 TerminationMode.ERRORS_COMPUTED,
+                                 file -> Validation.verifyIf(file)
+                                                   .withTerm(() -> config.getSizeLimit() == null, "error")
+                                                   .or()
+                                                   .withTerm(this::isValidFile, "error")
                          );
     }
 

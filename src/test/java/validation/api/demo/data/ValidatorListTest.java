@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.number.LongConditions;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class ValidatorListTest {
                   .ofSize(4, "incorrect.size")
                   .inspecting(it -> it.get(3), it -> 42L == it, "not.equal")
                   .each(LongConditions.isGt(0L), "not.greater")
-                  .failFast();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     @Test
@@ -32,6 +33,6 @@ public class ValidatorListTest {
                   .ofSize(4, "incorrect.size")
                   .inspecting(it -> it.get(3), it -> 42L == it, "not.equal")
                   .each(LongConditions.isGt(42L), "not.greater")
-                  .failFast();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 }

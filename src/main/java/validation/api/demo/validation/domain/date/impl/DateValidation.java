@@ -1,6 +1,8 @@
 package validation.api.demo.validation.domain.date.impl;
 
 import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.date.AbstractDateClause;
 
 import java.time.LocalDate;
@@ -14,22 +16,12 @@ public class DateValidation extends AbstractDateClause {
     }
 
     @Override
-    public void failFast() {
-        super.failFast();
+    public List<SystemMessage> failOn(TerminationMode terminationMode) {
+        return super.failOn(terminationMode);
     }
 
     @Override
-    public void failSafe() {
-        super.failSafe();
-    }
-
-    @Override
-    public List<SystemMessage> examine() {
-        return super.examine();
-    }
-
-    @Override
-    public void failIfNoneGroupMatch() {
-        super.failIfNoneGroupMatch();
+    public List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        return super.failOn(terminationMode, errorMode);
     }
 }

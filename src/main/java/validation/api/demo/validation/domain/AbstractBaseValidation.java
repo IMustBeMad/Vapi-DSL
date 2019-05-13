@@ -1,17 +1,16 @@
 package validation.api.demo.validation.domain;
 
 import lombok.extern.slf4j.Slf4j;
-import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.Clause;
+import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.object.ObjectConditions;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
@@ -52,8 +51,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected AbstractBaseValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
-        return this.inspect(this.obj, validator);
+    protected AbstractBaseValidation<T> withTerm(TerminationMode terminationMode, Function<T, AbstractBaseValidation<T>> validator) {
+        return this.inspect(this.obj, terminationMode, validator);
     }
 
     protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
@@ -90,14 +89,12 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return this.inspect(mapper.apply(this.obj), validator);
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
+        return this.inspect(mapper.apply(this.obj), terminationMode, validator);
     }
 
-    protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
-        List<Condition<R>> fails = validator.apply(obj).innerExamine();
-
-        memoize(new SingleCondition<>(it -> fails.isEmpty(), collectMessages(fails)));
+    protected <R> AbstractBaseValidation<T> inspect(R obj, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
+        memoize(new SingleCondition<>(it -> validator.apply(obj).terminate(terminationMode).isEmpty()));
 
         return this;
     }
@@ -106,11 +103,5 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         memoize(new SingleCondition<>(it -> predicate.test(obj), onError));
 
         return this;
-    }
-
-    private <R> String collectMessages(List<Condition<R>> fails) {
-        return fails.stream()
-                    .map(Condition::getOnError)
-                    .collect(Collectors.joining("\n"));
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import validation.api.demo.data.common.InnerTestObject;
 import validation.api.demo.data.common.TestObject;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.TerminationMode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,11 +32,11 @@ public class ValidatorTest {
                   .isNull(ERROR_IS_NULL)
                   .or()
                   .isNotNull(ERROR_IS_NULL)
-                  .examine();
+                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
 
         Validation.verifyIf("test")
                   .isNotNull(ERROR_IS_NULL)
-                  .failFast();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     @Test
@@ -45,7 +47,7 @@ public class ValidatorTest {
                   .isNotNull(ERROR_IS_NULL)
                   .isEqualTo("test", ERROR_NOT_EQUALS)
                   .matches("IR.*", ERROR_NOT_MATCHED)
-                  .examine();
+                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
     }
 
     @Test
@@ -55,7 +57,7 @@ public class ValidatorTest {
         Validation.verifyIf(now)
                   .isEqualTo(now.plusDays(1), ERROR_NOT_EQUALS)
                   .isAfter(now.minusDays(1), ERROR_NOT_GT)
-                  .failSafe();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     @Test
@@ -64,7 +66,7 @@ public class ValidatorTest {
                   .isNull(ERROR_IS_NULL)
                   .isEqualTo(43L, ERROR_NOT_EQUALS)
                   .isGt(45L, ERROR_NOT_GT)
-                  .examine();
+                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
     }
 
     @Test
@@ -76,8 +78,11 @@ public class ValidatorTest {
                   .contains("Rick", ERROR_NOT_CONTAINS)
                   .hasNoDuplicates(ERROR_HAS_DUPLICATES)
                   .ofSize(10, ERROR_WRONG_SIZE)
-                  .inspecting(list -> list.get(0), name -> Validation.verifyIf(name).isEqualTo("test", ERROR_NOT_EQUALS))
-                  .failSafe();
+                  .inspecting(
+                          list -> list.get(0),
+                          TerminationMode.ERRORS_COMPUTED,
+                          name -> Validation.verifyIf(name).isEqualTo("test", ERROR_NOT_EQUALS))
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     @Test
@@ -91,11 +96,12 @@ public class ValidatorTest {
                   .inspecting(TestObject::getName, name -> name.matches("Fancy.*"), ERROR_NOT_MATCHED)
                   .inspecting(
                           TestObject::getId,
+                          TerminationMode.ERRORS_COMPUTED,
                           id -> Validation.verifyIf(id)
                                           .isNull(ERROR_IS_NULL)
                                           .isGt(41L, ERROR_NOT_GT)
                   )
-                  .failFast();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     @Test
@@ -106,7 +112,7 @@ public class ValidatorTest {
                   .contains("test", ERROR_NOT_CONTAINS)
                   .ofSize(2, ERROR_WRONG_SIZE)
                   .inspecting(array -> array[0], el -> el.equals("test"), ERROR_NOT_EQUALS)
-                  .failSafe();
+                  .failOn(TerminationMode.FIRST_ERROR);
     }
 
     /*repository check for instance*/
