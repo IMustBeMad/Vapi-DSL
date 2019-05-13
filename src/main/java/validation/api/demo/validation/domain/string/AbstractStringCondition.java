@@ -6,6 +6,7 @@ import validation.api.demo.validation.domain.string.impl.StringValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class AbstractStringCondition extends AbstractBaseValidation<String> {
 
@@ -53,6 +54,11 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
+    public StringValidation withTerm(Supplier<Boolean> supplier, String onError) {
+        return (StringValidation) super.withTerm(supplier, onError);
+    }
+
+    @Override
     public StringValidation isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
         return (StringValidation) super.isAnyOf(condition1, condition2, onError);
     }
@@ -75,5 +81,10 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     @Override
     public <R> StringValidation inspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (StringValidation) super.inspecting(mapper, validator);
+    }
+
+    @Override
+    public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (StringValidation) super.inspecting(mapper, condition);
     }
 }

@@ -46,6 +46,16 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
+    protected AbstractBaseValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
+        memoize(new SingleCondition<>(it -> supplier.get(), onError));
+
+        return this;
+    }
+
+    protected AbstractBaseValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
+        return this.inspect(this.obj, validator);
+    }
+
     protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
         memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.OR, onError));
 
@@ -71,9 +81,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
-        memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it)), onError));
-
-        return this;
+        return this.inspect(mapper.apply(this.obj), predicate, onError);
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
@@ -83,10 +91,19 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        List<Condition<R>> fails = validator.apply(mapper.apply(this.obj))
-                                            .innerExamine();
+        return this.inspect(mapper.apply(this.obj), validator);
+    }
+
+    protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
+        List<Condition<R>> fails = validator.apply(obj).innerExamine();
 
         memoize(new SingleCondition<>(it -> fails.isEmpty(), collectMessages(fails)));
+
+        return this;
+    }
+
+    protected <R> AbstractBaseValidation<T> inspect(R obj, Predicate<R> predicate, String onError) {
+        memoize(new SingleCondition<>(it -> predicate.test(obj), onError));
 
         return this;
     }

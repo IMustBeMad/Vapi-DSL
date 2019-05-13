@@ -64,6 +64,11 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     }
 
     @Override
+    public LongValidation withTerm(Supplier<Boolean> supplier, String onError) {
+        return (LongValidation) super.withTerm(supplier, onError);
+    }
+
+    @Override
     public LongValidation isAnyOf(SingleCondition<Long> condition1, SingleCondition<Long> condition2, String onError) {
         return (LongValidation) super.isAnyOf(condition1, condition2, onError);
     }
