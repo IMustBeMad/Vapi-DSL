@@ -33,7 +33,7 @@ public class ValidatorTest {
         Validation.verifyIf(val)
                   .isNotNull("is.null")
                   .isEqualTo(42L, "not.equal")
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class ValidatorTest {
                   .isNotNull(ERROR_IS_NULL)
                   .isEqualTo("test", ERROR_NOT_EQUALS)
                   .matches("IR.*", ERROR_NOT_MATCHED)
-                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
+                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED, ErrorMode.RETURN);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ValidatorTest {
         Validation.verifyIf(now)
                   .isEqualTo(now.plusDays(1), ERROR_NOT_EQUALS)
                   .isAfter(now.minusDays(1), ERROR_NOT_GT)
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class ValidatorTest {
                   .isNull(ERROR_IS_NULL)
                   .isEqualTo(43L, ERROR_NOT_EQUALS)
                   .isGt(45L, ERROR_NOT_GT)
-                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
+                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED, ErrorMode.RETURN);
     }
 
     @Test
@@ -77,9 +77,9 @@ public class ValidatorTest {
                   .ofSize(10, ERROR_WRONG_SIZE)
                   .inspecting(
                           list -> list.get(0),
-                          TerminationMode.ERRORS_COMPUTED,
+                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           name -> Validation.verifyIf(name).isEqualTo("test", ERROR_NOT_EQUALS))
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -93,12 +93,12 @@ public class ValidatorTest {
                   .inspecting(TestObject::getName, name -> name.matches("Fancy.*"), ERROR_NOT_MATCHED)
                   .inspecting(
                           TestObject::getId,
-                          TerminationMode.ERRORS_COMPUTED,
+                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           id -> Validation.verifyIf(id)
                                           .isNull(ERROR_IS_NULL)
                                           .isGt(41L, ERROR_NOT_GT)
                   )
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ValidatorTest {
                   .contains("test", ERROR_NOT_CONTAINS)
                   .ofSize(2, ERROR_WRONG_SIZE)
                   .inspecting(array -> array[0], el -> el.equals("test"), ERROR_NOT_EQUALS)
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     /*repository check for instance*/

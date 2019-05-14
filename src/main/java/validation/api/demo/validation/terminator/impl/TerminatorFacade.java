@@ -18,11 +18,11 @@ public enum TerminatorFacade {
         List<SystemMessage> errors = new ArrayList<>();
 
         switch (terminationMode) {
-            case FIRST_ERROR:
+            case FIRST_ERROR_ENCOUNTERED:
             case FIRST_GROUP_MATCH:
                 errors = failFast(conditionClusters, obj);
                 break;
-            case ERRORS_COMPUTED:
+            case LAST_ERROR_ENCOUNTERED:
                 errors = failSafe(conditionClusters, obj);
                 break;
             case NONE_GROUP_MATCH:

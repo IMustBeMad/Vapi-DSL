@@ -35,7 +35,7 @@ public class AttachmentValidatorNew {
                   .isEmpty("test")
                   .or()
                   .each(
-                          TerminationMode.FIRST_ERROR,
+                          TerminationMode.FIRST_ERROR_ENCOUNTERED,
                           attachment -> this.isValidAttachment(attachment, docs)
                   )
                   .failOn(TerminationMode.NONE_GROUP_MATCH);
@@ -47,7 +47,7 @@ public class AttachmentValidatorNew {
                          .or()
                          .withTerm(() -> noConfig(docs), "error")
                          .or()
-                         .withTerm(TerminationMode.ERRORS_COMPUTED, this::hasValidFormat);
+                         .withTerm(TerminationMode.LAST_ERROR_ENCOUNTERED, this::hasValidFormat);
     }
 
     private ObjectValidation<Attachment> hasValidFormat(Attachment attachment) {
@@ -58,7 +58,7 @@ public class AttachmentValidatorNew {
                          .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()), "error")
                          .inspecting(
                                  attachmentService::getAttachmentFile,
-                                 TerminationMode.ERRORS_COMPUTED,
+                                 TerminationMode.LAST_ERROR_ENCOUNTERED,
                                  file -> Validation.verifyIf(file)
                                                    .withTerm(() -> config.getSizeLimit() == null, "error")
                                                    .or()

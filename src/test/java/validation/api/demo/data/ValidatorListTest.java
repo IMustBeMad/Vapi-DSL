@@ -22,7 +22,7 @@ public class ValidatorListTest {
                   .ofSize(4, "incorrect.size")
                   .inspecting(it -> it.get(3), it -> 42L == it, "not.equal")
                   .each(LongConditions.isGt(0L), "not.greater")
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -33,6 +33,6 @@ public class ValidatorListTest {
                   .ofSize(4, "incorrect.size")
                   .inspecting(it -> it.get(3), it -> 42L == it, "not.equal")
                   .each(LongConditions.isGt(42L), "not.greater")
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 }

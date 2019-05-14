@@ -32,11 +32,11 @@ public class UserValidatorNew {
                   .isNotNull("User not found")
                   .inspecting(
                           this::getClientId,
-                          TerminationMode.ERRORS_COMPUTED,
+                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           id -> Validation.verifyIf(id)
                                           .isAnyOf(isGte(1L), isEqualTo(orderClientId), "invalid user")
                   )
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     private Long getClientId(User user) {

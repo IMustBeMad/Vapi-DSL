@@ -27,12 +27,12 @@ public class InnerValidationTest {
 
         Validation.verifyIf(attachments)
                   .ofSize(4, "incorrect.size")
-                  .each(TerminationMode.ERRORS_COMPUTED,
+                  .each(TerminationMode.LAST_ERROR_ENCOUNTERED,
                         attachment -> Validation.verifyIf(attachment)
                                                 .inspecting(Attachment::getId, () -> LongConditions.isGt(0L), "not.gt")
                                                 .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"), "not.matches")
                   )
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     @Test
@@ -46,12 +46,12 @@ public class InnerValidationTest {
 
         Validation.verifyIf(attachments)
                   .ofSize(4, "incorrect.size")
-                  .each(TerminationMode.ERRORS_COMPUTED,
+                  .each(TerminationMode.LAST_ERROR_ENCOUNTERED,
                         attachment -> Validation.verifyIf(attachment)
                                                 .inspecting(Attachment::getId, () -> LongConditions.isGt(0L), "not.gt")
                                                 .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"), "not.matches")
                   )
-                  .failOn(TerminationMode.FIRST_ERROR);
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
 
     private Attachment getAttachment(Long id, String name) {
