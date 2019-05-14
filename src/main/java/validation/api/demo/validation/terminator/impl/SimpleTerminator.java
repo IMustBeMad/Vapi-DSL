@@ -16,7 +16,7 @@ public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failFast(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnFirstError(List<Condition<T>> conditions, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
 
         for (Condition<T> condition : conditions) {
@@ -31,7 +31,7 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> failSafe(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnLastError(List<Condition<T>> conditions, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<SystemMessage> errors = new ArrayList<>();
 
@@ -52,7 +52,17 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return this.failFast(conditionClusters.get(0).getConditions(), obj);
+    public <T> List<SystemMessage> failOnNoErrors(List<Condition<T>> conditions, T obj) {
+        return null;
+    }
+
+    @Override
+    public <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        return this.failOnFirstError(conditionClusters.get(0).getConditions(), obj);
+    }
+
+    @Override
+    public <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        throw new UnsupportedOperationException();
     }
 }

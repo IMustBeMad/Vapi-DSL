@@ -8,27 +8,14 @@ import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.terminator.Terminator;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public enum TerminatorFacade {
     INSTANCE;
 
     public <T> List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode, List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<SystemMessage> errors = new ArrayList<>();
-
-        switch (terminationMode) {
-            case FIRST_ERROR_ENCOUNTERED:
-            case FIRST_GROUP_MATCH:
-                errors = failFast(conditionClusters, obj);
-                break;
-            case LAST_ERROR_ENCOUNTERED:
-                errors = failSafe(conditionClusters, obj);
-                break;
-            case NONE_GROUP_MATCH:
-                errors = failIfNoneGroupMatch(conditionClusters, obj);
-                break;
-        }
+        List<SystemMessage> errors = getErrors(terminationMode, conditionClusters, obj);
 
         if (errorMode == ErrorMode.THROW && !errors.isEmpty()) {
             throw ValidationException.withError(errors);
@@ -37,20 +24,47 @@ public enum TerminatorFacade {
         return errors;
     }
 
-    private <T> List<SystemMessage> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+    private <T> List<SystemMessage> getErrors(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+        switch (terminationMode) {
+            case FIRST_ERROR_ENCOUNTERED:
+                return failOnFirstError(conditionClusters, obj);
+            case LAST_ERROR_ENCOUNTERED:
+                return failOnLastError(conditionClusters, obj);
+            case NONE_GROUP_MATCH:
+                return failOnNoneGroupMatch(conditionClusters, obj);
+            case FIRST_GROUP_MATCH:
+                return failOnFirstGroupMatch(conditionClusters, obj);
+            case NO_ERROR_ENCOUNTERED:
+                return failOnNoErrors(conditionClusters, obj);
+        }
 
-        return getTerminator(conditionClusters).failFast(conditions, obj);
+        return Collections.emptyList();
     }
 
-    private <T> List<SystemMessage> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<SystemMessage> failOnNoErrors(List<ConditionCluster<T>> conditionClusters, T obj) {
         List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
 
-        return getTerminator(conditionClusters).failSafe(conditions, obj);
+        return getTerminator(conditionClusters).failOnNoErrors(conditions, obj);
     }
 
-    private <T> List<SystemMessage> failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).failIfNoneGroupMatch(conditionClusters, obj);
+    private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
+        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+
+        return getTerminator(conditionClusters).failOnFirstError(conditions, obj);
+    }
+
+    private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
+        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+
+        return getTerminator(conditionClusters).failOnLastError(conditions, obj);
+    }
+
+    private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        return getTerminator(conditionClusters).failOnFirstGroupMatch(conditionClusters, obj);
+    }
+
+    private <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        return getTerminator(conditionClusters).failOnNoneGroupMatch(conditionClusters, obj);
     }
 
     private <T> List<Condition<T>> getFirstClusterConditions(List<ConditionCluster<T>> conditionClusters) {

@@ -15,17 +15,22 @@ public enum TernaryTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failFast(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnFirstError(List<Condition<T>> conditions, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> failSafe(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnLastError(List<Condition<T>> conditions, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> failOnNoErrors(List<Condition<T>> conditions, T obj) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<SystemMessage> systemMessages = new ArrayList<>();
 
@@ -49,5 +54,10 @@ public enum TernaryTerminator implements Terminator {
         }
 
         return systemMessages;
+    }
+
+    @Override
+    public <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+        return null;
     }
 }

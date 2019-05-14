@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface Terminator {
 
-    <T> List<SystemMessage> failFast(List<Condition<T>> conditions, T obj);
+    <T> List<SystemMessage> failOnFirstError(List<Condition<T>> conditions, T obj);
 
-    <T> List<SystemMessage> failSafe(List<Condition<T>> conditions, T obj);
+    <T> List<SystemMessage> failOnLastError(List<Condition<T>> conditions, T obj);
 
-    <T> List<SystemMessage> failIfNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj);
+    <T> List<SystemMessage> failOnNoErrors(List<Condition<T>> conditions, T obj);
+
+    <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj);
+
+    <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj);
 }
