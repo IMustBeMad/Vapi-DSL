@@ -110,7 +110,7 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (ListValidation<T>) super.inspecting(mapper, condition);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
+        return (ListValidation<T>) super.inspecting(mapper, condition, onError);
     }
 }

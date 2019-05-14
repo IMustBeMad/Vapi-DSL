@@ -85,7 +85,7 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
-    public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (StringValidation) super.inspecting(mapper, condition);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
+        return (StringValidation) super.inspecting(mapper, condition, onError);
     }
 }

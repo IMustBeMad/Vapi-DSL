@@ -19,6 +19,7 @@ public abstract class BaseDataHolder<T> {
 
     protected T obj;
     protected TerminationMode terminationMode;
+    private List<SystemMessage> errors;
 
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private List<ConditionCluster<T>> conditionClusters = Arrays.asList(this.currentCluster);
@@ -30,23 +31,22 @@ public abstract class BaseDataHolder<T> {
     protected List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
         this.terminationMode = terminationMode;
 
-        return TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
+        return this.terminate(terminationMode, errorMode);
     }
 
-    void preTest(SingleCondition<T> condition, String onError) {
-        ValidationResult result = this.test(toSingleCondition(condition, onError));
+    List<SystemMessage> getError() {
+        return this.errors;
+    }
 
-        if (!result.isValid()) {
-            throw ValidationException.withError(result.getReason());
-        }
+    List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
+        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
+        this.errors = systemMessages;
+
+        return systemMessages;
     }
 
     void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
-    }
-
-    List<SystemMessage> terminate(TerminationMode terminationMode) {
-        return TerminatorFacade.INSTANCE.terminate(terminationMode, ErrorMode.RETURN, this.conditionClusters, this.obj);
     }
 
     void registerCluster() {
@@ -58,6 +58,14 @@ public abstract class BaseDataHolder<T> {
 
     protected void registerCondition(SingleCondition<T> condition, String onError) {
         this.memoize(toSingleCondition(condition, onError));
+    }
+
+    void preTest(SingleCondition<T> condition, String onError) {
+        ValidationResult result = this.test(toSingleCondition(condition, onError));
+
+        if (!result.isValid()) {
+            throw ValidationException.withError(result.getReason());
+        }
     }
 
     private SingleCondition<T> toSingleCondition(SingleCondition<T> condition, String onError) {

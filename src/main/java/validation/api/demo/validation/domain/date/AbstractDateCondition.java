@@ -80,7 +80,7 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (DateValidation) super.inspecting(mapper, condition);
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
+        return (DateValidation) super.inspecting(mapper, condition, onError);
     }
 }

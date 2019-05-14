@@ -29,8 +29,8 @@ public class InnerValidationTest {
                   .ofSize(4, "incorrect.size")
                   .each(TerminationMode.ERRORS_COMPUTED,
                         attachment -> Validation.verifyIf(attachment)
-                                                .inspecting(Attachment::getId, () -> LongConditions.isGt(0L))
-                                                .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"))
+                                                .inspecting(Attachment::getId, () -> LongConditions.isGt(0L), "not.gt")
+                                                .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"), "not.matches")
                   )
                   .failOn(TerminationMode.FIRST_ERROR);
     }
@@ -48,8 +48,8 @@ public class InnerValidationTest {
                   .ofSize(4, "incorrect.size")
                   .each(TerminationMode.ERRORS_COMPUTED,
                         attachment -> Validation.verifyIf(attachment)
-                                                .inspecting(Attachment::getId, () -> LongConditions.isGt(0L))
-                                                .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"))
+                                                .inspecting(Attachment::getId, () -> LongConditions.isGt(0L), "not.gt")
+                                                .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*"), "not.matches")
                   )
                   .failOn(TerminationMode.FIRST_ERROR);
     }

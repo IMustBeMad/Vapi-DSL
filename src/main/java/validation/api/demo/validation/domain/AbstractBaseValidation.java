@@ -3,7 +3,9 @@ package validation.api.demo.validation.domain;
 import lombok.extern.slf4j.Slf4j;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.common.ValidationCondition;
 import validation.api.demo.validation.dict.Clause;
+import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.object.ObjectConditions;
 
@@ -83,8 +85,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this.inspect(mapper.apply(this.obj), predicate, onError);
     }
 
-    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
-        memoize(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it))));
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
+        memoize(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it)), onError));
 
         return this;
     }
@@ -94,7 +96,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspect(R obj, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        memoize(new SingleCondition<>(it -> validator.apply(obj).terminate(terminationMode).isEmpty()));
+        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+        memoize(new ValidationCondition<>(it -> innerValidation.terminate(terminationMode, ErrorMode.RETURN).isEmpty(), innerValidation::getError));
 
         return this;
     }

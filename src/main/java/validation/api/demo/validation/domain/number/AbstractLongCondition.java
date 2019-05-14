@@ -95,7 +95,7 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     }
 
     @Override
-    public <R> LongValidation inspecting(Function<Long, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (LongValidation) super.inspecting(mapper, condition);
+    public <R> LongValidation inspecting(Function<Long, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
+        return (LongValidation) super.inspecting(mapper, condition, onError);
     }
 }
