@@ -2,6 +2,7 @@ package validation.api.demo.validation.common;
 
 import lombok.*;
 import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.dict.FailureMode;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,8 +18,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ValidationCondition<T> implements Condition<T> {
 
-    private Predicate<T> predicate;
-    private Supplier<List<SystemMessage>> supplier;
+    private @NonNull Predicate<T> predicate;
+    private FailureMode failureMode = FailureMode.COMMON;
+    private @NonNull Supplier<List<SystemMessage>> supplier;
+
+    public ValidationCondition(Predicate<T> predicate, Supplier<List<SystemMessage>> supplier) {
+        this.predicate = predicate;
+        this.supplier = supplier;
+    }
 
     @Override
     public List<Predicate<T>> getPredicates() {

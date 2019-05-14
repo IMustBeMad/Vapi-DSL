@@ -24,7 +24,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected AbstractBaseValidation<T> isNotNull(String onError) {
-        preTest(ObjectConditions.isNotNull(), onError);
+        registerCondition(ObjectConditions.isNotNull(), onError);
 
         return this;
     }

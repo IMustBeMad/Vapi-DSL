@@ -28,14 +28,11 @@ public class ValidatorTest {
 
     @Test
     public void test() {
-        Validation.verifyIf(getTestObj())
-                  .isNull(ERROR_IS_NULL)
-                  .or()
-                  .isNotNull(ERROR_IS_NULL)
-                  .failOn(TerminationMode.ERRORS_COMPUTED, ErrorMode.RETURN);
+        Long val = null;
 
-        Validation.verifyIf("test")
-                  .isNotNull(ERROR_IS_NULL)
+        Validation.verifyIf(val)
+                  .isNotNull("is.null")
+                  .isEqualTo(42L, "not.equal")
                   .failOn(TerminationMode.FIRST_ERROR);
     }
 
