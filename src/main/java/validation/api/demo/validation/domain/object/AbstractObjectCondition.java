@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.object;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
@@ -42,8 +43,8 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public ObjectValidation<T> withTerm(TerminationMode terminationMode, Function<T, AbstractBaseValidation<T>> validator) {
-        return (ObjectValidation<T>) super.withTerm(terminationMode, validator);
+    public ObjectValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
+        return (ObjectValidation<T>) super.withTerm(validator);
     }
 
     @Override
@@ -67,12 +68,22 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ObjectValidation<T>) super.inspecting(mapper, terminationMode, validator);
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ObjectValidation<T>) super.inspecting(mapper, validator);
     }
 
     @Override
     public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
         return (ObjectValidation<T>) super.inspecting(mapper, condition, onError);
+    }
+
+    @Override
+    public ObjectValidation<T> failOn(TerminationMode terminationMode) {
+        return (ObjectValidation<T>) super.failOn(terminationMode);
+    }
+
+    @Override
+    public ObjectValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        return (ObjectValidation<T>) super.failOn(terminationMode, errorMode);
     }
 }

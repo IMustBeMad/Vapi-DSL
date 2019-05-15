@@ -77,7 +77,6 @@ public class ValidatorTest {
                   .ofSize(10, ERROR_WRONG_SIZE)
                   .inspecting(
                           list -> list.get(0),
-                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           name -> Validation.verifyIf(name).isEqualTo("test", ERROR_NOT_EQUALS))
                   .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }
@@ -93,7 +92,6 @@ public class ValidatorTest {
                   .inspecting(TestObject::getName, name -> name.matches("Fancy.*"), ERROR_NOT_MATCHED)
                   .inspecting(
                           TestObject::getId,
-                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           id -> Validation.verifyIf(id)
                                           .isNull(ERROR_IS_NULL)
                                           .isGt(41L, ERROR_NOT_GT)

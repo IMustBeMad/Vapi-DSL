@@ -20,7 +20,7 @@ public class ValidatorListTest {
 
         Validation.verifyIf(longs)
                   .ofSize(4, "incorrect.size")
-                  .inspecting(it -> it.get(3), it -> 42L == it, "not.equal")
+                  .inspecting(it -> it.get(3), it -> it == 42L, "not.equal")
                   .each(LongConditions.isGt(0L), "not.greater")
                   .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }

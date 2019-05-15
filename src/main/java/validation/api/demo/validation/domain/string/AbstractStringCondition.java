@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.string;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.string.impl.StringValidation;
@@ -80,12 +81,22 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
-    public <R> StringValidation inspecting(Function<String, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        return (StringValidation) super.inspecting(mapper, terminationMode, validator);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (StringValidation) super.inspecting(mapper, validator);
     }
 
     @Override
     public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
         return (StringValidation) super.inspecting(mapper, condition, onError);
+    }
+
+    @Override
+    public StringValidation failOn(TerminationMode terminationMode) {
+        return (StringValidation) super.failOn(terminationMode);
+    }
+
+    @Override
+    public StringValidation failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        return (StringValidation) super.failOn(terminationMode, errorMode);
     }
 }

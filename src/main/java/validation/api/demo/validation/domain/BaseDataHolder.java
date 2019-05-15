@@ -16,24 +16,44 @@ import java.util.List;
 public abstract class BaseDataHolder<T> {
 
     protected T obj;
-    protected TerminationMode terminationMode;
+    private TerminationMode terminationMode;
+    private ErrorMode errorMode;
     private List<SystemMessage> errors;
 
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
-    protected List<SystemMessage> failOn(TerminationMode terminationMode) {
-        return this.failOn(terminationMode, ErrorMode.THROW);
+    protected List<SystemMessage> examine() {
+        if (this.terminationMode == null || this.errorMode == null) {
+            this.terminationMode = conditionClusters.size() == 1 ? TerminationMode.FIRST_ERROR_ENCOUNTERED
+                                                                 : TerminationMode.NONE_GROUP_MATCH;
+
+            this.errorMode = ErrorMode.THROW;
+        }
+
+        return this.terminate(this.terminationMode, this.errorMode);
     }
 
-    protected List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        this.terminationMode = terminationMode;
-
-        return this.terminate(terminationMode, errorMode);
-    }
+//    protected List<SystemMessage> failOn(TerminationMode terminationMode) {
+//        return this.failOn(terminationMode, ErrorMode.THROW);
+//    }
+//
+//    protected List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+//        this.terminationMode = terminationMode;
+//
+//        return this.terminate(terminationMode, errorMode);
+//    }
 
     List<SystemMessage> getError() {
         return this.errors;
+    }
+
+    TerminationMode getTerminationMode() {
+        return this.terminationMode;
+    }
+
+    ErrorMode getErrorMode() {
+        return this.errorMode;
     }
 
     List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
@@ -52,6 +72,15 @@ public abstract class BaseDataHolder<T> {
 
         this.conditionClusters.add(conditionCluster);
         this.currentCluster = conditionCluster;
+    }
+
+    void registerModes(TerminationMode terminationMode, ErrorMode errorMode) {
+        if (this.terminationMode != null || this.errorMode != null) {
+            throw new UnsupportedOperationException();
+        }
+
+        this.terminationMode = terminationMode;
+        this.errorMode = errorMode;
     }
 
     protected void registerCondition(SingleCondition<T> condition, String onError) {

@@ -11,7 +11,8 @@ import validation.api.demo.validation.dict.TerminationMode;
 
 import java.util.Optional;
 
-import static validation.api.demo.validation.domain.number.LongConditions.*;
+import static validation.api.demo.validation.domain.number.LongConditions.isEqualTo;
+import static validation.api.demo.validation.domain.number.LongConditions.isGte;
 
 @Slf4j
 @Service
@@ -32,9 +33,9 @@ public class UserValidatorNew {
                   .isNotNull("User not found")
                   .inspecting(
                           this::getClientId,
-                          TerminationMode.LAST_ERROR_ENCOUNTERED,
                           id -> Validation.verifyIf(id)
                                           .isAnyOf(isGte(1L), isEqualTo(orderClientId), "invalid user")
+                                          .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
                   )
                   .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
     }

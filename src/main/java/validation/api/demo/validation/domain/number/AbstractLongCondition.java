@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.number;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.number.impl.LongValidation;
@@ -90,12 +91,22 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     }
 
     @Override
-    public <R> LongValidation inspecting(Function<Long, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        return (LongValidation) super.inspecting(mapper,terminationMode, validator);
+    public <R> LongValidation inspecting(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (LongValidation) super.inspecting(mapper, validator);
     }
 
     @Override
     public <R> LongValidation inspecting(Function<Long, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
         return (LongValidation) super.inspecting(mapper, condition, onError);
+    }
+
+    @Override
+    public LongValidation failOn(TerminationMode terminationMode) {
+        return (LongValidation) super.failOn(terminationMode);
+    }
+
+    @Override
+    public LongValidation failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        return (LongValidation) super.failOn(terminationMode, errorMode);
     }
 }

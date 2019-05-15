@@ -1,6 +1,7 @@
 package validation.api.demo.validation.domain.date;
 
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.date.impl.DateValidation;
@@ -75,12 +76,22 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        return (DateValidation) super.inspecting(mapper, terminationMode, validator);
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (DateValidation) super.inspecting(mapper, validator);
     }
 
     @Override
     public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
         return (DateValidation) super.inspecting(mapper, condition, onError);
+    }
+
+    @Override
+    public DateValidation failOn(TerminationMode terminationMode) {
+        return (DateValidation) super.failOn(terminationMode);
+    }
+
+    @Override
+    public DateValidation failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        return (DateValidation) super.failOn(terminationMode, errorMode);
     }
 }

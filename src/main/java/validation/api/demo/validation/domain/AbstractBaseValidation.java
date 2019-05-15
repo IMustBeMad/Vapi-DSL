@@ -53,8 +53,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected AbstractBaseValidation<T> withTerm(TerminationMode terminationMode, Function<T, AbstractBaseValidation<T>> validator) {
-        return this.inspect(this.obj, terminationMode, validator);
+    protected AbstractBaseValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
+        return this.inspect(this.obj, validator);
     }
 
     protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
@@ -91,13 +91,25 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
-        return this.inspect(mapper.apply(this.obj), terminationMode, validator);
+    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return this.inspect(mapper.apply(this.obj), validator);
     }
 
-    protected <R> AbstractBaseValidation<T> inspect(R obj, TerminationMode terminationMode, Function<R, AbstractBaseValidation<R>> validator) {
+    protected AbstractBaseValidation<T> failOn(TerminationMode terminationMode) {
+        registerModes(terminationMode, ErrorMode.THROW);
+
+        return this;
+    }
+
+    protected AbstractBaseValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
+        registerModes(terminationMode, errorMode);
+
+        return this;
+    }
+
+    protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
         AbstractBaseValidation<R> innerValidation = validator.apply(obj);
-        memoize(new ValidationCondition<>(it -> innerValidation.terminate(terminationMode, ErrorMode.RETURN).isEmpty(), innerValidation::getError));
+        memoize(new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError));
 
         return this;
     }
