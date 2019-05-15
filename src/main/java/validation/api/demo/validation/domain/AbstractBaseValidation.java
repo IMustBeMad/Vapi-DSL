@@ -69,7 +69,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    public AbstractBaseValidation<T> or() {
+    protected AbstractBaseValidation<T> or() {
         registerCluster();
 
         return this;
