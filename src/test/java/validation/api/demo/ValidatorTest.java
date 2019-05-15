@@ -31,9 +31,9 @@ public class ValidatorTest {
         Long val = null;
 
         Validation.verifyIf(val)
-                  .isNotNull("is.null")
-                  .isEqualTo(42L, "not.equal")
-                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
+                  .isNull("is.not.null")
+                  .failOn(TerminationMode.NO_ERROR_ENCOUNTERED)
+                  .examine();
     }
 
     @Test

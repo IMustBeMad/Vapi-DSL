@@ -34,33 +34,12 @@ public abstract class BaseDataHolder<T> {
         return this.terminate(this.terminationMode, this.errorMode);
     }
 
-//    protected List<SystemMessage> failOn(TerminationMode terminationMode) {
-//        return this.failOn(terminationMode, ErrorMode.THROW);
-//    }
-//
-//    protected List<SystemMessage> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-//        this.terminationMode = terminationMode;
-//
-//        return this.terminate(terminationMode, errorMode);
-//    }
+    protected void registerCondition(SingleCondition<T> condition, String onError) {
+        this.memoize(toSingleCondition(condition, onError));
+    }
 
     List<SystemMessage> getError() {
         return this.errors;
-    }
-
-    TerminationMode getTerminationMode() {
-        return this.terminationMode;
-    }
-
-    ErrorMode getErrorMode() {
-        return this.errorMode;
-    }
-
-    List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
-        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
-        this.errors = systemMessages;
-
-        return systemMessages;
     }
 
     void memoize(Condition<T> condition) {
@@ -83,8 +62,11 @@ public abstract class BaseDataHolder<T> {
         this.errorMode = errorMode;
     }
 
-    protected void registerCondition(SingleCondition<T> condition, String onError) {
-        this.memoize(toSingleCondition(condition, onError));
+    private List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
+        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
+        this.errors = systemMessages;
+
+        return systemMessages;
     }
 
     private SingleCondition<T> toSingleCondition(SingleCondition<T> condition, String onError) {

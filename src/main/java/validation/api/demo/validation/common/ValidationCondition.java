@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ValidationCondition<T> implements Condition<T> {
 
-    private @NonNull Predicate<T> predicate;
+    private Predicate<T> predicate;
     private FailureMode failureMode = FailureMode.COMMON;
-    private @NonNull Supplier<List<SystemMessage>> supplier;
+    private Supplier<List<SystemMessage>> supplier;
 
     public ValidationCondition(Predicate<T> predicate, Supplier<List<SystemMessage>> supplier) {
         this.predicate = predicate;

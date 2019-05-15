@@ -16,18 +16,16 @@ import java.util.function.Predicate;
 public class SingleCondition<T> implements Condition<T> {
 
     private Predicate<T> predicate;
-    private FailureMode failureMode;
+    private FailureMode failureMode = FailureMode.COMMON;
     private String onError;
 
     public SingleCondition(Predicate<T> predicate) {
         this.predicate = predicate;
-        this.failureMode = FailureMode.COMMON;
     }
 
     public SingleCondition(Predicate<T> predicate, String onError) {
         this.predicate = predicate;
         this.onError = onError;
-        this.failureMode = FailureMode.COMMON;
     }
 
     public SingleCondition(Predicate<T> predicate, FailureMode failureMode) {
