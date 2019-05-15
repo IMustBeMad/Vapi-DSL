@@ -16,4 +16,9 @@ public class StringValidation extends AbstractStringClause {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    public StringValidation onError(String error) {
+        return ((StringValidation) super.onError(error));
+    }
 }

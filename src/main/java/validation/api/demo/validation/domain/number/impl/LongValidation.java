@@ -16,4 +16,9 @@ public class LongValidation extends AbstractLongClause {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected LongValidation onError(String error) {
+        return (LongValidation) super.onError(error);
+    }
 }

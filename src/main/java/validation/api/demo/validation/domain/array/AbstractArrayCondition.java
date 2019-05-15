@@ -13,63 +13,63 @@ import java.util.stream.Stream;
 
 public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T[]> {
 
-    public ArrayValidation<T> contains(T element, String onError) {
-        registerCondition(ArrayConditions.contains(element), onError);
+    public ArrayValidation<T> contains(T element) {
+        registerCondition(ArrayConditions.contains(element));
 
         return (ArrayValidation<T>) this;
     }
 
-    public ArrayValidation<T> ofSize(int size, String onError) {
-        registerCondition(ArrayConditions.ofSize(size), onError);
+    public ArrayValidation<T> ofSize(int size) {
+        registerCondition(ArrayConditions.ofSize(size));
 
         return (ArrayValidation<T>) this;
     }
 
-    public ArrayValidation<T> isEmpty(String onError) {
-        registerCondition(ArrayConditions.isEmpty(), onError);
+    public ArrayValidation<T> isEmpty() {
+        registerCondition(ArrayConditions.isEmpty());
 
         return (ArrayValidation<T>) this;
     }
 
-    public ArrayValidation<T> isNotEmpty(String onError) {
-        registerCondition(ArrayConditions.isNotEmpty(), onError);
+    public ArrayValidation<T> isNotEmpty() {
+        registerCondition(ArrayConditions.isNotEmpty());
 
         return (ArrayValidation<T>) this;
     }
 
     @Override
-    public ArrayValidation<T> isNull(String onError) {
-        return (ArrayValidation<T>) super.isNull(onError);
+    public ArrayValidation<T> isNull() {
+        return (ArrayValidation<T>) super.isNull();
     }
 
     @Override
-    public ArrayValidation<T> isNotNull(String onError) {
-        return (ArrayValidation<T>) super.isNotNull(onError);
+    public ArrayValidation<T> isNotNull() {
+        return (ArrayValidation<T>) super.isNotNull();
     }
 
     @Override
-    public ArrayValidation<T> isEqualTo(T[] otherObj, String onError) {
-        return (ArrayValidation<T>) super.isEqualTo(otherObj, onError);
+    public ArrayValidation<T> isEqualTo(T[] otherObj) {
+        return (ArrayValidation<T>) super.isEqualTo(otherObj);
     }
 
     @Override
-    public ArrayValidation<T> isNotEqualTo(T[] otherObj, String onError) {
-        return (ArrayValidation<T>) super.isNotEqualTo(otherObj, onError);
+    public ArrayValidation<T> isNotEqualTo(T[] otherObj) {
+        return (ArrayValidation<T>) super.isNotEqualTo(otherObj);
     }
 
     @Override
-    public ArrayValidation<T> withTerm(Predicate<T[]> predicate, String onError) {
-        return (ArrayValidation<T>) super.withTerm(predicate, onError);
+    public ArrayValidation<T> withTerm(Predicate<T[]> predicate) {
+        return (ArrayValidation<T>) super.withTerm(predicate);
     }
 
     @Override
-    public ArrayValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
-        return (ArrayValidation<T>) super.withTerm(supplier, onError);
+    public ArrayValidation<T> withTerm(Supplier<Boolean> supplier) {
+        return (ArrayValidation<T>) super.withTerm(supplier);
     }
 
-    public ArrayValidation<T> each(SingleCondition<T> condition, String onError) {
+    public ArrayValidation<T> each(SingleCondition<T> condition) {
         SingleCondition<T[]> listCondition = new SingleCondition<>(array -> Stream.of(array).allMatch(el -> condition.getPredicate().test(el)));
-        registerCondition(listCondition, onError);
+        registerCondition(listCondition);
 
         return (ArrayValidation<T>) this;
     }
@@ -81,13 +81,13 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     }
 
     @Override
-    public ArrayValidation<T> isAnyOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
-        return (ArrayValidation<T>) super.isAnyOf(condition1, condition2, onError);
+    public ArrayValidation<T> isAnyOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2) {
+        return (ArrayValidation<T>) super.isAnyOf(condition1, condition2);
     }
 
     @Override
-    public ArrayValidation<T> isAllOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2, String onError) {
-        return (ArrayValidation<T>) super.isAllOf(condition1, condition2, onError);
+    public ArrayValidation<T> isAllOf(SingleCondition<T[]> condition1, SingleCondition<T[]> condition2) {
+        return (ArrayValidation<T>) super.isAllOf(condition1, condition2);
     }
 
     @Override
@@ -96,18 +96,18 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     }
 
     @Override
-    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Predicate<R> predicate, String onError) {
-        return (ArrayValidation<T>) super.inspecting(mapper, predicate, onError);
+    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Predicate<R> predicate) {
+        return (ArrayValidation<T>) super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ArrayValidation<T>) super.inspecting(mapper, validator);
+    public <R> ArrayValidation<T> innerValidation(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ArrayValidation<T>) super.innerValidation(mapper, validator);
     }
 
     @Override
-    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
-        return (ArrayValidation<T>) super.inspecting(mapper, condition, onError);
+    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ArrayValidation<T>) super.inspecting(mapper, condition);
     }
 
     @Override

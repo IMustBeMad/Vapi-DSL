@@ -17,4 +17,9 @@ public class DateValidation extends AbstractDateClause {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    protected DateValidation onError(String error) {
+        return (DateValidation) super.onError(error);
+    }
 }

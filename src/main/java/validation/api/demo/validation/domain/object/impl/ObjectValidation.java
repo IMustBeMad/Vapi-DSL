@@ -18,4 +18,9 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    public ObjectValidation<T> onError(String error) {
+        return ((ObjectValidation<T>) super.onError(error));
+    }
 }

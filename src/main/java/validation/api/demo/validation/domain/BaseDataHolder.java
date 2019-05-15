@@ -22,24 +22,30 @@ public abstract class BaseDataHolder<T> {
 
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
+    private Condition<T> currentCondition;
 
     protected List<SystemMessage> examine() {
         if (this.terminationMode == null || this.errorMode == null) {
-            this.terminationMode = conditionClusters.size() == 1 ? TerminationMode.FIRST_ERROR_ENCOUNTERED
-                                                                 : TerminationMode.NONE_GROUP_MATCH;
-
-            this.errorMode = ErrorMode.THROW;
+            this.terminationMode = getDefaultTerminationMode();
+            this.errorMode = getDefaultErrorMode();
         }
 
         return this.terminate(this.terminationMode, this.errorMode);
     }
 
-    protected void registerCondition(SingleCondition<T> condition, String onError) {
-        this.memoize(toSingleCondition(condition, onError));
+    protected void registerCondition(SingleCondition<T> condition) {
+        SingleCondition<T> conditionToRegister = toSingleCondition(condition);
+        this.currentCondition = conditionToRegister;
+
+        this.memoize(conditionToRegister);
     }
 
     List<SystemMessage> getError() {
         return this.errors;
+    }
+
+    Condition<T> getCurrentCondition() {
+        return this.currentCondition;
     }
 
     void memoize(Condition<T> condition) {
@@ -54,10 +60,6 @@ public abstract class BaseDataHolder<T> {
     }
 
     void registerModes(TerminationMode terminationMode, ErrorMode errorMode) {
-        if (this.terminationMode != null || this.errorMode != null) {
-            throw new UnsupportedOperationException();
-        }
-
         this.terminationMode = terminationMode;
         this.errorMode = errorMode;
     }
@@ -69,11 +71,19 @@ public abstract class BaseDataHolder<T> {
         return systemMessages;
     }
 
-    private SingleCondition<T> toSingleCondition(SingleCondition<T> condition, String onError) {
+    private SingleCondition<T> toSingleCondition(SingleCondition<T> condition) {
         SingleCondition<T> singleCondition = new SingleCondition<>();
         singleCondition.setPredicate(condition.getPredicate());
-        singleCondition.setOnError(onError);
 
         return singleCondition;
+    }
+
+    private ErrorMode getDefaultErrorMode() {
+        return ErrorMode.THROW;
+    }
+
+    private TerminationMode getDefaultTerminationMode() {
+        return conditionClusters.size() == 1 ? TerminationMode.FIRST_ERROR_ENCOUNTERED
+                                             : TerminationMode.NONE_GROUP_MATCH;
     }
 }

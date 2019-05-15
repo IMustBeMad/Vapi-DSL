@@ -16,4 +16,9 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
     public List<SystemMessage> examine() {
         return super.examine();
     }
+
+    @Override
+    public ArrayValidation<T> onError(String error) {
+        return (ArrayValidation<T>) super.onError(error);
+    }
 }

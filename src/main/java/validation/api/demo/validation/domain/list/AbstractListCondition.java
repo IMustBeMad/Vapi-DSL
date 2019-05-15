@@ -13,38 +13,38 @@ import java.util.function.Supplier;
 
 public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
 
-    public ListValidation<T> contains(T element, String onError) {
-        registerCondition(ListConditions.contains(element), onError);
+    public ListValidation<T> contains(T element) {
+        registerCondition(ListConditions.contains(element));
 
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> ofSize(int size, String onError) {
-        registerCondition(ListConditions.ofSize(size), onError);
+    public ListValidation<T> ofSize(int size) {
+        registerCondition(ListConditions.ofSize(size));
 
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> hasNoDuplicates(String onError) {
-        registerCondition(ListConditions.hasNoDuplicates(), onError);
+    public ListValidation<T> hasNoDuplicates() {
+        registerCondition(ListConditions.hasNoDuplicates());
 
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> isEmpty(String onError) {
-        registerCondition(ListConditions.isEmpty(), onError);
+    public ListValidation<T> isEmpty() {
+        registerCondition(ListConditions.isEmpty());
 
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> isNotEmpty(String onError) {
-        registerCondition(ListConditions.isNotEmpty(), onError);
+    public ListValidation<T> isNotEmpty() {
+        registerCondition(ListConditions.isNotEmpty());
 
         return (ListValidation<T>) this;
     }
 
-    public ListValidation<T> each(SingleCondition<T> condition, String onError) {
-        this.obj.forEach(it -> this.inspect(it, condition.getPredicate(), onError));
+    public ListValidation<T> each(SingleCondition<T> condition) {
+        this.obj.forEach(it -> this.inspect(it, condition.getPredicate()));
 
         return (ListValidation<T>) this;
     }
@@ -56,43 +56,43 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     @Override
-    public ListValidation<T> isNull(String onError) {
-        return (ListValidation<T>) super.isNull(onError);
+    public ListValidation<T> isNull() {
+        return (ListValidation<T>) super.isNull();
     }
 
     @Override
-    public ListValidation<T> isNotNull(String onError) {
-        return (ListValidation<T>) super.isNotNull(onError);
+    public ListValidation<T> isNotNull() {
+        return (ListValidation<T>) super.isNotNull();
     }
 
     @Override
-    public ListValidation<T> isEqualTo(List<T> otherList, String onError) {
-        return (ListValidation<T>) super.isEqualTo(otherList, onError);
+    public ListValidation<T> isEqualTo(List<T> otherList) {
+        return (ListValidation<T>) super.isEqualTo(otherList);
     }
 
     @Override
-    public ListValidation<T> isNotEqualTo(List<T> otherList, String onError) {
-        return (ListValidation<T>) super.isNotEqualTo(otherList, onError);
+    public ListValidation<T> isNotEqualTo(List<T> otherList) {
+        return (ListValidation<T>) super.isNotEqualTo(otherList);
     }
 
     @Override
-    public ListValidation<T> withTerm(Predicate<List<T>> predicate, String onError) {
-        return (ListValidation<T>) super.withTerm(predicate, onError);
+    public ListValidation<T> withTerm(Predicate<List<T>> predicate) {
+        return (ListValidation<T>) super.withTerm(predicate);
     }
 
     @Override
-    public ListValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
-        return (ListValidation<T>) super.withTerm(supplier, onError);
+    public ListValidation<T> withTerm(Supplier<Boolean> supplier) {
+        return (ListValidation<T>) super.withTerm(supplier);
     }
 
     @Override
-    public ListValidation<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
-        return (ListValidation<T>) super.isAnyOf(condition1, condition2, onError);
+    public ListValidation<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2) {
+        return (ListValidation<T>) super.isAnyOf(condition1, condition2);
     }
 
     @Override
-    public ListValidation<T> isAllOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2, String onError) {
-        return (ListValidation<T>) super.isAllOf(condition1, condition2, onError);
+    public ListValidation<T> isAllOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2) {
+        return (ListValidation<T>) super.isAllOf(condition1, condition2);
     }
 
     @Override
@@ -101,18 +101,18 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate, String onError) {
-        return (ListValidation<T>) super.inspecting(mapper, predicate, onError);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate) {
+        return (ListValidation<T>) super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ListValidation<T>) super.inspecting(mapper, validator);
+    public <R> ListValidation<T> innerValidation(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ListValidation<T>) super.innerValidation(mapper, validator);
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
-        return (ListValidation<T>) super.inspecting(mapper, condition, onError);
+    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ListValidation<T>) super.inspecting(mapper, condition);
     }
 
     @Override

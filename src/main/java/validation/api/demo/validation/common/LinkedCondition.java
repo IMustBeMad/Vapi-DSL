@@ -23,10 +23,9 @@ public class LinkedCondition<T> implements Condition<T> {
     private Clause linkClause;
     private String onError;
 
-    public LinkedCondition(List<SingleCondition<T>> conditions, Clause linkClause, String onError) {
+    public LinkedCondition(List<SingleCondition<T>> conditions, Clause linkClause) {
         this.conditions = conditions;
         this.linkClause = linkClause;
-        this.onError = onError;
     }
 
     public List<Predicate<T>> getPredicates() {

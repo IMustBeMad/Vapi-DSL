@@ -10,6 +10,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -21,6 +23,7 @@ public class ValidationCondition<T> implements Condition<T> {
     private Predicate<T> predicate;
     private FailureMode failureMode = FailureMode.COMMON;
     private Supplier<List<SystemMessage>> supplier;
+    private String onError;
 
     public ValidationCondition(Predicate<T> predicate, Supplier<List<SystemMessage>> supplier) {
         this.predicate = predicate;
@@ -34,6 +37,10 @@ public class ValidationCondition<T> implements Condition<T> {
 
     @Override
     public String getOnError() {
+        if (!isEmpty(this.onError)) {
+            return this.onError;
+        }
+
         return String.join(",\n", getErrorCodes());
     }
 
