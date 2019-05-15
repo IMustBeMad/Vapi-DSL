@@ -40,6 +40,7 @@ public enum SimpleTerminator implements Terminator {
 
             if (!result.isValid()) {
                 SystemMessage reason = result.getReason();
+
                 if (condition.getFailureMode() == FailureMode.EARLY_EXIT) {
                     return Collections.singletonList(reason);
                 }
@@ -53,7 +54,13 @@ public enum SimpleTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> failOnNoErrors(List<Condition<T>> conditions, T obj) {
-        return null;
+        List<SystemMessage> systemMessages = this.failOnLastError(conditions, obj);
+
+        if (systemMessages.isEmpty()) {
+            return Collections.singletonList(SystemMessage.withError("group", "fail.on.no.errors"));
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
@@ -63,6 +70,6 @@ public enum SimpleTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        throw new UnsupportedOperationException();
+        return this.failOnNoErrors(conditionClusters.get(0).getConditions(), obj);
     }
 }

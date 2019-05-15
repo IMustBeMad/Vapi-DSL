@@ -35,22 +35,12 @@ public enum TernaryTerminator implements Terminator {
         List<SystemMessage> systemMessages = new ArrayList<>();
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {
-            SystemMessage systemMessage = null;
-            List<Condition<T>> conditions = conditionCluster.getConditions();
-
-            for (Condition<T> condition : conditions) {
-                ValidationResult result = tester.test(condition, obj);
-
-                if (!result.isValid()) {
-                    systemMessage = result.getReason();
-                    systemMessages.add(systemMessage);
-                    break;
-                }
-            }
+            SystemMessage systemMessage = getFirstError(tester, conditionCluster, obj);
 
             if (systemMessage == null) {
                 return Collections.emptyList();
             }
+            systemMessages.add(systemMessage);
         }
 
         return systemMessages;
@@ -58,6 +48,25 @@ public enum TernaryTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return null;
+        TesterFacade tester = TesterFacade.INSTANCE;
+
+        for (ConditionCluster<T> conditionCluster : conditionClusters) {
+            SystemMessage systemMessage = getFirstError(tester, conditionCluster, obj);
+
+            if (systemMessage == null) {
+                return Collections.singletonList(SystemMessage.withError("group", "fail.on.first.group.match"));
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    private <T> SystemMessage getFirstError(TesterFacade tester, ConditionCluster<T> conditionCluster, T obj) {
+        return conditionCluster.getConditions().stream()
+                               .map(condition -> tester.test(condition, obj))
+                               .filter(result -> !result.isValid())
+                               .findFirst()
+                               .map(ValidationResult::getReason)
+                               .orElse(null);
     }
 }
