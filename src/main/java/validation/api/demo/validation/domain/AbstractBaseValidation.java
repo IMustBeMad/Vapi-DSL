@@ -91,7 +91,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected <R> AbstractBaseValidation<T> innerValidation(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+    protected <R> AbstractBaseValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return this.inspect(mapper.apply(this.obj), validator);
     }
 
@@ -107,6 +107,18 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
+    protected AbstractBaseValidation<T> onError(String error) {
+        this.getCurrentCondition().setOnError(error);
+
+        return this;
+    }
+
+    protected AbstractBaseValidation<T> onGroupError(String error) {
+        this.getCurrentCluster().setOnError(error);
+
+        return this;
+    }
+
     protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
         AbstractBaseValidation<R> innerValidation = validator.apply(obj);
         memoize(new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError));
@@ -116,12 +128,6 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
 
     protected <R> AbstractBaseValidation<T> inspect(R obj, Predicate<R> predicate) {
         memoize(new SingleCondition<>(it -> predicate.test(obj)));
-
-        return this;
-    }
-
-    protected AbstractBaseValidation<T> onError(String error) {
-        this.getCurrentCondition().setOnError(error);
 
         return this;
     }

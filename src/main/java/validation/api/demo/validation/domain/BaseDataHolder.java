@@ -48,6 +48,10 @@ public abstract class BaseDataHolder<T> {
         return this.currentCondition;
     }
 
+    ConditionCluster<T> getCurrentCluster() {
+        return this.currentCluster;
+    }
+
     void memoize(Condition<T> condition) {
         this.currentCluster.add(condition);
     }

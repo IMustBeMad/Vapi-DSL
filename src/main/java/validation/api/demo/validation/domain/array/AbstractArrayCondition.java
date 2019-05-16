@@ -101,13 +101,13 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     }
 
     @Override
-    public <R> ArrayValidation<T> innerValidation(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ArrayValidation<T>) super.innerValidation(mapper, validator);
+    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ArrayValidation<T>) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> ArrayValidation<T> inspecting(Function<T[], R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (ArrayValidation<T>) super.inspecting(mapper, condition);
+    public <R> ArrayValidation<T> deepInspecting(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ArrayValidation<T>) super.deepInspecting(mapper, validator);
     }
 
     @Override

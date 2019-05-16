@@ -76,13 +76,13 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public <R> DateValidation innerValidation(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (DateValidation) super.innerValidation(mapper, validator);
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (DateValidation) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (DateValidation) super.inspecting(mapper, condition);
+    public <R> DateValidation deepInspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (DateValidation) super.deepInspecting(mapper, validator);
     }
 
     @Override

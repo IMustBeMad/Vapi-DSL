@@ -75,7 +75,7 @@ public class ValidatorTest {
                   .contains("Rick")
                   .hasNoDuplicates()
                   .ofSize(10)
-                  .innerValidation(
+                  .deepInspecting(
                           list -> list.get(0),
                           name -> Validation.verifyIf(name)
                   )

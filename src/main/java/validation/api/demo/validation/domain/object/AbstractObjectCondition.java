@@ -68,13 +68,13 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public <R> ObjectValidation<T> innerValidation(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ObjectValidation<T>) super.innerValidation(mapper, validator);
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ObjectValidation<T>) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (ObjectValidation<T>) super.inspecting(mapper, condition);
+    public <R> ObjectValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ObjectValidation<T>) super.deepInspecting(mapper, validator);
     }
 
     @Override
