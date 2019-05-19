@@ -86,13 +86,15 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     @Override
-    public ListValidation<T> isAnyOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2) {
-        return (ListValidation<T>) super.isAnyOf(condition1, condition2);
+    @SafeVarargs
+    public final ListValidation<T> isAnyOf(SingleCondition<List<T>>... conditions) {
+        return (ListValidation<T>) super.isAnyOf(conditions);
     }
 
     @Override
-    public ListValidation<T> isAllOf(SingleCondition<List<T>> condition1, SingleCondition<List<T>> condition2) {
-        return (ListValidation<T>) super.isAllOf(condition1, condition2);
+    @SafeVarargs
+    public final ListValidation<T> isAllOf(SingleCondition<List<T>>... conditions) {
+        return (ListValidation<T>) super.isAllOf(conditions);
     }
 
     @Override

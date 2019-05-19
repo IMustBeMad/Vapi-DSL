@@ -56,13 +56,15 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public DateValidation isAnyOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2) {
-        return (DateValidation) super.isAnyOf(condition1, condition2);
+    @SafeVarargs
+    public final DateValidation isAnyOf(SingleCondition<LocalDate>... conditions) {
+        return (DateValidation) super.isAnyOf(conditions);
     }
 
     @Override
-    public DateValidation isAllOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2) {
-        return (DateValidation) super.isAllOf(condition1, condition2);
+    @SafeVarargs
+    public final DateValidation isAllOf(SingleCondition<LocalDate>... conditions) {
+        return (DateValidation) super.isAllOf(conditions);
     }
 
     @Override

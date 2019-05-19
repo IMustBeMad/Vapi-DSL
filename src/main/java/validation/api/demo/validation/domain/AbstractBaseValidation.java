@@ -57,14 +57,14 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this.inspect(this.obj, validator);
     }
 
-    protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2) {
-        memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.OR));
+    protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T>... conditions) {
+        memoize(new LinkedCondition<>(List.of(conditions), Clause.OR));
 
         return this;
     }
 
-    protected AbstractBaseValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2) {
-        memoize(new LinkedCondition<>(List.of(condition1, condition2), Clause.AND));
+    protected AbstractBaseValidation<T> isAllOf(SingleCondition<T>... conditions) {
+        memoize(new LinkedCondition<>(List.of(conditions), Clause.AND));
 
         return this;
     }

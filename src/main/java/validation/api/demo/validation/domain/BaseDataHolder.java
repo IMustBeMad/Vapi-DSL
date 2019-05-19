@@ -34,10 +34,7 @@ public abstract class BaseDataHolder<T> {
     }
 
     protected void registerCondition(SingleCondition<T> condition) {
-        SingleCondition<T> conditionToRegister = toSingleCondition(condition);
-        this.currentCondition = conditionToRegister;
-
-        this.memoize(conditionToRegister);
+        this.memoize(toSingleCondition(condition));
     }
 
     List<SystemMessage> getError() {
@@ -53,6 +50,7 @@ public abstract class BaseDataHolder<T> {
     }
 
     void memoize(Condition<T> condition) {
+        this.currentCondition = condition;
         this.currentCluster.add(condition);
     }
 
