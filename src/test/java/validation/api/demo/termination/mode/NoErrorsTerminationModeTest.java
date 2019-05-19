@@ -1,4 +1,4 @@
-package validation.api.demo.data;
+package validation.api.demo.termination.mode;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +25,8 @@ public class NoErrorsTerminationModeTest {
 
     @Test
     public void should_returnError_when_noErrorsEncountered() {
-        List<SystemMessage> messages = getStringValidation()
-                                               .failOn(NO_ERROR_ENCOUNTERED, ErrorMode.RETURN)
-                                               .examine();
+        List<SystemMessage> messages = getStringValidation().failOn(NO_ERROR_ENCOUNTERED, ErrorMode.RETURN)
+                                                            .examine();
 
         assertThat(messages).extracting(SystemMessage::getReasonCode)
                             .containsOnly(ERROR);

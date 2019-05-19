@@ -1,4 +1,4 @@
-package validation.api.demo.data;
+package validation.api.demo.termination.mode;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
