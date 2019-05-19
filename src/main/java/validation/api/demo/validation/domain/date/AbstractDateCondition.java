@@ -36,8 +36,8 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public AbstractDateCondition isEqualTo(LocalDate otherDate) {
-        return (AbstractDateCondition) super.isEqualTo(otherDate);
+    public DateValidation isEqualTo(LocalDate otherDate) {
+        return (DateValidation) super.isEqualTo(otherDate);
     }
 
     @Override

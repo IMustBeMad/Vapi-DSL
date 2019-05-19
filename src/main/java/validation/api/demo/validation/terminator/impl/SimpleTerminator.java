@@ -8,22 +8,21 @@ import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.terminator.Terminator;
 import validation.api.demo.validation.tester.impl.TesterFacade;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failOnFirstError(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnFirstError(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
+        List<Condition<T>> conditions = conditionCluster.getConditions();
 
         for (Condition<T> condition : conditions) {
             ValidationResult result = tester.test(condition, obj);
 
             if (!result.isValid()) {
-                return Collections.singletonList(result.getReason());
+                return Collections.singletonList(getErrorReason(result, conditionCluster.getOnError()));
             }
         }
 
@@ -31,9 +30,10 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> failOnLastError(List<Condition<T>> conditions, T obj) {
+    public <T> List<SystemMessage> failOnLastError(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
-        List<SystemMessage> errors = new ArrayList<>();
+        List<Condition<T>> conditions = conditionCluster.getConditions();
+        Set<SystemMessage> errors = new HashSet<>();
 
         for (Condition<T> condition : conditions) {
             ValidationResult result = tester.test(condition, obj);
@@ -45,19 +45,19 @@ public enum SimpleTerminator implements Terminator {
                     return Collections.singletonList(reason);
                 }
 
-                errors.add(reason);
+                errors.add(getErrorReason(result, conditionCluster.getOnError()));
             }
         }
 
-        return errors;
+        return new ArrayList<>(errors);
     }
 
     @Override
-    public <T> List<SystemMessage> failOnNoErrors(List<Condition<T>> conditions, T obj) {
-        List<SystemMessage> systemMessages = this.failOnLastError(conditions, obj);
+    public <T> List<SystemMessage> failOnNoErrors(ConditionCluster<T> conditionCluster, T obj) {
+        List<SystemMessage> systemMessages = this.failOnLastError(conditionCluster, obj);
 
         if (systemMessages.isEmpty()) {
-            return Collections.singletonList(SystemMessage.withError("group", "fail.on.no.errors"));
+            return Collections.singletonList(SystemMessage.withError("group", conditionCluster.getOnError()));
         }
 
         return Collections.emptyList();
@@ -65,11 +65,11 @@ public enum SimpleTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return this.failOnFirstError(conditionClusters.get(0).getConditions(), obj);
+        return this.failOnFirstError(conditionClusters.get(0), obj);
     }
 
     @Override
     public <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return this.failOnNoErrors(conditionClusters.get(0).getConditions(), obj);
+        return this.failOnNoErrors(conditionClusters.get(0), obj);
     }
 }

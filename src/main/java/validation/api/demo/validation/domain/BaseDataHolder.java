@@ -21,8 +21,8 @@ public abstract class BaseDataHolder<T> {
     private List<SystemMessage> errors;
 
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
-    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
     private Condition<T> currentCondition;
+    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
     protected List<SystemMessage> examine() {
         if (this.terminationMode == null || this.errorMode == null) {

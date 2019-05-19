@@ -18,7 +18,12 @@ public class LongValidation extends AbstractLongClause {
     }
 
     @Override
-    protected LongValidation onError(String error) {
+    public LongValidation onError(String error) {
         return (LongValidation) super.onError(error);
+    }
+
+    @Override
+    public LongValidation onGroupError(String error) {
+        return (LongValidation) super.onGroupError(error);
     }
 }
