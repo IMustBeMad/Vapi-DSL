@@ -7,8 +7,12 @@ import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
+import validation.api.demo.validation.dict.TerminationMode;
 
 import java.util.Optional;
+
+import static validation.api.demo.validation.domain.number.LongConditions.isEqualTo;
+import static validation.api.demo.validation.domain.number.LongConditions.isGt;
 
 @Slf4j
 @Service
@@ -25,15 +29,16 @@ public class UserValidatorNew {
         }
 
         Validation.verifyIf(userService.getOne(userId))
-                  .log("Validating user with id [{}]", userId);
-//                  .isNotNull("User not found")
-//                  .inspecting(
-//                          this::getClientId,
-//                          id -> Validation.verifyIf(id)
-//                                          .isAnyOf(isGte(1L), isEqualTo(orderClientId), "invalid user")
-//                                          .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
-//                  )
-//                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
+                  .log("Validating user with id [{}]", userId)
+                  .isNotNull().onError("User not found")
+                  .deepInspecting(
+                          this::getClientId,
+                          id -> Validation.verifyIf(id)
+                                          .isAnyOf(isGt(1L), isEqualTo(orderClientId)).onError("invalid user")
+                                          .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
+                  )
+                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
+                  .examine();
     }
 
     private Long getClientId(User user) {

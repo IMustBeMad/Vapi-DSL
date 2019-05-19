@@ -121,6 +121,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
 
     protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
         AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+        innerValidation.setDeepInspectingDefaultErrorMore();
+
         memoize(new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError));
 
         return this;

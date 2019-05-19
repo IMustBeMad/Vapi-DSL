@@ -24,19 +24,6 @@ public abstract class BaseDataHolder<T> {
     private Condition<T> currentCondition;
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
-    protected List<SystemMessage> examine() {
-        if (this.terminationMode == null || this.errorMode == null) {
-            this.terminationMode = getDefaultTerminationMode();
-            this.errorMode = getDefaultErrorMode();
-        }
-
-        return this.terminate(this.terminationMode, this.errorMode);
-    }
-
-    protected void registerCondition(SingleCondition<T> condition) {
-        this.memoize(toSingleCondition(condition));
-    }
-
     List<SystemMessage> getError() {
         return this.errors;
     }
@@ -47,6 +34,21 @@ public abstract class BaseDataHolder<T> {
 
     ConditionCluster<T> getCurrentCluster() {
         return this.currentCluster;
+    }
+
+    protected List<SystemMessage> examine() {
+        if (this.terminationMode == null) {
+            this.terminationMode = getDefaultTerminationMode();
+        }
+        if (this.errorMode == null) {
+            this.errorMode = getDefaultErrorMode();
+        }
+
+        return this.terminate(this.terminationMode, this.errorMode);
+    }
+
+    protected void registerCondition(SingleCondition<T> condition) {
+        this.memoize(toSingleCondition(condition));
     }
 
     void memoize(Condition<T> condition) {
@@ -64,6 +66,10 @@ public abstract class BaseDataHolder<T> {
     void registerModes(TerminationMode terminationMode, ErrorMode errorMode) {
         this.terminationMode = terminationMode;
         this.errorMode = errorMode;
+    }
+
+    void setDeepInspectingDefaultErrorMore() {
+        this.errorMode = ErrorMode.RETURN;
     }
 
     private List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
