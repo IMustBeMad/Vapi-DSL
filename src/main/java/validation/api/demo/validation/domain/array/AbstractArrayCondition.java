@@ -1,15 +1,21 @@
 package validation.api.demo.validation.domain.array;
 
+import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.Clause;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T[]> {
 
@@ -33,6 +39,25 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
 
     public ArrayValidation<T> isNotEmpty() {
         registerCondition(ArrayConditions.isNotEmpty());
+
+        return (ArrayValidation<T>) this;
+    }
+
+    public ArrayValidation<T> each(SingleCondition<T> condition) {
+        Optional.of(condition)
+                .map(SingleCondition::getPredicate)
+                .map(this::toSerialCondition)
+                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
+                .ifPresent(this::registerCondition);
+
+        return (ArrayValidation<T>) this;
+    }
+
+    public ArrayValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
+        Optional.of(validator)
+                .map(this::toSerialCondition)
+                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
+                .ifPresent(this::registerCondition);
 
         return (ArrayValidation<T>) this;
     }
@@ -65,19 +90,6 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     @Override
     public ArrayValidation<T> withTerm(Supplier<Boolean> supplier) {
         return (ArrayValidation<T>) super.withTerm(supplier);
-    }
-
-    public ArrayValidation<T> each(SingleCondition<T> condition) {
-        SingleCondition<T[]> listCondition = new SingleCondition<>(array -> Stream.of(array).allMatch(el -> condition.getPredicate().test(el)));
-        registerCondition(listCondition);
-
-        return (ArrayValidation<T>) this;
-    }
-
-    public ArrayValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
-        Stream.of(this.obj).forEach(el -> this.inspect(el, validator));
-
-        return (ArrayValidation<T>) this;
     }
 
     @Override
@@ -120,5 +132,17 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     @Override
     public ArrayValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
         return (ArrayValidation<T>) super.failOn(terminationMode, errorMode);
+    }
+
+    private List<Condition<T[]>> toSerialCondition(Function<T, AbstractBaseValidation<T>> validator) {
+        return Arrays.stream(this.obj)
+                     .map(it -> this.toCondition(it, validator))
+                     .collect(Collectors.toList());
+    }
+
+    private List<Condition<T[]>> toSerialCondition(Predicate<T> predicate) {
+        return Arrays.stream(this.obj)
+                     .map(it -> this.toCondition(it, predicate))
+                     .collect(Collectors.toList());
     }
 }

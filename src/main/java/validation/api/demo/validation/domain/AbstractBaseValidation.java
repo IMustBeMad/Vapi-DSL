@@ -3,7 +3,6 @@ package validation.api.demo.validation.domain;
 import lombok.extern.slf4j.Slf4j;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.common.ValidationCondition;
 import validation.api.demo.validation.dict.Clause;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
@@ -82,7 +81,9 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        return this.inspect(mapper.apply(this.obj), predicate);
+        memoize(toCondition(mapper.apply(this.obj), predicate));
+
+        return this;
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
@@ -119,17 +120,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
-        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
-        innerValidation.setDeepInspectingDefaultErrorMore();
-
-        memoize(new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError));
-
-        return this;
-    }
-
-    protected <R> AbstractBaseValidation<T> inspect(R obj, Predicate<R> predicate) {
-        memoize(new SingleCondition<>(it -> predicate.test(obj)));
+    private  <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
+        memoize(toCondition(obj, validator));
 
         return this;
     }

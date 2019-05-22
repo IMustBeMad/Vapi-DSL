@@ -1,9 +1,7 @@
 package validation.api.demo.validation.domain;
 
 import validation.api.demo.exception.SystemMessage;
-import validation.api.demo.validation.common.Condition;
-import validation.api.demo.validation.common.ConditionCluster;
-import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.common.*;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.terminator.impl.TerminatorFacade;
@@ -11,6 +9,8 @@ import validation.api.demo.validation.terminator.impl.TerminatorFacade;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 public abstract class BaseDataHolder<T> {
@@ -48,7 +48,22 @@ public abstract class BaseDataHolder<T> {
     }
 
     protected void registerCondition(SingleCondition<T> condition) {
-        this.memoize(toSingleCondition(condition));
+        this.memoize(copyCondition(condition));
+    }
+
+    protected void registerCondition(LinkedCondition<T> condition) {
+        this.memoize(condition);
+    }
+
+    protected <R> SingleCondition<T> toCondition(R obj, Predicate<R> predicate) {
+        return new SingleCondition<>(it -> predicate.test(obj));
+    }
+
+    protected <R> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R>> validator) {
+        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+        innerValidation.setDeepInspectingDefaultErrorMore();
+
+        return new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError);
     }
 
     void memoize(Condition<T> condition) {
@@ -79,7 +94,7 @@ public abstract class BaseDataHolder<T> {
         return systemMessages;
     }
 
-    private SingleCondition<T> toSingleCondition(SingleCondition<T> condition) {
+    private SingleCondition<T> copyCondition(SingleCondition<T> condition) {
         SingleCondition<T> singleCondition = new SingleCondition<>();
         singleCondition.setPredicate(condition.getPredicate());
 

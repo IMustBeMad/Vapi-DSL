@@ -1,15 +1,20 @@
 package validation.api.demo.validation.domain.list;
 
+import validation.api.demo.validation.common.Condition;
+import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
+import validation.api.demo.validation.dict.Clause;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.list.impl.ListValidation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
 
@@ -44,13 +49,20 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     }
 
     public ListValidation<T> each(SingleCondition<T> condition) {
-        this.obj.forEach(it -> this.inspect(it, condition.getPredicate()));
+        Optional.of(condition)
+                .map(SingleCondition::getPredicate)
+                .map(this::toSerialCondition)
+                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
+                .ifPresent(this::registerCondition);
 
         return (ListValidation<T>) this;
     }
 
     public ListValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
-       this.obj.forEach(it -> this.inspect(it, validator));
+        Optional.of(validator)
+                .map(this::toSerialCondition)
+                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
+                .ifPresent(this::registerCondition);
 
         return (ListValidation<T>) this;
     }
@@ -125,5 +137,17 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     @Override
     public ListValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
         return (ListValidation<T>) super.failOn(terminationMode, errorMode);
+    }
+
+    private List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T>> validator) {
+        return this.obj.stream()
+                       .map(it -> this.toCondition(it, validator))
+                       .collect(Collectors.toList());
+    }
+
+    private List<Condition<List<T>>> toSerialCondition(Predicate<T> predicate) {
+        return this.obj.stream()
+                       .map(it -> this.toCondition(it, predicate))
+                       .collect(Collectors.toList());
     }
 }
