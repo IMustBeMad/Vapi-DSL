@@ -1,4 +1,4 @@
-package validation.api.demo.data;
+package validation.api.demo.data.feature;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class InnerValidationTest {
+public class DeepInspectingTest {
 
     @Test
     public void should_beNoErrors_when_validationsHaveNoErrors() {

@@ -21,4 +21,9 @@ public class StringValidation extends AbstractStringClause {
     public StringValidation onError(String error) {
         return ((StringValidation) super.onError(error));
     }
+
+    @Override
+    public StringValidation onGroupError(String error) {
+        return (StringValidation) super.onGroupError(error);
+    }
 }

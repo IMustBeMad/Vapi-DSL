@@ -48,13 +48,15 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public ObjectValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2) {
-        return (ObjectValidation<T>) super.isAnyOf(condition1, condition2);
+    @SafeVarargs
+    public final ObjectValidation<T> isAnyOf(SingleCondition<T>... conditions) {
+        return (ObjectValidation<T>) super.isAnyOf(conditions);
     }
 
     @Override
-    public ObjectValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2) {
-        return (ObjectValidation<T>) super.isAllOf(condition1, condition2);
+    @SafeVarargs
+    public final ObjectValidation<T> isAllOf(SingleCondition<T>... conditions) {
+        return (ObjectValidation<T>) super.isAllOf(conditions);
     }
 
     @Override

@@ -21,24 +21,8 @@ public abstract class BaseDataHolder<T> {
     private List<SystemMessage> errors;
 
     private ConditionCluster<T> currentCluster = new ConditionCluster<>();
-    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
     private Condition<T> currentCondition;
-
-    protected List<SystemMessage> examine() {
-        if (this.terminationMode == null || this.errorMode == null) {
-            this.terminationMode = getDefaultTerminationMode();
-            this.errorMode = getDefaultErrorMode();
-        }
-
-        return this.terminate(this.terminationMode, this.errorMode);
-    }
-
-    protected void registerCondition(SingleCondition<T> condition) {
-        SingleCondition<T> conditionToRegister = toSingleCondition(condition);
-        this.currentCondition = conditionToRegister;
-
-        this.memoize(conditionToRegister);
-    }
+    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
     List<SystemMessage> getError() {
         return this.errors;
@@ -52,7 +36,23 @@ public abstract class BaseDataHolder<T> {
         return this.currentCluster;
     }
 
+    protected List<SystemMessage> examine() {
+        if (this.terminationMode == null) {
+            this.terminationMode = getDefaultTerminationMode();
+        }
+        if (this.errorMode == null) {
+            this.errorMode = getDefaultErrorMode();
+        }
+
+        return this.terminate(this.terminationMode, this.errorMode);
+    }
+
+    protected void registerCondition(SingleCondition<T> condition) {
+        this.memoize(toSingleCondition(condition));
+    }
+
     void memoize(Condition<T> condition) {
+        this.currentCondition = condition;
         this.currentCluster.add(condition);
     }
 
@@ -66,6 +66,10 @@ public abstract class BaseDataHolder<T> {
     void registerModes(TerminationMode terminationMode, ErrorMode errorMode) {
         this.terminationMode = terminationMode;
         this.errorMode = errorMode;
+    }
+
+    void setDeepInspectingDefaultErrorMore() {
+        this.errorMode = ErrorMode.RETURN;
     }
 
     private List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {

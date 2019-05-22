@@ -2,7 +2,6 @@ package validation.api.demo.validation.terminator.impl;
 
 import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.exception.ValidationException;
-import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
@@ -42,21 +41,21 @@ public enum TerminatorFacade {
     }
 
     private <T> List<SystemMessage> failOnNoErrors(List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+        ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnNoErrors(conditions, obj);
+        return getTerminator(conditionClusters).failOnNoErrors(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+        ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnFirstError(conditions, obj);
+        return getTerminator(conditionClusters).failOnFirstError(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
-        List<Condition<T>> conditions = getFirstClusterConditions(conditionClusters);
+        ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnLastError(conditions, obj);
+        return getTerminator(conditionClusters).failOnLastError(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
@@ -67,8 +66,8 @@ public enum TerminatorFacade {
         return getTerminator(conditionClusters).failOnNoneGroupMatch(conditionClusters, obj);
     }
 
-    private <T> List<Condition<T>> getFirstClusterConditions(List<ConditionCluster<T>> conditionClusters) {
-        return conditionClusters.get(0).getConditions();
+    private <T> ConditionCluster<T> getFirstConditionCluster(List<ConditionCluster<T>> conditionClusters) {
+        return conditionClusters.get(0);
     }
 
     private <T> Terminator getTerminator(List<ConditionCluster<T>> conditionClusters) {

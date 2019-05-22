@@ -31,36 +31,37 @@ public class AttachmentValidatorNew {
     public void validate(Claim claim, List<Doc> docs) {
         List<Attachment> attachments = attachmentService.getClaimAttachments(claim.getId());
 
-//        Validation.verifyIf(attachments)
-//                  .isEmpty("test")
-//                  .or()
-//                  .each(attachment -> this.isValidAttachment(attachment, docs))
-//                  .failOn(TerminationMode.NONE_GROUP_MATCH);
+        Validation.verifyIf(attachments)
+                  .isEmpty()
+                  .or()
+                  .each(attachment -> this.isValidAttachment(attachment, docs))
+                  .failOn(TerminationMode.NONE_GROUP_MATCH);
     }
 
-//    private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
-//        return Validation.verifyIf(attachment)
-//                         .inspecting(this::getAttachmentFile, File::exists, "")
-//                         .or()
-//                         .withTerm(() -> noConfig(docs), "error")
-//                         .or()
-//                         .withTerm(this::hasValidFormat);
-//    }
+    private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
+        return Validation.verifyIf(attachment)
+                         .inspecting(this::getAttachmentFile, File::exists)
+                         .or()
+                         .withTerm(() -> noConfig(docs))
+                         .or()
+                         .withTerm(this::hasValidFormat)
+                         .failOn(TerminationMode.NONE_GROUP_MATCH);
+    }
 
     private ObjectValidation<Attachment> hasValidFormat(Attachment attachment) {
         Long clientId = userService.getCurrentClientId();
         ClientConfig config = clientService.getClientConfig(clientId);
 
         return Validation.verifyIf(attachment)
-//                         .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()), "error")
-//                         .inspecting(
-//                                 attachmentService::getAttachmentFile,
-//                                 file -> Validation.verifyIf(file)
-//                                                   .withTerm(() -> config.getSizeLimit() == null, "error")
-//                                                   .or()
-//                                                   .withTerm(this::isValidFile, "error")
-//                                                   .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
-//                         )
+                         .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()))
+                         .deepInspecting(
+                                 attachmentService::getAttachmentFile,
+                                 file -> Validation.verifyIf(file)
+                                                   .withTerm(() -> config.getSizeLimit() == null)
+                                                   .or()
+                                                   .withTerm(this::isValidFile)
+                                                   .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
+                         )
                          .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED);
     }
 
