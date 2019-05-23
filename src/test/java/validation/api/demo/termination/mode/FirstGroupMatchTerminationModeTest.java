@@ -13,7 +13,7 @@ import validation.api.demo.validation.domain.number.impl.LongValidation;
 import java.util.List;
 
 @RunWith(JUnit4.class)
-public class AnyGroupMatchTerminationModeTest {
+public class FirstGroupMatchTerminationModeTest {
 
     @Test
     public void should_returnError_whenAnyGroupIsMatched() {
