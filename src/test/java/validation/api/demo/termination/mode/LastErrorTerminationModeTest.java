@@ -2,8 +2,7 @@ package validation.api.demo.termination.mode;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runners.JUnit4;
 import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.exception.ValidationException;
 import validation.api.demo.validation.dict.ErrorMode;
@@ -20,8 +19,7 @@ import static validation.api.demo.validation.dict.TerminationMode.LAST_ERROR_ENC
 import static validation.api.demo.validation.domain.date.DateConditions.isAfter;
 import static validation.api.demo.validation.domain.object.ObjectConditions.isEqualTo;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(JUnit4.class)
 public class LastErrorTerminationModeTest {
 
     @Test

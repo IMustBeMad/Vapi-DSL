@@ -10,7 +10,7 @@ import validation.api.demo.validation.tester.Tester;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public enum LinkedConditionTester implements Tester {
     INSTANCE;

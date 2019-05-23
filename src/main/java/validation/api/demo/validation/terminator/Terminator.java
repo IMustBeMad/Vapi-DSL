@@ -7,7 +7,7 @@ import validation.api.demo.validation.result.ValidationResult;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public interface Terminator {
 

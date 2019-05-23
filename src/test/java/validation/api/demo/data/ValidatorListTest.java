@@ -3,8 +3,7 @@ package validation.api.demo.data;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runners.JUnit4;
 import validation.api.demo.exception.SystemMessage;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.TerminationMode;
@@ -12,8 +11,7 @@ import validation.api.demo.validation.domain.number.LongConditions;
 
 import java.util.List;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(JUnit4.class)
 public class ValidatorListTest {
 
     @Test

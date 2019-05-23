@@ -1,9 +1,9 @@
 package validation.api.demo.data.feature;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runners.JUnit4;
 import validation.api.demo.data.common.Attachment;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.TerminationMode;
@@ -12,8 +12,7 @@ import validation.api.demo.validation.domain.string.StringConditions;
 
 import java.util.List;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(JUnit4.class)
 public class DeepInspectingTest {
 
     @Test
@@ -26,6 +25,7 @@ public class DeepInspectingTest {
         );
 
         Validation.verifyIf(attachments)
+                  .log("should be no errors")
                   .ofSize(4).onError("incorrect.size")
                   .each(attachment -> Validation.verifyIf(attachment)
                                                 .inspecting(Attachment::getId, () -> LongConditions.isGt(0L)).onError("not.gt")
@@ -45,15 +45,17 @@ public class DeepInspectingTest {
                 getAttachment(4L, "test3")
         );
 
-        Validation.verifyIf(attachments)
-                  .ofSize(4).onError("incorrect.size")
-                  .each(attachment -> Validation.verifyIf(attachment)
-                                                .inspecting(Attachment::getId, () -> LongConditions.isGt(0L)).onError("not.gt")
-                                                .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*")).onError("not.matches")
-                                                .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
-                  )
-                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
-                  .examine();
+        Assertions.assertThatThrownBy(() -> Validation.verifyIf(attachments)
+                                                      .log("should be error on second item")
+                                                      .ofSize(4).onError("incorrect.size")
+                                                      .each(attachment -> Validation.verifyIf(attachment)
+                                                                                    .inspecting(Attachment::getId, () -> LongConditions.isGt(0L)).onError("not.gt")
+                                                                                    .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*")).onError("not.matches")
+                                                                                    .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
+                                                      )
+                                                      .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
+                                                      .examine())
+        .hasMessage("not.matches,\nnot.gt");
     }
 
     private Attachment getAttachment(Long id, String name) {

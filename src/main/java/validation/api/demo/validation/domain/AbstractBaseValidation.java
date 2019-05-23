@@ -1,6 +1,8 @@
 package validation.api.demo.validation.domain;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.Clause;
@@ -15,6 +17,8 @@ import java.util.function.Supplier;
 
 @Slf4j
 public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
+
+    private static final Logger LOGGER = LogManager.getLogger(AbstractBaseValidation.class);
 
     protected AbstractBaseValidation<T> isNull() {
         registerCondition(ObjectConditions.isNull());
@@ -75,7 +79,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected AbstractBaseValidation<T> log(String msg, Object... values) {
-        log.debug(msg, values);
+        LOGGER.debug(msg, values);
 
         return this;
     }
