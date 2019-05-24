@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.number.LongConditions;

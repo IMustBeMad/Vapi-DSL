@@ -9,7 +9,7 @@ import validation.api.demo.data.service.AttachmentService;
 import validation.api.demo.data.service.ClientService;
 import validation.api.demo.data.service.PdfAValidator;
 import validation.api.demo.data.service.UserService;
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.data.exception.SystemMessage;
 
 import java.io.File;
 import java.util.ArrayList;

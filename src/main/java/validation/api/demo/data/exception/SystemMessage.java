@@ -1,4 +1,4 @@
-package validation.api.demo.exception;
+package validation.api.demo.data.exception;
 
 import lombok.*;
 
@@ -7,11 +7,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "withError")
 public class SystemMessage {
-
-    private String field;
-    private String reasonCode;
 
     public SystemMessage(String type, String code, String originalName, String join) {
 

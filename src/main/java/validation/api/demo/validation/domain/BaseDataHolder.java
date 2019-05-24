@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain;
 
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.common.*;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;

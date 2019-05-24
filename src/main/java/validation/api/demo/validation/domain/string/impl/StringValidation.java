@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.string.impl;
 
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.domain.string.AbstractStringClause;
 
 import java.util.List;

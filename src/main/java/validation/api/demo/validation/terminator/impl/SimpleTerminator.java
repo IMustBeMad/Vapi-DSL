@@ -1,6 +1,6 @@
 package validation.api.demo.validation.terminator.impl;
 
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.dict.FailureMode;

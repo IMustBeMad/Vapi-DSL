@@ -1,7 +1,7 @@
 package validation.api.demo.validation.common;
 
 import lombok.*;
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.dict.FailureMode;
 
 import java.util.Collections;

@@ -1,6 +1,6 @@
 package validation.api.demo.validation.domain.date.impl;
 
-import validation.api.demo.exception.SystemMessage;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.domain.date.AbstractDateClause;
 
 import java.time.LocalDate;
