@@ -55,7 +55,30 @@ public class DeepInspectingTest {
                                                       )
                                                       .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
                                                       .examine())
-        .hasMessage("not.matches,\nnot.gt");
+                  .hasMessage("not.matches,\nnot.gt");
+    }
+
+    @Test
+    public void should_beNoErrors_when_complexDeepInspect() {
+        List<String> list = List.of("test1", "test2", "test3");
+
+        Validation.verifyIf(list)
+                  .ofSize(3)
+                  .deepInspecting(
+                          it -> it.get(0),
+                          item -> Validation.verifyIf(item)
+                                            .isNotNull()
+                                            .isEqualTo("test1")
+                                            .deepInspecting(
+                                                    it -> it.substring(0, 1),
+                                                    letter -> Validation.verifyIf(letter)
+                                                                        .isEqualTo("d").onError("d.wrong.code")
+                                                                        .matches("t")
+                                                                        .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
+                                            ).failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
+                  )
+                  .failOn(TerminationMode.NO_ERROR_ENCOUNTERED)
+                  .examine();
     }
 
     private Attachment getAttachment(Long id, String name) {
