@@ -35,7 +35,8 @@ public class AttachmentValidatorNew {
                   .isEmpty()
                   .or()
                   .each(attachment -> this.isValidAttachment(attachment, docs))
-                  .failOn(TerminationMode.NONE_GROUP_MATCH);
+                  .failOn(TerminationMode.NONE_GROUP_MATCH)
+                  .examine();
     }
 
     private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
