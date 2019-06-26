@@ -21,14 +21,14 @@ public enum ErrorMode {
     /**
      * The {@code ErrorMode} that is used to raise an exception on
      * validation errors.
-     *
+     * <p>
      * This is the default mode for parent {@link Validation}.
      */
     THROW,
 
     /**
      * The {@code ErrorMode} that is used to return a list of validation errors.
-     *
+     * <p>
      * This is the default mode for inner {@link Validation}.
      */
     RETURN
