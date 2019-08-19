@@ -14,6 +14,13 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
         this.obj = obj;
     }
 
+    ObjectValidation(T obj, ObjectTemplate<T> template) {
+        this.obj = obj;
+        this.currentCondition = template.getCurrentCondition();
+        this.currentCluster = template.getCurrentCluster();
+        this.conditionClusters = template.getConditionClusters();
+    }
+
     @Override
     public List<SystemMessage> examine() {
         return super.examine();

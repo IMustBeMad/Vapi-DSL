@@ -20,9 +20,9 @@ public abstract class BaseDataHolder<T> {
     private ErrorMode errorMode;
     private List<SystemMessage> errors;
 
-    private ConditionCluster<T> currentCluster = new ConditionCluster<>();
-    private Condition<T> currentCondition;
-    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
+    protected ConditionCluster<T> currentCluster = new ConditionCluster<>();
+    protected Condition<T> currentCondition;
+    protected List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
     List<SystemMessage> getError() {
         return this.errors;
