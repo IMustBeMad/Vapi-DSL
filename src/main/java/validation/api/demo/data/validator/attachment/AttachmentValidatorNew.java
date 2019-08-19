@@ -32,19 +32,21 @@ public class AttachmentValidatorNew {
         List<Attachment> attachments = attachmentService.getClaimAttachments(claim.getId());
 
         Validation.verifyIf(attachments)
-                  .isEmpty("test")
+                  .isEmpty()
                   .or()
                   .each(attachment -> this.isValidAttachment(attachment, docs))
-                  .failOn(TerminationMode.NONE_GROUP_MATCH);
+                  .failOn(TerminationMode.NONE_GROUP_MATCH)
+                  .examine();
     }
 
     private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
         return Validation.verifyIf(attachment)
-                         .inspecting(this::getAttachmentFile, File::exists, "")
+                         .inspecting(this::getAttachmentFile, File::exists)
                          .or()
-                         .withTerm(() -> noConfig(docs), "error")
+                         .withTerm(() -> noConfig(docs))
                          .or()
-                         .withTerm(this::hasValidFormat);
+                         .withTerm(this::hasValidFormat)
+                         .failOn(TerminationMode.NONE_GROUP_MATCH);
     }
 
     private ObjectValidation<Attachment> hasValidFormat(Attachment attachment) {
@@ -52,13 +54,13 @@ public class AttachmentValidatorNew {
         ClientConfig config = clientService.getClientConfig(clientId);
 
         return Validation.verifyIf(attachment)
-                         .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()), "error")
-                         .inspecting(
+                         .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()))
+                         .deepInspecting(
                                  attachmentService::getAttachmentFile,
                                  file -> Validation.verifyIf(file)
-                                                   .withTerm(() -> config.getSizeLimit() == null, "error")
+                                                   .withTerm(() -> config.getSizeLimit() == null)
                                                    .or()
-                                                   .withTerm(this::isValidFile, "error")
+                                                   .withTerm(this::isValidFile)
                                                    .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
                          )
                          .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED);

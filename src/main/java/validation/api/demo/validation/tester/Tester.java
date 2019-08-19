@@ -8,7 +8,7 @@ public interface Tester {
 
     <T> ValidationResult test(Condition<T> condition, T obj);
 
-    default <T> ValidationResult getResult(boolean isValid, Condition<T> condition) {
-        return isValid ? Validation.ok() : Validation.failed(condition.getOnError());
+    default ValidationResult getResult(boolean isValid, String onError) {
+        return isValid ? Validation.ok() : Validation.failed(onError);
     }
 }

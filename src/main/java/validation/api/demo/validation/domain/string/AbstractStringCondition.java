@@ -12,62 +12,64 @@ import java.util.function.Supplier;
 
 public abstract class AbstractStringCondition extends AbstractBaseValidation<String> {
 
-    public StringValidation matches(String pattern, String onError) {
-        registerCondition(StringConditions.matches(pattern), onError);
+    public StringValidation matches(String pattern) {
+        registerCondition(StringConditions.matches(pattern));
 
         return (StringValidation) this;
     }
 
-    public StringValidation isEmpty(String onError) {
-        registerCondition(StringConditions.isEmpty(), onError);
+    public StringValidation isEmpty() {
+        registerCondition(StringConditions.isEmpty());
 
         return (StringValidation) this;
     }
 
-    public StringValidation isNotEmpty(String onError) {
-        registerCondition(StringConditions.isNotEmpty(), onError);
+    public StringValidation isNotEmpty() {
+        registerCondition(StringConditions.isNotEmpty());
 
         return (StringValidation) this;
     }
 
     @Override
-    public StringValidation isNull(String onError) {
-        return (StringValidation) super.isNull(onError);
+    public StringValidation isNull() {
+        return (StringValidation) super.isNull();
     }
 
     @Override
-    public StringValidation isNotNull(String onError) {
-        return (StringValidation) super.isNotNull(onError);
+    public StringValidation isNotNull() {
+        return (StringValidation) super.isNotNull();
     }
 
     @Override
-    public StringValidation isEqualTo(String otherString, String onError) {
-        return (StringValidation) super.isEqualTo(otherString, onError);
+    public StringValidation isEqualTo(String otherString) {
+        return (StringValidation) super.isEqualTo(otherString);
     }
 
     @Override
-    public StringValidation isNotEqualTo(String otherString, String onError) {
-        return (StringValidation) super.isNotEqualTo(otherString, onError);
+    public StringValidation isNotEqualTo(String otherString) {
+        return (StringValidation) super.isNotEqualTo(otherString);
     }
 
     @Override
-    public StringValidation withTerm(Predicate<String> predicate, String onError) {
-        return (StringValidation) super.withTerm(predicate, onError);
+    public StringValidation withTerm(Predicate<String> predicate) {
+        return (StringValidation) super.withTerm(predicate);
     }
 
     @Override
-    public StringValidation withTerm(Supplier<Boolean> supplier, String onError) {
-        return (StringValidation) super.withTerm(supplier, onError);
+    public StringValidation withTerm(Supplier<Boolean> supplier) {
+        return (StringValidation) super.withTerm(supplier);
     }
 
     @Override
-    public StringValidation isAnyOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
-        return (StringValidation) super.isAnyOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final StringValidation isAnyOf(SingleCondition<String>... conditions) {
+        return (StringValidation) super.isAnyOf(conditions);
     }
 
     @Override
-    public StringValidation isAllOf(SingleCondition<String> condition1, SingleCondition<String> condition2, String onError) {
-        return (StringValidation) super.isAllOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final StringValidation isAllOf(SingleCondition<String>... conditions) {
+        return (StringValidation) super.isAllOf(conditions);
     }
 
     @Override
@@ -76,18 +78,18 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
-    public <R> StringValidation inspecting(Function<String, R> mapper, Predicate<R> predicate, String onError) {
-        return (StringValidation) super.inspecting(mapper, predicate, onError);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Predicate<R> predicate) {
+        return (StringValidation) super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> StringValidation inspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (StringValidation) super.inspecting(mapper, validator);
+    public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (StringValidation) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> StringValidation inspecting(Function<String, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
-        return (StringValidation) super.inspecting(mapper, condition, onError);
+    public <R> StringValidation deepInspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (StringValidation) super.deepInspecting(mapper, validator);
     }
 
     @Override

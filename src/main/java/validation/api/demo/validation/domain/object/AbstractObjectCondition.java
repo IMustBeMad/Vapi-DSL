@@ -13,33 +13,33 @@ import java.util.function.Supplier;
 public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<T> {
 
     @Override
-    public ObjectValidation<T> isNull(String onError) {
-        return (ObjectValidation<T>) super.isNull(onError);
+    public ObjectValidation<T> isNull() {
+        return (ObjectValidation<T>) super.isNull();
     }
 
     @Override
-    public ObjectValidation<T> isNotNull(String onError) {
-        return (ObjectValidation<T>) super.isNotNull(onError);
+    public ObjectValidation<T> isNotNull() {
+        return (ObjectValidation<T>) super.isNotNull();
     }
 
     @Override
-    public ObjectValidation<T> isEqualTo(T otherObj, String onError) {
-        return (ObjectValidation<T>) super.isEqualTo(otherObj, onError);
+    public ObjectValidation<T> isEqualTo(T otherObj) {
+        return (ObjectValidation<T>) super.isEqualTo(otherObj);
     }
 
     @Override
-    public ObjectValidation<T> isNotEqualTo(T otherObj, String onError) {
-        return (ObjectValidation<T>) super.isNotEqualTo(otherObj, onError);
+    public ObjectValidation<T> isNotEqualTo(T otherObj) {
+        return (ObjectValidation<T>) super.isNotEqualTo(otherObj);
     }
 
     @Override
-    public ObjectValidation<T> withTerm(Predicate<T> predicate, String onError) {
-        return (ObjectValidation<T>) super.withTerm(predicate, onError);
+    public ObjectValidation<T> withTerm(Predicate<T> predicate) {
+        return (ObjectValidation<T>) super.withTerm(predicate);
     }
 
     @Override
-    public ObjectValidation<T> withTerm(Supplier<Boolean> supplier, String onError) {
-        return (ObjectValidation<T>) super.withTerm(supplier, onError);
+    public ObjectValidation<T> withTerm(Supplier<Boolean> supplier) {
+        return (ObjectValidation<T>) super.withTerm(supplier);
     }
 
     @Override
@@ -48,13 +48,15 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public ObjectValidation<T> isAnyOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
-        return (ObjectValidation<T>) super.isAnyOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final ObjectValidation<T> isAnyOf(SingleCondition<T>... conditions) {
+        return (ObjectValidation<T>) super.isAnyOf(conditions);
     }
 
     @Override
-    public ObjectValidation<T> isAllOf(SingleCondition<T> condition1, SingleCondition<T> condition2, String onError) {
-        return (ObjectValidation<T>) super.isAllOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final ObjectValidation<T> isAllOf(SingleCondition<T>... conditions) {
+        return (ObjectValidation<T>) super.isAllOf(conditions);
     }
 
     @Override
@@ -63,18 +65,18 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate, String onError) {
-        return (ObjectValidation<T>) super.inspecting(mapper, predicate, onError);
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
+        return (ObjectValidation<T>) super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ObjectValidation<T>) super.inspecting(mapper, validator);
+    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (ObjectValidation<T>) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> ObjectValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
-        return (ObjectValidation<T>) super.inspecting(mapper, condition, onError);
+    public <R> ObjectValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (ObjectValidation<T>) super.deepInspecting(mapper, validator);
     }
 
     @Override

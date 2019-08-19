@@ -13,56 +13,58 @@ import java.util.function.Supplier;
 
 public abstract class AbstractDateCondition extends AbstractBaseValidation<LocalDate> {
 
-    public DateValidation isAfter(LocalDate otherDate, String onError) {
-        registerCondition(DateConditions.isAfter(otherDate), onError);
+    public DateValidation isAfter(LocalDate otherDate) {
+        registerCondition(DateConditions.isAfter(otherDate));
 
         return (DateValidation) this;
     }
 
-    public DateValidation isBefore(LocalDate otherDate, String onError) {
-        registerCondition(DateConditions.isBefore(otherDate), onError);
+    public DateValidation isBefore(LocalDate otherDate) {
+        registerCondition(DateConditions.isBefore(otherDate));
 
         return (DateValidation) this;
     }
 
     @Override
-    public DateValidation isNull(String onError) {
-        return (DateValidation) super.isNull(onError);
+    public DateValidation isNull() {
+        return (DateValidation) super.isNull();
     }
 
     @Override
-    public DateValidation isNotNull(String onError) {
-        return (DateValidation) super.isNotNull(onError);
+    public DateValidation isNotNull() {
+        return (DateValidation) super.isNotNull();
     }
 
     @Override
-    public AbstractDateCondition isEqualTo(LocalDate otherDate, String onError) {
-        return (AbstractDateCondition) super.isEqualTo(otherDate, onError);
+    public DateValidation isEqualTo(LocalDate otherDate) {
+        return (DateValidation) super.isEqualTo(otherDate);
     }
 
     @Override
-    public DateValidation isNotEqualTo(LocalDate otherDate, String onError) {
-        return (DateValidation) super.isNotEqualTo(otherDate, onError);
+    public DateValidation isNotEqualTo(LocalDate otherDate) {
+        return (DateValidation) super.isNotEqualTo(otherDate);
     }
 
     @Override
-    public DateValidation withTerm(Predicate<LocalDate> predicate, String onError) {
-        return (DateValidation) super.withTerm(predicate, onError);
+    public DateValidation withTerm(Predicate<LocalDate> predicate) {
+        return (DateValidation) super.withTerm(predicate);
     }
 
     @Override
-    public DateValidation withTerm(Supplier<Boolean> supplier, String onError) {
-        return (DateValidation) super.withTerm(supplier, onError);
+    public DateValidation withTerm(Supplier<Boolean> supplier) {
+        return (DateValidation) super.withTerm(supplier);
     }
 
     @Override
-    public DateValidation isAnyOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
-        return (DateValidation) super.isAnyOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final DateValidation isAnyOf(SingleCondition<LocalDate>... conditions) {
+        return (DateValidation) super.isAnyOf(conditions);
     }
 
     @Override
-    public DateValidation isAllOf(SingleCondition<LocalDate> condition1, SingleCondition<LocalDate> condition2, String onError) {
-        return (DateValidation) super.isAllOf(condition1, condition2, onError);
+    @SafeVarargs
+    public final DateValidation isAllOf(SingleCondition<LocalDate>... conditions) {
+        return (DateValidation) super.isAllOf(conditions);
     }
 
     @Override
@@ -71,18 +73,18 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Predicate<R> predicate, String onError) {
-        return (DateValidation) super.inspecting(mapper, predicate, onError);
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Predicate<R> predicate) {
+        return (DateValidation) super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (DateValidation) super.inspecting(mapper, validator);
+    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (DateValidation) super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> DateValidation inspecting(Function<LocalDate, R> mapper, Supplier<SingleCondition<R>> condition, String onError) {
-        return (DateValidation) super.inspecting(mapper, condition, onError);
+    public <R> DateValidation deepInspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (DateValidation) super.deepInspecting(mapper, validator);
     }
 
     @Override

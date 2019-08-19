@@ -11,5 +11,7 @@ public interface Condition<T> {
 
     String getOnError();
 
+    void setOnError(String error);
+
     FailureMode getFailureMode();
 }

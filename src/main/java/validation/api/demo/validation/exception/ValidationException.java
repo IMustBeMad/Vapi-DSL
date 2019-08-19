@@ -1,4 +1,4 @@
-package validation.api.demo.exception;
+package validation.api.demo.validation.exception;
 
 import java.util.List;
 import java.util.stream.Collectors;

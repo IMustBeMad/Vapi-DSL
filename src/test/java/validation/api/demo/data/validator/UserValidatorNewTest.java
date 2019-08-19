@@ -12,7 +12,7 @@ import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.data.validator.user.UserValidatorNew;
-import validation.api.demo.exception.ValidationException;
+import validation.api.demo.validation.exception.ValidationException;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
