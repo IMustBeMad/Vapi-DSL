@@ -2,7 +2,7 @@ package validation.api.demo.validation.common;
 
 import lombok.*;
 import validation.api.demo.validation.dict.Clause;
-import validation.api.demo.validation.dict.FailureMode;
+import validation.api.demo.validation.dict.FlowType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 public class LinkedCondition<T> implements Condition<T> {
 
     private List<Condition<T>> conditions = new ArrayList<>();
-    private FailureMode failureMode = FailureMode.COMMON;
+    private FlowType flowType = FlowType.COMMON;
     private Clause linkClause;
     private String onError;
 

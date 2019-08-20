@@ -13,26 +13,23 @@ import validation.api.demo.validation.dict.TerminationMode;
 import java.time.LocalDate;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@RunWith(SpringRunner.class)
 public class ValidatorTest {
-
-    private static final String ERROR_IS_NULL = "is.null";
-    private static final String ERROR_NOT_EQUALS = "not.equals";
-    private static final String ERROR_NOT_MATCHED = "not.matched";
-    private static final String ERROR_NOT_GT = "not.gt";
-    private static final String ERROR_NOT_IN_REPO = "not.in.repo";
-    private static final String ERROR_NOT_CONTAINS = "not.contains";
-    private static final String ERROR_HAS_DUPLICATES = "has.duplicates";
-    private static final String ERROR_WRONG_SIZE = "wrong.size";
 
     @Test
     public void test() {
-        Validation.verifyIf("test")
-                  .matches("test").onError("error")
-                  .isNotEmpty()
-                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
+        Validation.failIf("test")
+                  .isNull()
+                  .or()
+                  .isEqualTo("test").onError("is.eq.test.error")
                   .examine();
+
+//        Validation.verifyIf("test")
+//                  .matches("test").onError("error")
+//                  .isNotEmpty()
+//                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
+//                  .examine();
     }
 
     @Test

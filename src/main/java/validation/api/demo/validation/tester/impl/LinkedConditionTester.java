@@ -16,7 +16,7 @@ public enum LinkedConditionTester implements Tester {
     INSTANCE;
 
     @Override
-    public <T> ValidationResult test(Condition<T> condition, T obj) {
+    public <T> ValidationResult test(Condition<T> condition, T obj, TesterFacade.TestMode testMode) {
         LinkedCondition<T> linkedCondition = (LinkedCondition<T>) condition;
 
         List<Predicate<T>> predicates = linkedCondition.getPredicates();
@@ -28,7 +28,8 @@ public enum LinkedConditionTester implements Tester {
 
         return getResult(
                 predicates.stream().anyMatch(it -> it.test(obj)),
-                condition.getOnError()
+                condition.getOnError(),
+                testMode
         );
     }
 

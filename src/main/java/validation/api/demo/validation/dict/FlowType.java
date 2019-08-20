@@ -1,5 +1,5 @@
 package validation.api.demo.validation.dict;
 
-public enum FailureMode {
+public enum FlowType {
     EARLY_EXIT, COMMON
 }

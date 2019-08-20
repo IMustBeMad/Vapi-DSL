@@ -1,7 +1,7 @@
 package validation.api.demo.validation.common;
 
 import lombok.*;
-import validation.api.demo.validation.dict.FailureMode;
+import validation.api.demo.validation.dict.FlowType;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public class SingleCondition<T> implements Condition<T> {
 
     private Predicate<T> predicate;
-    private FailureMode failureMode = FailureMode.COMMON;
+    private FlowType flowType = FlowType.COMMON;
     private String onError;
 
     public SingleCondition(Predicate<T> predicate) {
@@ -28,9 +28,9 @@ public class SingleCondition<T> implements Condition<T> {
         this.onError = onError;
     }
 
-    public SingleCondition(Predicate<T> predicate, FailureMode failureMode) {
+    public SingleCondition(Predicate<T> predicate, FlowType flowType) {
         this.predicate = predicate;
-        this.failureMode = failureMode;
+        this.flowType = flowType;
     }
 
     @Override

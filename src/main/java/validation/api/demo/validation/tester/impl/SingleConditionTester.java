@@ -11,10 +11,10 @@ public enum SingleConditionTester implements Tester {
     INSTANCE;
 
     @Override
-    public <T> ValidationResult test(Condition<T> condition, T obj) {
+    public <T> ValidationResult test(Condition<T> condition, T obj, TesterFacade.TestMode testMode) {
         List<Predicate<T>> predicates = condition.getPredicates();
         Predicate<T> predicate = predicates.get(0);
 
-        return getResult(predicate.test(obj), condition.getOnError());
+        return getResult(predicate.test(obj), condition.getOnError(), testMode);
     }
 }

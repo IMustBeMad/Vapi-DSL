@@ -3,7 +3,7 @@ package validation.api.demo.validation.terminator.impl;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
-import validation.api.demo.validation.dict.FailureMode;
+import validation.api.demo.validation.dict.FlowType;
 import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.terminator.Terminator;
 import validation.api.demo.validation.tester.impl.TesterFacade;
@@ -41,7 +41,7 @@ public enum SimpleTerminator implements Terminator {
             if (!result.isValid()) {
                 SystemMessage reason = result.getReason();
 
-                if (condition.getFailureMode() == FailureMode.EARLY_EXIT) {
+                if (condition.getFlowType() == FlowType.EARLY_EXIT) {
                     return Collections.singletonList(reason);
                 }
 

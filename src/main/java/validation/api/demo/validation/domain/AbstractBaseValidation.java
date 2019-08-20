@@ -100,14 +100,16 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this.inspect(mapper.apply(this.obj), validator);
     }
 
+    @Deprecated
     protected AbstractBaseValidation<T> failOn(TerminationMode terminationMode) {
-        registerModes(terminationMode, ErrorMode.THROW);
+        registerModes(ErrorMode.THROW);
 
         return this;
     }
 
+    @Deprecated
     protected AbstractBaseValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        registerModes(terminationMode, errorMode);
+        registerModes(errorMode);
 
         return this;
     }

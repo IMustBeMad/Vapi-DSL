@@ -2,7 +2,7 @@ package validation.api.demo.validation.common;
 
 import lombok.*;
 import validation.api.demo.validation.exception.SystemMessage;
-import validation.api.demo.validation.dict.FailureMode;
+import validation.api.demo.validation.dict.FlowType;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class ValidationCondition<T> implements Condition<T> {
 
     private Predicate<T> predicate;
-    private FailureMode failureMode = FailureMode.COMMON;
+    private FlowType flowType = FlowType.COMMON;
     private Supplier<List<SystemMessage>> supplier;
     private String onError;
 

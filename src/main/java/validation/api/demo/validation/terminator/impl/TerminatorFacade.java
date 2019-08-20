@@ -1,19 +1,23 @@
 package validation.api.demo.validation.terminator.impl;
 
-import validation.api.demo.validation.exception.SystemMessage;
-import validation.api.demo.validation.exception.ValidationException;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.FailMode;
+import validation.api.demo.validation.dict.SucceedMode;
 import validation.api.demo.validation.dict.TerminationMode;
+import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.exception.ValidationException;
 import validation.api.demo.validation.terminator.Terminator;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> terminate(FailMode failMode, SucceedMode succeedMode, ErrorMode errorMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+        TerminationMode terminationMode = getTerminationMode(failMode, succeedMode, conditionClusters);
         List<SystemMessage> errors = getErrors(terminationMode, conditionClusters, obj);
 
         if (errorMode == ErrorMode.THROW && !errors.isEmpty()) {
@@ -77,5 +81,24 @@ public enum TerminatorFacade {
 
     private <T> boolean isSingleCluster(List<ConditionCluster<T>> clusters) {
         return clusters.size() == 1;
+    }
+
+    private <T> TerminationMode getTerminationMode(FailMode failMode, SucceedMode succeedMode, List<ConditionCluster<T>> conditionClusters) {
+        boolean singleGroup = conditionClusters.size() == 1;
+
+        if (Objects.nonNull(failMode)) {
+            if (FailMode.FAST == failMode) {
+                return singleGroup ? TerminationMode.NO_ERROR_ENCOUNTERED
+                                   : TerminationMode.FIRST_GROUP_MATCH;
+            } else {
+                return TerminationMode.LAST_ERROR_ENCOUNTERED;
+            }
+        }
+        if (Objects.nonNull(succeedMode)) {
+            return singleGroup ? TerminationMode.FIRST_ERROR_ENCOUNTERED
+                               : TerminationMode.NONE_GROUP_MATCH;
+        }
+
+        return TerminationMode.FIRST_ERROR_ENCOUNTERED;
     }
 }

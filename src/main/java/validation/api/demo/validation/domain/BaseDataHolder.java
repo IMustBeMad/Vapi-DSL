@@ -1,9 +1,10 @@
 package validation.api.demo.validation.domain;
 
-import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.common.*;
 import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
+import validation.api.demo.validation.dict.FailMode;
+import validation.api.demo.validation.dict.SucceedMode;
+import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.terminator.impl.TerminatorFacade;
 
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ import java.util.function.Predicate;
 public abstract class BaseDataHolder<T> {
 
     protected T obj;
-    private TerminationMode terminationMode;
+    protected FailMode failMode;
+    protected SucceedMode succeedMode;
+
     private ErrorMode errorMode;
     private List<SystemMessage> errors;
 
@@ -37,14 +40,13 @@ public abstract class BaseDataHolder<T> {
     }
 
     protected List<SystemMessage> examine() {
-        if (this.terminationMode == null) {
-            this.terminationMode = getDefaultTerminationMode();
-        }
-        if (this.errorMode == null) {
-            this.errorMode = getDefaultErrorMode();
-        }
+        return examine(ErrorMode.THROW);
+    }
 
-        return this.terminate(this.terminationMode, this.errorMode);
+    protected List<SystemMessage> examine(ErrorMode errorMode) {
+        this.errorMode = errorMode;
+
+        return this.terminate();
     }
 
     protected void registerCondition(SingleCondition<T> condition) {
@@ -61,9 +63,8 @@ public abstract class BaseDataHolder<T> {
 
     protected <R> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R>> validator) {
         AbstractBaseValidation<R> innerValidation = validator.apply(obj);
-        innerValidation.setDeepInspectingDefaultErrorMore();
 
-        return new ValidationCondition<>(it -> innerValidation.examine().isEmpty(), innerValidation::getError);
+        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getError);
     }
 
     void memoize(Condition<T> condition) {
@@ -78,17 +79,13 @@ public abstract class BaseDataHolder<T> {
         this.currentCluster = conditionCluster;
     }
 
-    void registerModes(TerminationMode terminationMode, ErrorMode errorMode) {
-        this.terminationMode = terminationMode;
+    @Deprecated
+    void registerModes(ErrorMode errorMode) {
         this.errorMode = errorMode;
     }
 
-    void setDeepInspectingDefaultErrorMore() {
-        this.errorMode = ErrorMode.RETURN;
-    }
-
-    private List<SystemMessage> terminate(TerminationMode terminationMode, ErrorMode errorMode) {
-        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(terminationMode, errorMode, this.conditionClusters, this.obj);
+    private List<SystemMessage> terminate() {
+        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(this.failMode, this.succeedMode, this.errorMode, this.conditionClusters, this.obj);
         this.errors = systemMessages;
 
         return systemMessages;
@@ -99,14 +96,5 @@ public abstract class BaseDataHolder<T> {
         singleCondition.setPredicate(condition.getPredicate());
 
         return singleCondition;
-    }
-
-    private ErrorMode getDefaultErrorMode() {
-        return ErrorMode.THROW;
-    }
-
-    private TerminationMode getDefaultTerminationMode() {
-        return conditionClusters.size() == 1 ? TerminationMode.FIRST_ERROR_ENCOUNTERED
-                                             : TerminationMode.NONE_GROUP_MATCH;
     }
 }

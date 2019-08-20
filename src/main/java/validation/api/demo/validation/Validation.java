@@ -1,5 +1,7 @@
 package validation.api.demo.validation;
 
+import validation.api.demo.validation.dict.FailMode;
+import validation.api.demo.validation.dict.SucceedMode;
 import validation.api.demo.validation.domain.array.AbstractArrayCondition;
 import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 import validation.api.demo.validation.domain.date.AbstractDateCondition;
@@ -23,11 +25,35 @@ import java.util.List;
 public class Validation {
 
     public static <T> AbstractObjectCondition<T> verifyIf(T obj) {
-        return new ObjectValidation<>(obj);
+        return new ObjectValidation<>(obj, FailMode.FAST);
+    }
+
+    public static <T> AbstractObjectCondition<T> failIf(T obj) {
+        return new ObjectValidation<>(obj, FailMode.FAST);
+    }
+
+    public static <T> AbstractObjectCondition<T> failIf(T obj, FailMode failMode) {
+        return new ObjectValidation<>(obj, failMode);
+    }
+
+    public static <T> AbstractObjectCondition<T> succeedIf(T obj) {
+        return new ObjectValidation<>(obj, SucceedMode.MATCH);
     }
 
     public static AbstractStringCondition verifyIf(String value) {
-        return new StringValidation(value);
+        return new StringValidation(value, FailMode.FAST);
+    }
+
+    public static AbstractStringCondition failIf(String value) {
+        return new StringValidation(value, FailMode.FAST);
+    }
+
+    public static AbstractStringCondition failIf(String value, FailMode failMode) {
+        return new StringValidation(value, failMode);
+    }
+
+    public static AbstractStringCondition succeedIf(String value) {
+        return new StringValidation(value, SucceedMode.MATCH);
     }
 
     public static AbstractIntCondition verifyIf(Integer integer) {

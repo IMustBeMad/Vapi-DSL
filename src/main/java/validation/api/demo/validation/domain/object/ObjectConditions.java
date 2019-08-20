@@ -1,7 +1,7 @@
 package validation.api.demo.validation.domain.object;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.dict.FailureMode;
+import validation.api.demo.validation.dict.FlowType;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ public class ObjectConditions {
     }
 
     public static <T> SingleCondition<T> isNotNull() {
-        return new SingleCondition<>(Objects::nonNull, FailureMode.EARLY_EXIT);
+        return new SingleCondition<>(Objects::nonNull, FlowType.EARLY_EXIT);
     }
 
     public static <T> SingleCondition<T> isEqualTo(T otherObj) {

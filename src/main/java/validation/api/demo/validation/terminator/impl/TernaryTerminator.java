@@ -9,6 +9,7 @@ import validation.api.demo.validation.tester.impl.TesterFacade;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum TernaryTerminator implements Terminator {
     INSTANCE;
@@ -50,10 +51,12 @@ public enum TernaryTerminator implements Terminator {
         TesterFacade tester = TesterFacade.INSTANCE;
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {
-            ValidationResult result = getFirstError(tester, conditionCluster, obj);
+            List<ValidationResult> result = getGroupErrors(tester, conditionCluster, obj);
 
-            if (result == null) {
-                return Collections.singletonList(getErrorReason(result, conditionCluster.getOnError()));
+            if (!result.isEmpty()) {
+                return result.stream()
+                             .map(ValidationResult::getReason)
+                             .collect(Collectors.toList());
             }
         }
 
@@ -66,5 +69,12 @@ public enum TernaryTerminator implements Terminator {
                                .filter(result -> !result.isValid())
                                .findFirst()
                                .orElse(null);
+    }
+
+    private <T> List<ValidationResult> getGroupErrors(TesterFacade tester, ConditionCluster<T> conditionCluster, T obj) {
+        return conditionCluster.getConditions().stream()
+                               .map(condition -> tester.invertedTest(condition, obj))
+                               .filter(result -> !result.isValid())
+                               .collect(Collectors.toList());
     }
 }

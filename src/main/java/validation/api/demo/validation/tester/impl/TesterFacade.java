@@ -7,9 +7,21 @@ public enum TesterFacade {
     INSTANCE;
 
     public <T> ValidationResult test(Condition<T> condition, T obj) {
+        return getValidationResult(condition, obj, TestMode.STRAIGHT);
+    }
+
+    public <T> ValidationResult invertedTest(Condition<T> condition, T obj) {
+        return getValidationResult(condition, obj, TestMode.INVERTED);
+    }
+
+    private <T> ValidationResult getValidationResult(Condition<T> condition, T obj, TestMode testMode) {
         boolean singleCondition = condition.getPredicates().size() == 1;
 
-        return singleCondition ? SingleConditionTester.INSTANCE.test(condition, obj)
-                               : LinkedConditionTester.INSTANCE.test(condition, obj);
+        return singleCondition ? SingleConditionTester.INSTANCE.test(condition, obj, testMode)
+                               : LinkedConditionTester.INSTANCE.test(condition, obj, testMode);
+    }
+
+    public enum TestMode {
+        STRAIGHT, INVERTED
     }
 }

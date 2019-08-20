@@ -8,6 +8,14 @@ public class StringConditions {
         return new SingleCondition<>(it -> it.matches(pattern));
     }
 
+    public static SingleCondition<String> equals(String otherString) {
+        return new SingleCondition<>(it -> it.equals(otherString));
+    }
+
+    public static SingleCondition<String> notEquals(String otherString) {
+        return new SingleCondition<>(it -> !it.equals(otherString));
+    }
+
     public static SingleCondition<String> isEmpty() {
         return new SingleCondition<>(String::isEmpty);
     }
