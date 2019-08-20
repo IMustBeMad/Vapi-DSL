@@ -1,7 +1,7 @@
-package validation.api.demo.validation.domain.number.impl;
+package validation.api.demo.validation.domain.number.biginteger.impl;
 
 import validation.api.demo.validation.exception.SystemMessage;
-import validation.api.demo.validation.domain.number.AbstractLongClause;
+import validation.api.demo.validation.domain.number.biginteger.AbstractLongClause;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ import org.junit.runners.JUnit4;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.TerminationMode;
-import validation.api.demo.validation.domain.number.LongConditions;
+import validation.api.demo.validation.domain.number.biginteger.LongConditions;
 
 import java.util.List;
 

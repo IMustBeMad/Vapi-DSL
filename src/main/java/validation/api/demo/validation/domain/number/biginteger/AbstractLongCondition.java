@@ -1,10 +1,10 @@
-package validation.api.demo.validation.domain.number;
+package validation.api.demo.validation.domain.number.biginteger;
 
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
-import validation.api.demo.validation.domain.number.impl.LongValidation;
+import validation.api.demo.validation.domain.number.biginteger.impl.LongValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

@@ -7,7 +7,7 @@ import org.junit.runners.JUnit4;
 import validation.api.demo.data.common.Attachment;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.TerminationMode;
-import validation.api.demo.validation.domain.number.LongConditions;
+import validation.api.demo.validation.domain.number.biginteger.LongConditions;
 import validation.api.demo.validation.domain.string.StringConditions;
 
 import java.util.List;

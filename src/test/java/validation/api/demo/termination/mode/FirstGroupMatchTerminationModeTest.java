@@ -4,11 +4,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.TerminationMode;
-import validation.api.demo.validation.domain.number.impl.LongValidation;
+import validation.api.demo.validation.domain.number.biginteger.impl.LongValidation;
+import validation.api.demo.validation.exception.SystemMessage;
 
 import java.util.List;
 

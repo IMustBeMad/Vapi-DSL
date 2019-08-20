@@ -1,4 +1,4 @@
-package validation.api.demo.validation.domain.number;
+package validation.api.demo.validation.domain.number.biginteger;
 
 import validation.api.demo.validation.common.SingleCondition;
 

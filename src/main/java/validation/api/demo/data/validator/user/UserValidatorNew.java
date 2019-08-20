@@ -11,8 +11,8 @@ import validation.api.demo.validation.dict.TerminationMode;
 
 import java.util.Optional;
 
-import static validation.api.demo.validation.domain.number.LongConditions.isEqualTo;
-import static validation.api.demo.validation.domain.number.LongConditions.isGt;
+import static validation.api.demo.validation.domain.number.biginteger.LongConditions.isEqualTo;
+import static validation.api.demo.validation.domain.number.biginteger.LongConditions.isGt;
 
 @Slf4j
 @Service
