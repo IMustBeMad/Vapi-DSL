@@ -4,8 +4,6 @@ import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.Clause;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.list.impl.ListValidation;
 
@@ -19,31 +17,31 @@ import java.util.stream.Collectors;
 public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
 
     public ListValidation<T> contains(T element) {
-        registerCondition(ListConditions.contains(element));
+        this.registerCondition(ListConditions.contains(element));
 
         return (ListValidation<T>) this;
     }
 
     public ListValidation<T> ofSize(int size) {
-        registerCondition(ListConditions.ofSize(size));
+        this.registerCondition(ListConditions.ofSize(size));
 
         return (ListValidation<T>) this;
     }
 
     public ListValidation<T> hasNoDuplicates() {
-        registerCondition(ListConditions.hasNoDuplicates());
+        this.registerCondition(ListConditions.hasNoDuplicates());
 
         return (ListValidation<T>) this;
     }
 
     public ListValidation<T> isEmpty() {
-        registerCondition(ListConditions.isEmpty());
+        this.registerCondition(ListConditions.isEmpty());
 
         return (ListValidation<T>) this;
     }
 
     public ListValidation<T> isNotEmpty() {
-        registerCondition(ListConditions.isNotEmpty());
+        this.registerCondition(ListConditions.isNotEmpty());
 
         return (ListValidation<T>) this;
     }
@@ -127,16 +125,6 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     @Override
     public <R> ListValidation<T> deepInspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ListValidation<T>) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    public ListValidation<T> failOn(TerminationMode terminationMode) {
-        return (ListValidation<T>) super.failOn(terminationMode);
-    }
-
-    @Override
-    public ListValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (ListValidation<T>) super.failOn(terminationMode, errorMode);
     }
 
     private List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T>> validator) {

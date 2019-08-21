@@ -1,8 +1,6 @@
 package validation.api.demo.validation.domain.date;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.date.impl.DateValidation;
 
@@ -14,13 +12,13 @@ import java.util.function.Supplier;
 public abstract class AbstractDateCondition extends AbstractBaseValidation<LocalDate> {
 
     public DateValidation isAfter(LocalDate otherDate) {
-        registerCondition(DateConditions.isAfter(otherDate));
+        this.registerCondition(DateConditions.isAfter(otherDate));
 
         return (DateValidation) this;
     }
 
     public DateValidation isBefore(LocalDate otherDate) {
-        registerCondition(DateConditions.isBefore(otherDate));
+        this.registerCondition(DateConditions.isBefore(otherDate));
 
         return (DateValidation) this;
     }
@@ -85,15 +83,5 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     @Override
     public <R> DateValidation deepInspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (DateValidation) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    public DateValidation failOn(TerminationMode terminationMode) {
-        return (DateValidation) super.failOn(terminationMode);
-    }
-
-    @Override
-    public DateValidation failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (DateValidation) super.failOn(terminationMode, errorMode);
     }
 }

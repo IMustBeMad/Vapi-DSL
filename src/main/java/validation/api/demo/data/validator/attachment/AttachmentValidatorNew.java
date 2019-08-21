@@ -7,7 +7,7 @@ import validation.api.demo.data.service.AttachmentService;
 import validation.api.demo.data.service.ClientService;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.TerminationMode;
+import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
 import java.io.File;
@@ -31,39 +31,35 @@ public class AttachmentValidatorNew {
     public void validate(Claim claim, List<Doc> docs) {
         List<Attachment> attachments = attachmentService.getClaimAttachments(claim.getId());
 
-        Validation.verifyIf(attachments)
+        Validation.succeedIf(attachments)
                   .isEmpty()
                   .or()
                   .each(attachment -> this.isValidAttachment(attachment, docs))
-                  .failOn(TerminationMode.NONE_GROUP_MATCH)
                   .examine();
     }
 
     private ObjectValidation<Attachment> isValidAttachment(Attachment attachment, List<Doc> docs) {
-        return Validation.verifyIf(attachment)
+        return Validation.succeedIf(attachment)
                          .inspecting(this::getAttachmentFile, File::exists)
                          .or()
                          .withTerm(() -> noConfig(docs))
                          .or()
-                         .withTerm(this::hasValidFormat)
-                         .failOn(TerminationMode.NONE_GROUP_MATCH);
+                         .withTerm(this::hasValidFormat);
     }
 
     private ObjectValidation<Attachment> hasValidFormat(Attachment attachment) {
         Long clientId = userService.getCurrentClientId();
         ClientConfig config = clientService.getClientConfig(clientId);
 
-        return Validation.verifyIf(attachment)
+        return Validation.failIf(attachment, MatchMode.EAGER)
                          .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()))
                          .deepInspecting(
                                  attachmentService::getAttachmentFile,
-                                 file -> Validation.verifyIf(file)
+                                 file -> Validation.failIf(file, MatchMode.EAGER)
                                                    .withTerm(() -> config.getSizeLimit() == null)
                                                    .or()
                                                    .withTerm(this::isValidFile)
-                                                   .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
-                         )
-                         .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED);
+                         );
     }
 
     private boolean noConfig(List<Doc> docs) {

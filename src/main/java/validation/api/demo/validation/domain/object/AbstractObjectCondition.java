@@ -1,8 +1,6 @@
 package validation.api.demo.validation.domain.object;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
@@ -77,15 +75,5 @@ public abstract class AbstractObjectCondition<T> extends AbstractBaseValidation<
     @Override
     public <R> ObjectValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ObjectValidation<T>) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    public ObjectValidation<T> failOn(TerminationMode terminationMode) {
-        return (ObjectValidation<T>) super.failOn(terminationMode);
-    }
-
-    @Override
-    public ObjectValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (ObjectValidation<T>) super.failOn(terminationMode, errorMode);
     }
 }

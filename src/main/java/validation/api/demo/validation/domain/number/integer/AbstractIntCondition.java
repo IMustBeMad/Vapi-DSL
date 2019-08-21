@@ -1,8 +1,6 @@
 package validation.api.demo.validation.domain.number.integer;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.number.integer.impl.IntValidation;
 
@@ -13,25 +11,25 @@ import java.util.function.Supplier;
 public abstract class AbstractIntCondition extends AbstractBaseValidation<Integer> {
 
     public IntValidation isGt(Integer otherInteger) {
-        registerCondition(IntConditions.isGt(otherInteger));
+        this.registerCondition(IntConditions.isGt(otherInteger));
 
         return (IntValidation) this;
     }
 
     public IntValidation isGte(Integer otherInteger) {
-        registerCondition(IntConditions.isGte(otherInteger));
+        this.registerCondition(IntConditions.isGte(otherInteger));
 
         return (IntValidation) this;
     }
 
     public IntValidation isLt(Integer otherInteger) {
-        registerCondition(IntConditions.isLt(otherInteger));
+        this.registerCondition(IntConditions.isLt(otherInteger));
 
         return (IntValidation) this;
     }
 
     public IntValidation isLte(Integer otherInteger) {
-        registerCondition(IntConditions.isLte(otherInteger));
+        this.registerCondition(IntConditions.isLte(otherInteger));
 
         return (IntValidation) this;
     }
@@ -99,15 +97,5 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     @Override
     protected <R> AbstractIntCondition deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (AbstractIntCondition) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    protected AbstractIntCondition failOn(TerminationMode terminationMode) {
-        return (AbstractIntCondition) super.failOn(terminationMode);
-    }
-
-    @Override
-    protected AbstractIntCondition failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (AbstractIntCondition) super.failOn(terminationMode, errorMode);
     }
 }

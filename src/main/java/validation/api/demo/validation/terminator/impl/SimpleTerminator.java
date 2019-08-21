@@ -14,15 +14,15 @@ public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failOnFirstError(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failOnFirstError(ConditionCluster<T> conditionCluster, T obj, TesterFacade.TestMode testMode) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
 
         for (Condition<T> condition : conditions) {
-            ValidationResult result = tester.test(condition, obj);
+            ValidationResult result = tester.test(condition, obj, testMode);
 
             if (!result.isValid()) {
-                return Collections.singletonList(getErrorReason(result, conditionCluster.getOnError()));
+                return getErrorReason(Collections.singletonList(result), conditionCluster.getOnError());
             }
         }
 
@@ -45,7 +45,7 @@ public enum SimpleTerminator implements Terminator {
                     return Collections.singletonList(reason);
                 }
 
-                errors.add(getErrorReason(result, conditionCluster.getOnError()));
+                errors.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
             }
         }
 
@@ -54,18 +54,12 @@ public enum SimpleTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> failOnNoErrors(ConditionCluster<T> conditionCluster, T obj) {
-        List<SystemMessage> systemMessages = this.failOnLastError(conditionCluster, obj);
-
-        if (systemMessages.isEmpty()) {
-            return Collections.singletonList(SystemMessage.withError("group", conditionCluster.getOnError()));
-        }
-
-        return Collections.emptyList();
+        return this.failOnFirstError(conditionCluster, obj, TesterFacade.TestMode.INVERTED);
     }
 
     @Override
     public <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return this.failOnFirstError(conditionClusters.get(0), obj);
+        return this.failOnFirstError(conditionClusters.get(0), obj, TesterFacade.TestMode.STRAIGHT);
     }
 
     @Override

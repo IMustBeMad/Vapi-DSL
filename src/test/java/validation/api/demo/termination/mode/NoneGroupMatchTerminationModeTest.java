@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.object.ObjectConditions;
 
 import java.util.List;
@@ -18,24 +17,22 @@ public class NoneGroupMatchTerminationModeTest {
         String isNotEmptyError = "is.not.empty";
         String isNotNullError = "is.not.null";
 
-        Assertions.assertThatThrownBy(() -> Validation.verifyIf("test")
+        Assertions.assertThatThrownBy(() -> Validation.succeedIf("test")
                                                       .isEmpty().onError(isNotEmptyError)
                                                       .or()
                                                       .isNull().onError(isNotNullError)
-                                                      .failOn(TerminationMode.NONE_GROUP_MATCH)
                                                       .examine())
                   .hasMessage(isNotEmptyError + "\n" + isNotNullError);
     }
 
     @Test
     public void should_beNoErrors_when_anyGroupIsMatched() {
-        Validation.verifyIf(List.of(42L, 42L))
+        Validation.succeedIf(List.of(42L, 42L))
                   .isEmpty().onError("not.empty")
                   .or()
                   .inspecting(it -> it.get(0), ObjectConditions::isNull).onError("is.not.null")
                   .or()
                   .ofSize(2).onError("incorrect.size")
-                  .failOn(TerminationMode.NONE_GROUP_MATCH)
                   .examine();
     }
 }

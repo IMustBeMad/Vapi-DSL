@@ -8,7 +8,7 @@ import validation.api.demo.data.common.InnerTestObject;
 import validation.api.demo.data.common.TestObject;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
+import validation.api.demo.validation.dict.MatchMode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,11 +36,10 @@ public class ValidatorTest {
     public void testString() {
         String issueNumber = "IR20180203123";
 
-        Validation.verifyIf(issueNumber)
+        Validation.failIf(issueNumber, MatchMode.EAGER)
                   .isNotNull()
                   .isEqualTo("test").onError("not.equal.test")
                   .matches("IR.*")
-                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED, ErrorMode.THROW)
                   .examine();
     }
 
@@ -48,35 +47,31 @@ public class ValidatorTest {
     public void testDate() {
         LocalDate now = LocalDate.now();
 
-        Validation.verifyIf(now)
+        Validation.succeedIf(now)
                   .isEqualTo(now.plusDays(1))
                   .isAfter(now.minusDays(1))
-                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
+                  .examine(ErrorMode.RETURN);
     }
 
     @Test
     public void testLong() {
-        Validation.verifyIf(42L)
+        Validation.failIf(42L, MatchMode.EAGER)
                   .isNull()
                   .isEqualTo(43L)
                   .isGt(45L)
-                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED, ErrorMode.RETURN);
+                  .examine(ErrorMode.RETURN);
     }
 
     @Test
     public void testList() {
         List<String> names = List.of("John", "Rick", "Mathew", "Max", "Jamie", "John");
 
-        Validation.verifyIf(names)
+        Validation.succeedIf(names)
                   .isNotNull()
                   .contains("Rick")
                   .hasNoDuplicates()
                   .ofSize(10)
-                  .deepInspecting(
-                          list -> list.get(0),
-                          name -> Validation.verifyIf(name)
-                  )
-                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
+                  .examine(ErrorMode.RETURN);
     }
 //
 //    @Test

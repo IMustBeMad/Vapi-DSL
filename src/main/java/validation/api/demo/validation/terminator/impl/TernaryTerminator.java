@@ -15,7 +15,7 @@ public enum TernaryTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failOnFirstError(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failOnFirstError(ConditionCluster<T> conditionCluster, T obj, TesterFacade.TestMode testMode) {
         throw new UnsupportedOperationException();
     }
 
@@ -40,7 +40,7 @@ public enum TernaryTerminator implements Terminator {
             if (result == null) {
                 return Collections.emptyList();
             }
-            systemMessages.add(getErrorReason(result, conditionCluster.getOnError()));
+            systemMessages.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
         }
 
         return systemMessages;
@@ -54,9 +54,7 @@ public enum TernaryTerminator implements Terminator {
             List<ValidationResult> result = getGroupErrors(tester, conditionCluster, obj);
 
             if (!result.isEmpty()) {
-                return result.stream()
-                             .map(ValidationResult::getReason)
-                             .collect(Collectors.toList());
+                return getErrorReason(result, conditionCluster.getOnError());
             }
         }
 
@@ -73,7 +71,7 @@ public enum TernaryTerminator implements Terminator {
 
     private <T> List<ValidationResult> getGroupErrors(TesterFacade tester, ConditionCluster<T> conditionCluster, T obj) {
         return conditionCluster.getConditions().stream()
-                               .map(condition -> tester.invertedTest(condition, obj))
+                               .map(condition -> tester.test(condition, obj, TesterFacade.TestMode.INVERTED))
                                .filter(result -> !result.isValid())
                                .collect(Collectors.toList());
     }

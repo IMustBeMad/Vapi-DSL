@@ -3,17 +3,16 @@ package validation.api.demo.termination.mode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import validation.api.demo.validation.exception.SystemMessage;
-import validation.api.demo.validation.exception.ValidationException;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.domain.string.impl.StringValidation;
+import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.exception.ValidationException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static validation.api.demo.validation.dict.TerminationMode.NO_ERROR_ENCOUNTERED;
 
 @RunWith(JUnit4.class)
 public class NoErrorsTerminationModeTest {
@@ -23,8 +22,7 @@ public class NoErrorsTerminationModeTest {
 
     @Test
     public void should_returnError_when_noErrorsEncountered() {
-        List<SystemMessage> messages = getStringValidation().failOn(NO_ERROR_ENCOUNTERED, ErrorMode.RETURN)
-                                                            .examine();
+        List<SystemMessage> messages = getStringValidation().examine(ErrorMode.RETURN);
 
         assertThat(messages).extracting(SystemMessage::getReasonCode)
                             .containsOnly(ERROR);
@@ -32,8 +30,7 @@ public class NoErrorsTerminationModeTest {
 
     @Test
     public void should_throwError_when_noErrorsEncountered() {
-        assertThatThrownBy(() -> getStringValidation().failOn(NO_ERROR_ENCOUNTERED)
-                                                      .examine())
+        assertThatThrownBy(() -> getStringValidation().examine())
                 .isInstanceOf(ValidationException.class)
                 .hasMessage(ERROR);
     }
@@ -42,16 +39,15 @@ public class NoErrorsTerminationModeTest {
     public void should_beNoErrors_when_errorEncountered() {
         Long id = 42L;
 
-        Validation.verifyIf(id)
+        Validation.failIf(id)
                   .isNotNull()
                   .isEqualTo(43L)
                   .onGroupError("equal.to.43")
-                  .failOn(NO_ERROR_ENCOUNTERED)
                   .examine();
     }
 
     private StringValidation getStringValidation() {
-        return Validation.verifyIf(TEST)
+        return Validation.failIf(TEST)
                          .isNotNull()
                          .matches("test")
                          .onGroupError(ERROR);

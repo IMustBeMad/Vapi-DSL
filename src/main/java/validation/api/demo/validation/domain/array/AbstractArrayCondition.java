@@ -4,8 +4,6 @@ import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.LinkedCondition;
 import validation.api.demo.validation.common.SingleCondition;
 import validation.api.demo.validation.dict.Clause;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.array.impl.ArrayValidation;
 
@@ -20,25 +18,25 @@ import java.util.stream.Collectors;
 public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T[]> {
 
     public ArrayValidation<T> contains(T element) {
-        registerCondition(ArrayConditions.contains(element));
+        this.registerCondition(ArrayConditions.contains(element));
 
         return (ArrayValidation<T>) this;
     }
 
     public ArrayValidation<T> ofSize(int size) {
-        registerCondition(ArrayConditions.ofSize(size));
+        this.registerCondition(ArrayConditions.ofSize(size));
 
         return (ArrayValidation<T>) this;
     }
 
     public ArrayValidation<T> isEmpty() {
-        registerCondition(ArrayConditions.isEmpty());
+        this.registerCondition(ArrayConditions.isEmpty());
 
         return (ArrayValidation<T>) this;
     }
 
     public ArrayValidation<T> isNotEmpty() {
-        registerCondition(ArrayConditions.isNotEmpty());
+        this.registerCondition(ArrayConditions.isNotEmpty());
 
         return (ArrayValidation<T>) this;
     }
@@ -122,16 +120,6 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     @Override
     public <R> ArrayValidation<T> deepInspecting(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (ArrayValidation<T>) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    public ArrayValidation<T> failOn(TerminationMode terminationMode) {
-        return (ArrayValidation<T>) super.failOn(terminationMode);
-    }
-
-    @Override
-    public ArrayValidation<T> failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (ArrayValidation<T>) super.failOn(terminationMode, errorMode);
     }
 
     private List<Condition<T[]>> toSerialCondition(Function<T, AbstractBaseValidation<T>> validator) {

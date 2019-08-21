@@ -10,8 +10,8 @@ public enum TesterFacade {
         return getValidationResult(condition, obj, TestMode.STRAIGHT);
     }
 
-    public <T> ValidationResult invertedTest(Condition<T> condition, T obj) {
-        return getValidationResult(condition, obj, TestMode.INVERTED);
+    public <T> ValidationResult test(Condition<T> condition, T obj, TestMode testMode) {
+        return getValidationResult(condition, obj, testMode);
     }
 
     private <T> ValidationResult getValidationResult(Condition<T> condition, T obj, TestMode testMode) {

@@ -4,10 +4,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.number.biginteger.LongConditions;
+import validation.api.demo.validation.exception.SystemMessage;
 
 import java.util.List;
 
@@ -18,12 +17,11 @@ public class ValidatorListTest {
     public void should_beNoErrors_when_eachElementIsCorrect() {
         List<Long> longs = List.of(1L, 2L, 3L, 42L);
 
-        List<SystemMessage> messages = Validation.verifyIf(longs)
+        List<SystemMessage> messages = Validation.succeedIf(longs)
                                                  .ofSize(4).onError("incorrect.size")
                                                  .isAllOf()
                                                  .inspecting(it -> it.get(3), it -> it == 42L).onError("not.equal")
                                                  .each(LongConditions.isGt(0L)).onError("not.greater")
-                                                 .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
                                                  .examine();
 
         Assertions.assertThat(messages).isEmpty();
@@ -33,11 +31,10 @@ public class ValidatorListTest {
     public void should_raiseAnError_when_eachElementIsNotCorrect() {
         List<Long> longs = List.of(1L, 2L, 3L, 42L);
 
-        Assertions.assertThatThrownBy(() -> Validation.verifyIf(longs)
+        Assertions.assertThatThrownBy(() -> Validation.succeedIf(longs)
                                                       .ofSize(4).onError("incorrect.size")
                                                       .inspecting(it -> it.get(3), it -> 42L == it).onError("not.equal")
                                                       .each(LongConditions.isGt(42L)).onError("not.greater")
-                                                      .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
                                                       .examine())
                   .hasMessage("not.greater");
     }

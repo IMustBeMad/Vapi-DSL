@@ -2,25 +2,26 @@ package validation.api.demo.validation.terminator.impl;
 
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.FailMode;
-import validation.api.demo.validation.dict.SucceedMode;
+import validation.api.demo.validation.dict.MatchMode;
+import validation.api.demo.validation.dict.PurposeMode;
 import validation.api.demo.validation.dict.TerminationMode;
+import validation.api.demo.validation.domain.BaseDataHolder;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.exception.ValidationException;
 import validation.api.demo.validation.terminator.Terminator;
+import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> List<SystemMessage> terminate(FailMode failMode, SucceedMode succeedMode, ErrorMode errorMode, List<ConditionCluster<T>> conditionClusters, T obj) {
-        TerminationMode terminationMode = getTerminationMode(failMode, succeedMode, conditionClusters);
+    public <T> List<SystemMessage> terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
+        TerminationMode terminationMode = getTerminationMode(modeManager, conditionClusters);
         List<SystemMessage> errors = getErrors(terminationMode, conditionClusters, obj);
 
-        if (errorMode == ErrorMode.THROW && !errors.isEmpty()) {
+        if (shouldThrowError(modeManager, errors)) {
             throw ValidationException.withError(errors);
         }
 
@@ -53,7 +54,7 @@ public enum TerminatorFacade {
     private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnFirstError(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).failOnFirstError(firstConditionCluster, obj, TesterFacade.TestMode.STRAIGHT);
     }
 
     private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
@@ -75,30 +76,38 @@ public enum TerminatorFacade {
     }
 
     private <T> Terminator getTerminator(List<ConditionCluster<T>> conditionClusters) {
-        return isSingleCluster(conditionClusters) ? SimpleTerminator.INSTANCE
-                                                  : TernaryTerminator.INSTANCE;
+        return isSingleCluster(conditionClusters) ? SimpleTerminator.INSTANCE : TernaryTerminator.INSTANCE;
     }
 
     private <T> boolean isSingleCluster(List<ConditionCluster<T>> clusters) {
         return clusters.size() == 1;
     }
 
-    private <T> TerminationMode getTerminationMode(FailMode failMode, SucceedMode succeedMode, List<ConditionCluster<T>> conditionClusters) {
+    private <T> TerminationMode getTerminationMode(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters) {
         boolean singleGroup = conditionClusters.size() == 1;
+        PurposeMode purposeMode = modeManager.getPurposeMode();
 
-        if (Objects.nonNull(failMode)) {
-            if (FailMode.FAST == failMode) {
+        if (purposeMode == PurposeMode.FAIL) {
+            if (modeManager.getMatchMode() == MatchMode.LAZY) {
                 return singleGroup ? TerminationMode.NO_ERROR_ENCOUNTERED
                                    : TerminationMode.FIRST_GROUP_MATCH;
-            } else {
-                return TerminationMode.LAST_ERROR_ENCOUNTERED;
             }
+
+            return TerminationMode.LAST_ERROR_ENCOUNTERED;
         }
-        if (Objects.nonNull(succeedMode)) {
-            return singleGroup ? TerminationMode.FIRST_ERROR_ENCOUNTERED
-                               : TerminationMode.NONE_GROUP_MATCH;
+        if (purposeMode == PurposeMode.SUCCESS) {
+            if (modeManager.getMatchMode() == MatchMode.LAZY) {
+                return singleGroup ? TerminationMode.FIRST_ERROR_ENCOUNTERED
+                                   : TerminationMode.NONE_GROUP_MATCH;
+            }
+
+            return TerminationMode.LAST_ERROR_ENCOUNTERED;
         }
 
         return TerminationMode.FIRST_ERROR_ENCOUNTERED;
+    }
+
+    private boolean shouldThrowError(BaseDataHolder.ModeManager modeManager, List<SystemMessage> errors) {
+        return modeManager.getErrorMode() == ErrorMode.THROW && !errors.isEmpty();
     }
 }

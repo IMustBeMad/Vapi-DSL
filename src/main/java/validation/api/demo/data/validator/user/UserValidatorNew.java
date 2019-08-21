@@ -7,7 +7,6 @@ import validation.api.demo.data.common.Client;
 import validation.api.demo.data.common.User;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.TerminationMode;
 
 import java.util.Optional;
 
@@ -28,16 +27,14 @@ public class UserValidatorNew {
             return;
         }
 
-        Validation.verifyIf(userService.getOne(userId))
+        Validation.succeedIf(userService.getOne(userId))
                   .log("Validating user with id [{}]", userId)
                   .isNotNull().onError("User not found")
                   .deepInspecting(
                           this::getClientId,
-                          id -> Validation.verifyIf(id)
+                          id -> Validation.succeedIf(id)
                                           .isAnyOf(isGt(1L), isEqualTo(orderClientId)).onError("invalid user")
-                                          .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
                   )
-                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED)
                   .examine();
     }
 

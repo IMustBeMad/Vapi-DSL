@@ -1,8 +1,6 @@
 package validation.api.demo.validation.domain.number.biginteger;
 
 import validation.api.demo.validation.common.SingleCondition;
-import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.TerminationMode;
 import validation.api.demo.validation.domain.AbstractBaseValidation;
 import validation.api.demo.validation.domain.number.biginteger.impl.LongValidation;
 
@@ -13,32 +11,32 @@ import java.util.function.Supplier;
 public abstract class AbstractLongCondition extends AbstractBaseValidation<Long> {
 
     public LongValidation isGt(Long otherLong) {
-        registerCondition(LongConditions.isGt(otherLong));
+        this.registerCondition(LongConditions.isGt(otherLong));
 
         return (LongValidation) this;
     }
 
     public LongValidation isGte(Long otherLong) {
-        registerCondition(LongConditions.isGte(otherLong));
+        this.registerCondition(LongConditions.isGte(otherLong));
 
         return (LongValidation) this;
     }
 
     public LongValidation isLt(Long otherLong) {
-        registerCondition(LongConditions.isLt(otherLong));
+        this.registerCondition(LongConditions.isLt(otherLong));
 
         return (LongValidation) this;
     }
 
     public LongValidation isLte(Long otherLong) {
-        registerCondition(LongConditions.isLte(otherLong));
+        this.registerCondition(LongConditions.isLte(otherLong));
 
         return (LongValidation) this;
     }
 
     @Override
     public LongValidation isEqualTo(Long otherLong) {
-        registerCondition(LongConditions.isEqualTo(otherLong));
+        this.registerCondition(LongConditions.isEqualTo(otherLong));
 
         return (LongValidation) this;
     }
@@ -100,15 +98,5 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     @Override
     public <R> LongValidation deepInspecting(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (LongValidation) super.deepInspecting(mapper, validator);
-    }
-
-    @Override
-    public LongValidation failOn(TerminationMode terminationMode) {
-        return (LongValidation) super.failOn(terminationMode);
-    }
-
-    @Override
-    public LongValidation failOn(TerminationMode terminationMode, ErrorMode errorMode) {
-        return (LongValidation) super.failOn(terminationMode, errorMode);
     }
 }
