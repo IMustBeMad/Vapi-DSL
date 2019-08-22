@@ -11,7 +11,7 @@ public enum SingleConditionTester implements Tester {
     INSTANCE;
 
     @Override
-    public <T> ValidationResult test(Condition<T> condition, T obj, TesterFacade.TestMode testMode) {
+    public <T> ValidationResult test(Condition<T> condition, T obj, TestMode testMode) {
         List<Predicate<T>> predicates = condition.getPredicates();
         Predicate<T> predicate = predicates.get(0);
 

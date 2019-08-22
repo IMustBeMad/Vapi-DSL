@@ -9,7 +9,6 @@ import validation.api.demo.validation.domain.BaseDataHolder;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.exception.ValidationException;
 import validation.api.demo.validation.terminator.Terminator;
-import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,27 +47,27 @@ public enum TerminatorFacade {
     private <T> List<SystemMessage> failOnNoErrors(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnNoErrors(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).matchAllMatched(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnFirstError(firstConditionCluster, obj, TesterFacade.TestMode.STRAIGHT);
+        return getTerminator(conditionClusters).matchLazily(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).failOnLastError(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).matchEagerly(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).failOnFirstGroupMatch(conditionClusters, obj);
+        return getTerminator(conditionClusters).matchGroupLazily(conditionClusters, obj);
     }
 
     private <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).failOnNoneGroupMatch(conditionClusters, obj);
+        return getTerminator(conditionClusters).matchNoneGroupMatched(conditionClusters, obj);
     }
 
     private <T> ConditionCluster<T> getFirstConditionCluster(List<ConditionCluster<T>> conditionClusters) {

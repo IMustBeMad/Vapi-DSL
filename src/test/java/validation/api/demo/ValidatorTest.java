@@ -20,9 +20,8 @@ public class ValidatorTest {
     @Test
     public void test() {
         Validation.failIf("test")
-                  .isNull()
-                  .or()
-                  .isEqualTo("test").onError("is.eq.test.error")
+                  .isNotNull().onError("no null")
+                  .isEqualTo("test")
                   .examine();
 
 //        Validation.verifyIf("test")
@@ -36,9 +35,9 @@ public class ValidatorTest {
     public void testString() {
         String issueNumber = "IR20180203123";
 
-        Validation.failIf(issueNumber, MatchMode.EAGER)
+        Validation.succeedIf(issueNumber)
                   .isNotNull()
-                  .isEqualTo("test").onError("not.equal.test")
+                  .isEqualTo("test")
                   .matches("IR.*")
                   .examine();
     }
@@ -66,12 +65,13 @@ public class ValidatorTest {
     public void testList() {
         List<String> names = List.of("John", "Rick", "Mathew", "Max", "Jamie", "John");
 
-        Validation.succeedIf(names)
+        Validation.failIf(names)
+                  .ofSize(3)
+                  .or()
                   .isNotNull()
                   .contains("Rick")
                   .hasNoDuplicates()
-                  .ofSize(10)
-                  .examine(ErrorMode.RETURN);
+                  .examine();
     }
 //
 //    @Test

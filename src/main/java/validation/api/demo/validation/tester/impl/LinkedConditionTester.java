@@ -16,7 +16,7 @@ public enum LinkedConditionTester implements Tester {
     INSTANCE;
 
     @Override
-    public <T> ValidationResult test(Condition<T> condition, T obj, TesterFacade.TestMode testMode) {
+    public <T> ValidationResult test(Condition<T> condition, T obj, TestMode testMode) {
         LinkedCondition<T> linkedCondition = (LinkedCondition<T>) condition;
 
         List<Predicate<T>> predicates = linkedCondition.getPredicates();
