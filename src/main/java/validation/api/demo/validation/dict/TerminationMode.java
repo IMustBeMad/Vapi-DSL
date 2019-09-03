@@ -23,7 +23,7 @@ public enum TerminationMode {
      * <p>
      * Usable when validation has only one {@link ConditionCluster}.
      */
-    FIRST_ERROR_ENCOUNTERED,
+    FAIL_FAST,
 
     /**
      * The {@code TerminationMode} that represents fail safe algorithm.
@@ -31,16 +31,7 @@ public enum TerminationMode {
      * <p>
      * Usable when validation has only one {@link ConditionCluster}.
      */
-    LAST_ERROR_ENCOUNTERED,
-
-    /**
-     * The {@code TerminationMode} that allows to fail the validation
-     * when all the conditions are suitable.
-     * With this mode an error will be raised on first encounter of suitable condition.
-     * <p>
-     * Usable when validation has only one {@link ConditionCluster}.
-     */
-    NO_ERROR_ENCOUNTERED,
+    FAIL_SAFE,
 
     /**
      * The {@code TerminationMode} that allows to fail the validation
@@ -59,5 +50,5 @@ public enum TerminationMode {
      * <p>
      * If {@link ConditionCluster} is only one, this mode will behave as {@code NO_ERROR_ENCOUNTERED} mode.
      */
-    FIRST_GROUP_MATCH
+    LAZY_GROUP_MATCH
 }

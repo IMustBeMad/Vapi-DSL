@@ -29,45 +29,37 @@ public enum TerminatorFacade {
 
     private <T> List<SystemMessage> getErrors(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
         switch (terminationMode) {
-            case FIRST_ERROR_ENCOUNTERED:
-                return failOnFirstError(conditionClusters, obj);
-            case LAST_ERROR_ENCOUNTERED:
-                return failOnLastError(conditionClusters, obj);
+            case FAIL_FAST:
+                return failFast(conditionClusters, obj);
+            case FAIL_SAFE:
+                return failSafe(conditionClusters, obj);
             case NONE_GROUP_MATCH:
                 return failOnNoneGroupMatch(conditionClusters, obj);
-            case FIRST_GROUP_MATCH:
+            case LAZY_GROUP_MATCH:
                 return failOnFirstGroupMatch(conditionClusters, obj);
-            case NO_ERROR_ENCOUNTERED:
-                return failOnNoErrors(conditionClusters, obj);
         }
 
         return Collections.emptyList();
     }
 
-    private <T> List<SystemMessage> failOnNoErrors(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<SystemMessage> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).matchAllMatched(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).failFast(firstConditionCluster, obj);
     }
 
-    private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<SystemMessage> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).unMatchLazily(firstConditionCluster, obj);
-    }
-
-    private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
-        ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
-
-        return getTerminator(conditionClusters).unMatchEagerly(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).failSafe(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).matchByGroupLazily(conditionClusters, obj);
+        return getTerminator(conditionClusters).failOnFirstGroupMatched(conditionClusters, obj);
     }
 
     private <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).matchNoneGroupMatched(conditionClusters, obj);
+        return getTerminator(conditionClusters).failOnNoneGroupMatched(conditionClusters, obj);
     }
 
     private <T> ConditionCluster<T> getFirstConditionCluster(List<ConditionCluster<T>> conditionClusters) {
@@ -87,15 +79,15 @@ public enum TerminatorFacade {
         PurposeMode purposeMode = modeManager.getPurposeMode();
 
         if (purposeMode == PurposeMode.FAIL) {
-            return TerminationMode.FIRST_GROUP_MATCH;
+            return TerminationMode.LAZY_GROUP_MATCH;
         }
         if (purposeMode == PurposeMode.SUCCESS) {
             if (modeManager.getMatchMode() == MatchMode.LAZY) {
-                return singleGroup ? TerminationMode.FIRST_ERROR_ENCOUNTERED
+                return singleGroup ? TerminationMode.FAIL_FAST
                                    : TerminationMode.NONE_GROUP_MATCH;
             } else {
                 if (singleGroup) {
-                    return TerminationMode.LAST_ERROR_ENCOUNTERED;
+                    return TerminationMode.FAIL_SAFE;
                 }
             }
         }

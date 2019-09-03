@@ -18,22 +18,17 @@ public enum TernaryTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> unMatchLazily(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failFast(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> unMatchEagerly(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failSafe(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> matchAllMatched(ConditionCluster<T> conditionCluster, T obj) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public <T> List<SystemMessage> matchNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<SystemMessage> systemMessages = new ArrayList<>();
 
@@ -50,7 +45,7 @@ public enum TernaryTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> matchByGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {

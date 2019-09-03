@@ -1,6 +1,5 @@
 package validation.api.demo.validation.terminator.impl;
 
-import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.dict.FlowType;
@@ -18,7 +17,7 @@ public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> unMatchLazily(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failFast(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
 
@@ -34,7 +33,7 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> unMatchEagerly(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> failSafe(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
         Set<SystemMessage> errors = new HashSet<>();
@@ -57,33 +56,15 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> matchAllMatched(ConditionCluster<T> conditionCluster, T obj) {
-        List<SystemMessage> systemMessages = this.unMatchEagerly(conditionCluster, obj);
-
-        if (systemMessages.isEmpty()) {
-            if (conditionCluster.getConditions().size() == 1) {
-                Condition<T> condition = conditionCluster.getConditions().get(0);
-                ValidationResult result = Validation.failed(condition.getOnError());
-
-                return getErrorReason(Collections.singletonList(result), conditionCluster.getOnError());
-            }
-
-            return getErrorReason(Collections.emptyList(), conditionCluster.getOnError());
-        }
-
-        return Collections.emptyList();
-    }
-
-    @Override
-    public <T> List<SystemMessage> matchNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> matchByGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> conditionCluster = conditionClusters.get(0);
 
-        List<SystemMessage> systemMessages = this.unMatchLazily(conditionCluster, obj);
+        List<SystemMessage> systemMessages = this.failFast(conditionCluster, obj);
 
         if (systemMessages.isEmpty()) {
             String onError = conditionCluster.getOnError();
