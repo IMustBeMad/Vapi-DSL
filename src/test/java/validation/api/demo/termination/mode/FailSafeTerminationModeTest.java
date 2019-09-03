@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.domain.list.ListConditions;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.exception.ValidationException;
@@ -19,7 +20,7 @@ import static validation.api.demo.validation.domain.date.DateConditions.isAfter;
 import static validation.api.demo.validation.domain.object.ObjectConditions.isEqualTo;
 
 @RunWith(JUnit4.class)
-public class LastErrorTerminationModeTest {
+public class FailSafeTerminationModeTest {
 
     @Test
     public void should_returnError_when_lastErrorEncountered() {
@@ -28,7 +29,7 @@ public class LastErrorTerminationModeTest {
         String sizeError = "incorrect.size";
         String allOfClauseError = "incorrect.all.of";
 
-        List<SystemMessage> messages = Validation.failIf(testList)
+        List<SystemMessage> messages = Validation.succeedIf(testList, MatchMode.EAGER)
                                                  .ofSize(4).onError(sizeError)
                                                  .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                  .inspecting(it -> it.get(0), it -> it.matches("test.*"))
@@ -45,7 +46,7 @@ public class LastErrorTerminationModeTest {
         String anyOfErrorClause = "incorrect.any.of";
         String groupError = "date.is.invalid";
 
-        assertThatThrownBy(() -> Validation.failIf(date)
+        assertThatThrownBy(() -> Validation.succeedIf(date, MatchMode.EAGER)
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
                                            .isAnyOf(isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)

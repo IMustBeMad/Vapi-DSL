@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(JUnit4.class)
-public class FirstErrorTerminationModeTest {
+public class FailFastTerminationModeTest {
 
     @Test
     public void should_returnError_when_failOFirstError() {

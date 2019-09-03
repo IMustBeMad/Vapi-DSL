@@ -27,7 +27,7 @@ public class DeepInspectingTest {
         Validation.succeedIf(attachments)
                   .log("should be no errors")
                   .ofSize(4).onError("incorrect.size")
-                  .each(attachment -> Validation.failIf(attachment)
+                  .each(attachment -> Validation.succeedIf(attachment)
                                                 .inspecting(Attachment::getId, () -> LongConditions.isGt(0L)).onError("not.gt")
                                                 .inspecting(Attachment::getOriginalName, () -> StringConditions.matches("test.*")).onError("not.matches")
                   )
@@ -62,7 +62,7 @@ public class DeepInspectingTest {
                   .ofSize(3)
                   .deepInspecting(
                           it -> it.get(0),
-                          item -> Validation.failIf(item)
+                          item -> Validation.succeedIf(item)
                                             .isNotNull()
                                             .isEqualTo("test1")
                                             .deepInspecting(
