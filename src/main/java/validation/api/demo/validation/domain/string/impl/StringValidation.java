@@ -30,7 +30,7 @@ public class StringValidation extends AbstractStringClause {
     }
 
     @Override
-    public StringValidation onGroupError(String error) {
-        return (StringValidation) super.onGroupError(error);
+    public StringValidation groupError(String error) {
+        return (StringValidation) super.groupError(error);
     }
 }

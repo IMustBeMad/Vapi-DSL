@@ -42,7 +42,7 @@ public class NoErrorsTerminationModeTest {
         Validation.failIf(id)
                   .isNotNull()
                   .isEqualTo(43L)
-                  .onGroupError("equal.to.43")
+                  .groupError("equal.to.43")
                   .examine();
     }
 
@@ -50,6 +50,6 @@ public class NoErrorsTerminationModeTest {
         return Validation.failIf(TEST)
                          .isNotNull()
                          .matches("test")
-                         .onGroupError(ERROR);
+                         .groupError(ERROR);
     }
 }

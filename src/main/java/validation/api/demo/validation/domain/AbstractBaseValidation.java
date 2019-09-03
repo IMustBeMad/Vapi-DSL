@@ -104,7 +104,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this;
     }
 
-    protected AbstractBaseValidation<T> onGroupError(String error) {
+    protected AbstractBaseValidation<T> groupError(String error) {
         this.getCurrentCluster().setOnError(error);
 
         return this;

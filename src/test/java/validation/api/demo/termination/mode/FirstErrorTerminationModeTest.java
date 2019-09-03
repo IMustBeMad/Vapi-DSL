@@ -54,7 +54,7 @@ public class FirstErrorTerminationModeTest {
         List<SystemMessage> messages = Validation.succeedIf(date)
                                                  .isEqualTo(LocalDate.now().plusDays(1))
                                                  .isAfter(LocalDate.now().minusDays(1))
-                                                 .onGroupError(groupError)
+                                                 .groupError(groupError)
                                                  .examine(ErrorMode.RETURN);
 
         assertThat(messages).extracting(SystemMessage::getReasonCode)

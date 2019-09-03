@@ -37,10 +37,10 @@ public class FirstGroupMatchTerminationModeTest {
     public void should_beNoErrors_whenNoGroupIsMatched() {
         Validation.failIf(42L)
                   .isNull()
-                  .onGroupError("is.null")
+                  .groupError("is.null")
                   .or()
                   .isEqualTo(43L)
-                  .onGroupError("is.not.equal")
+                  .groupError("is.not.equal")
                   .examine();
     }
 
@@ -49,6 +49,6 @@ public class FirstGroupMatchTerminationModeTest {
                          .isNull()
                          .or()
                          .isEqualTo(42L)
-                         .onGroupError(errorMsg);
+                         .groupError(errorMsg);
     }
 }

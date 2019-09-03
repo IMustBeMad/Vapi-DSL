@@ -32,7 +32,7 @@ public class ListValidation<T> extends AbstractListClause<T> {
     }
 
     @Override
-    public ListValidation<T> onGroupError(String error) {
-        return (ListValidation<T>) super.onGroupError(error);
+    public ListValidation<T> groupError(String error) {
+        return (ListValidation<T>) super.groupError(error);
     }
 }

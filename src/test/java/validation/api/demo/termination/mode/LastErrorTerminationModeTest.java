@@ -49,7 +49,7 @@ public class LastErrorTerminationModeTest {
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
                                            .isAnyOf(isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
-                                           .onGroupError(groupError)
+                                           .groupError(groupError)
                                            .examine())
                 .isInstanceOf(ValidationException.class)
                 .hasMessage(groupError);

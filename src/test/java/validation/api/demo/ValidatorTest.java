@@ -99,7 +99,7 @@ public class ValidatorTest {
                           .startsWith(startsWith).onError("does.not.start.with")
                           .or()
                           .ofLength(ofLength).onError("length.is.invalid")
-                          .onGroupError("group.error")
+                          .groupError("group.error")
                           .examine();
             }
 

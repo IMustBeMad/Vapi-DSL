@@ -31,7 +31,7 @@ public class DateValidation extends AbstractDateClause {
     }
 
     @Override
-    public DateValidation onGroupError(String error) {
-        return (DateValidation) super.onGroupError(error);
+    public DateValidation groupError(String error) {
+        return (DateValidation) super.groupError(error);
     }
 }

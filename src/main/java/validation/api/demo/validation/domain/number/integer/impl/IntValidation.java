@@ -30,7 +30,7 @@ public class IntValidation extends AbstractIntClause {
     }
 
     @Override
-    public IntValidation onGroupError(String error) {
-        return (IntValidation) super.onGroupError(error);
+    public IntValidation groupError(String error) {
+        return (IntValidation) super.groupError(error);
     }
 }

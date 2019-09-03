@@ -32,7 +32,7 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
     }
 
     @Override
-    public ArrayValidation<T> onGroupError(String error) {
-        return (ArrayValidation<T>) super.onGroupError(error);
+    public ArrayValidation<T> groupError(String error) {
+        return (ArrayValidation<T>) super.groupError(error);
     }
 }

@@ -32,7 +32,7 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
     }
 
     @Override
-    public ObjectValidation<T> onGroupError(String error) {
-        return (ObjectValidation<T>) super.onGroupError(error);
+    public ObjectValidation<T> groupError(String error) {
+        return (ObjectValidation<T>) super.groupError(error);
     }
 }
