@@ -113,7 +113,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     /**
      * Adds an {@code String} error to the current condition group {@link validation.api.demo.validation.common.ConditionCluster},
      * so it will be used when condition group is considered to be failed.
-     *
+     * <p>
      * Overrides {@link #onError(String)} value for the whole group.
      *
      * @param error {@code String} message to use.

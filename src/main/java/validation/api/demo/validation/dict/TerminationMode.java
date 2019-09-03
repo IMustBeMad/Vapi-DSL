@@ -1,54 +1,42 @@
 package validation.api.demo.validation.dict;
 
-import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.common.ConditionCluster;
 
 /**
  * The {@code TerminationMode} enum represents a mode
  * that should be used while performing validation.
- * Mode can dramatically change validation behavior,
- * so the attention should be paid to this.
  * <p>
- * If none {@code TerminationMode} is specified for
- * a {@link Validation} than the {@code FIRST_ERROR_ENCOUNTERED}
- * will be set as default if only one {@link ConditionCluster}
- * is present, otherwise {@code NONE_GROUP_MATCH} will be used.
+ * Depends on {@link PurposeMode} and {@link MatchMode} combination.
  */
 public enum TerminationMode {
 
     /**
-     * The {@code TerminationMode} that represents fail fast algorithm.
-     * With this mode an error will be raised on first encounter.
-     * Used as default if only one {@link ConditionCluster} is present.
-     * <p>
-     * Usable when validation has only one {@link ConditionCluster}.
+     * Represents fail fast algorithm.
+     * With this mode an error will be return on first encounter.
      */
     FAIL_FAST,
 
     /**
-     * The {@code TerminationMode} that represents fail safe algorithm.
-     * With this mode an error will be raised after all the errors are gathered.
-     * <p>
-     * Usable when validation has only one {@link ConditionCluster}.
+     * Represents fail safe algorithm.
+     * With this mode all errors will be gathered and returned for the {@link ConditionCluster}.
      */
     FAIL_SAFE,
 
     /**
-     * The {@code TerminationMode} that allows to fail the validation
-     * when none of the {@link ConditionCluster} have all the conditions matched.
-     * With this mode an error will be raised if none {@link ConditionCluster} is matched.
+     * Allows to fail the validation when none of the groups ({@link ConditionCluster}) have all the conditions matched.
+     * First encountered errors/group errors will be gathered and returned.
      * <p>
-     * If {@link ConditionCluster} is only one, this mode will behave as {@code FIRST_ERROR_ENCOUNTERED} mode.
-     * <p>
-     * Used as default if more than one {@link ConditionCluster} is present.
+     * {@see AbstractBaseValidation#onError(String)}
+     * {@see AbstractBaseValidation#groupError(String)}
      */
     NONE_GROUP_MATCH,
 
     /**
-     * The {@code TerminationMode} that allows to fail on first matched {@link ConditionCluster}.
-     * With this mode an error will be raised on first encounter of matched {@link ConditionCluster}.
+     * Allows to fail the validation on first matched condition group ({@link ConditionCluster}).
+     * All condition errors or a group error will be returned.
      * <p>
-     * If {@link ConditionCluster} is only one, this mode will behave as {@code NO_ERROR_ENCOUNTERED} mode.
+     * {@see AbstractBaseValidation#onError(String)}
+     * {@see AbstractBaseValidation#groupError(String)}
      */
     LAZY_GROUP_MATCH
 }

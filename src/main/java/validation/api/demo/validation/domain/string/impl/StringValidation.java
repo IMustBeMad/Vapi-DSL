@@ -1,8 +1,10 @@
 package validation.api.demo.validation.domain.string.impl;
 
-import validation.api.demo.validation.dict.*;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.MatchMode;
+import validation.api.demo.validation.dict.PurposeMode;
 import validation.api.demo.validation.domain.string.AbstractStringClause;
+import validation.api.demo.validation.exception.SystemMessage;
 
 import java.util.List;
 
