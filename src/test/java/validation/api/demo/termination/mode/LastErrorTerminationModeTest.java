@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.domain.list.ListConditions;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.exception.ValidationException;
@@ -29,7 +28,7 @@ public class LastErrorTerminationModeTest {
         String sizeError = "incorrect.size";
         String allOfClauseError = "incorrect.all.of";
 
-        List<SystemMessage> messages = Validation.failIf(testList, MatchMode.EAGER)
+        List<SystemMessage> messages = Validation.failIf(testList)
                                                  .ofSize(4).onError(sizeError)
                                                  .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                  .inspecting(it -> it.get(0), it -> it.matches("test.*"))
@@ -46,7 +45,7 @@ public class LastErrorTerminationModeTest {
         String anyOfErrorClause = "incorrect.any.of";
         String groupError = "date.is.invalid";
 
-        assertThatThrownBy(() -> Validation.failIf(date, MatchMode.EAGER)
+        assertThatThrownBy(() -> Validation.failIf(date)
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
                                            .isAnyOf(isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)

@@ -84,16 +84,8 @@ public class ValidatorTest {
 
         public static class FailedIfTest {
 
-            private static void lazySimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
-                simpleTest(MatchMode.LAZY, isEqualTo, startsWith, ofLength);
-            }
-
-            private static void eagerSimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
-                simpleTest(MatchMode.EAGER, isEqualTo, startsWith, ofLength);
-            }
-
-            private static void simpleTest(MatchMode matchMode, String isEqualTo, String startsWith, int ofLength) {
-                Validation.failIf(STRING, matchMode)
+            private static void simpleTest(String isEqualTo, String startsWith, int ofLength) {
+                Validation.failIf(STRING)
                           .isEqualTo(isEqualTo).onError("is.not.eq.test")
                           .startsWith(startsWith).onError("does.not.start.with")
                           .ofLength(ofLength).onError("length.is.invalid")
@@ -112,18 +104,14 @@ public class ValidatorTest {
             }
 
             @Test
-            public void should_failWithAllErrors_when_allConditionsAreMatched_withAnyMode() {
-                Assertions.assertThatThrownBy(() -> lazySimpleTestStub(STRING, PREFIX, 4))
-                          .hasMessage("is.not.eq.test\ndoes.not.start.with\nlength.is.invalid");
-
-                Assertions.assertThatThrownBy(() -> eagerSimpleTestStub(STRING, PREFIX, 4))
+            public void should_failWithAllErrors_when_allConditionsAreMatched() {
+                Assertions.assertThatThrownBy(() -> simpleTest(STRING, PREFIX, 4))
                           .hasMessage("is.not.eq.test\ndoes.not.start.with\nlength.is.invalid");
             }
 
             @Test
-            public void should_pass_when_anyConditionIsNotMet_withAnyMode() {
-                lazySimpleTestStub(INVALID_STRING, PREFIX, 4);
-                eagerSimpleTestStub(INVALID_STRING, PREFIX, 4);
+            public void should_pass_when_anyConditionIsNotMet() {
+                simpleTest(INVALID_STRING, PREFIX, 4);
             }
 
             @Test

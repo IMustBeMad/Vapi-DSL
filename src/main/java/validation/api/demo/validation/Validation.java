@@ -25,15 +25,11 @@ import java.util.List;
 public class Validation {
 
     public static <T> AbstractObjectCondition<T> failIf(T obj) {
-        return new ObjectValidation<>(obj, MatchMode.LAZY, PurposeMode.FAIL);
+        return new ObjectValidation<>(obj, null, PurposeMode.FAIL);
     }
 
     public static <T> AbstractObjectCondition<T> succeedIf(T obj) {
         return new ObjectValidation<>(obj, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static <T> AbstractObjectCondition<T> failIf(T obj, MatchMode matchMode) {
-        return new ObjectValidation<>(obj, matchMode, PurposeMode.FAIL);
     }
 
     public static <T> AbstractObjectCondition<T> succeedIf(T obj, MatchMode matchMode) {
@@ -41,15 +37,11 @@ public class Validation {
     }
 
     public static AbstractStringCondition failIf(String value) {
-        return new StringValidation(value, MatchMode.LAZY, PurposeMode.FAIL);
+        return new StringValidation(value, null, PurposeMode.FAIL);
     }
 
     public static AbstractStringCondition succeedIf(String value) {
         return new StringValidation(value, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static AbstractStringCondition failIf(String value, MatchMode matchMode) {
-        return new StringValidation(value, matchMode, PurposeMode.FAIL);
     }
 
     public static AbstractStringCondition succeedIf(String value, MatchMode matchMode) {
@@ -57,15 +49,11 @@ public class Validation {
     }
 
     public static AbstractIntCondition failIf(Integer integer) {
-        return new IntValidation(integer, MatchMode.LAZY, PurposeMode.FAIL);
+        return new IntValidation(integer, null, PurposeMode.FAIL);
     }
 
     public static AbstractIntCondition succeedIf(Integer integer) {
         return new IntValidation(integer, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static AbstractIntCondition failIf(Integer integer, MatchMode matchMode) {
-        return new IntValidation(integer, matchMode, PurposeMode.FAIL);
     }
 
     public static AbstractIntCondition succeedIf(Integer integer, MatchMode matchMode) {
@@ -73,15 +61,11 @@ public class Validation {
     }
 
     public static AbstractLongCondition failIf(Long aLong) {
-        return new LongValidation(aLong, MatchMode.LAZY, PurposeMode.FAIL);
+        return new LongValidation(aLong, null, PurposeMode.FAIL);
     }
 
     public static AbstractLongCondition succeedIf(Long aLong) {
         return new LongValidation(aLong, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static AbstractLongCondition failIf(Long aLong, MatchMode matchMode) {
-        return new LongValidation(aLong, matchMode, PurposeMode.FAIL);
     }
 
     public static AbstractLongCondition succeedIf(Long aLong, MatchMode matchMode) {
@@ -89,15 +73,11 @@ public class Validation {
     }
 
     public static AbstractDateCondition failIf(LocalDate date) {
-        return new DateValidation(date, MatchMode.LAZY, PurposeMode.FAIL);
+        return new DateValidation(date, null, PurposeMode.FAIL);
     }
 
     public static AbstractDateCondition succeedIf(LocalDate date) {
         return new DateValidation(date, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static AbstractDateCondition failIf(LocalDate date, MatchMode matchMode) {
-        return new DateValidation(date, matchMode, PurposeMode.FAIL);
     }
 
     public static AbstractDateCondition succeedIf(LocalDate date, MatchMode matchMode) {
@@ -105,15 +85,11 @@ public class Validation {
     }
 
     public static <T> AbstractListCondition<T> failIf(List<T> list) {
-        return new ListValidation<>(list, MatchMode.LAZY, PurposeMode.FAIL);
+        return new ListValidation<>(list, null, PurposeMode.FAIL);
     }
 
     public static <T> AbstractListCondition<T> succeedIf(List<T> list) {
         return new ListValidation<>(list, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static <T> AbstractListCondition<T> failIf(List<T> list, MatchMode matchMode) {
-        return new ListValidation<>(list, matchMode, PurposeMode.FAIL);
     }
 
     public static <T> AbstractListCondition<T> succeedIf(List<T> list, MatchMode matchMode) {
@@ -121,15 +97,11 @@ public class Validation {
     }
 
     public static <T> AbstractArrayCondition<T> failIf(T[] array) {
-        return new ArrayValidation<>(array, MatchMode.LAZY, PurposeMode.FAIL);
+        return new ArrayValidation<>(array, null, PurposeMode.FAIL);
     }
 
     public static <T> AbstractArrayCondition<T> succeedIf(T[] array) {
         return new ArrayValidation<>(array, MatchMode.LAZY, PurposeMode.SUCCESS);
-    }
-
-    public static <T> AbstractArrayCondition<T> failIf(T[] array, MatchMode matchMode) {
-        return new ArrayValidation<>(array, matchMode, PurposeMode.FAIL);
     }
 
     public static <T> AbstractArrayCondition<T> succeedIf(T[] array, MatchMode matchMode) {

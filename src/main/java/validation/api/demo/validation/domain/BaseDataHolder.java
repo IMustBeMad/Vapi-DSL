@@ -84,7 +84,7 @@ public abstract class BaseDataHolder<T> {
     @Getter
     @Setter
     @NoArgsConstructor
-    public class ModeManager {
+    public static class ModeManager {
 
         private MatchMode matchMode;
         private PurposeMode purposeMode;

@@ -7,7 +7,6 @@ import validation.api.demo.data.service.AttachmentService;
 import validation.api.demo.data.service.ClientService;
 import validation.api.demo.data.service.UserService;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.domain.object.impl.ObjectValidation;
 
 import java.io.File;
@@ -51,11 +50,11 @@ public class AttachmentValidatorNew {
         Long clientId = userService.getCurrentClientId();
         ClientConfig config = clientService.getClientConfig(clientId);
 
-        return Validation.failIf(attachment, MatchMode.EAGER)
+        return Validation.failIf(attachment)
                          .inspecting(Attachment::getOriginalName, name -> isValidExtension(name, config.getAllowedExtensions()))
                          .deepInspecting(
                                  attachmentService::getAttachmentFile,
-                                 file -> Validation.failIf(file, MatchMode.EAGER)
+                                 file -> Validation.failIf(file)
                                                    .withTerm(() -> config.getSizeLimit() == null)
                                                    .or()
                                                    .withTerm(this::isValidFile)
