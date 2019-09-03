@@ -20,25 +20,25 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
     public ArrayValidation<T> contains(T element) {
         this.registerCondition(ArrayConditions.contains(element));
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     public ArrayValidation<T> ofSize(int size) {
         this.registerCondition(ArrayConditions.ofSize(size));
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     public ArrayValidation<T> isEmpty() {
         this.registerCondition(ArrayConditions.isEmpty());
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     public ArrayValidation<T> isNotEmpty() {
         this.registerCondition(ArrayConditions.isNotEmpty());
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     public ArrayValidation<T> each(SingleCondition<T> condition) {
@@ -48,7 +48,7 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
                 .map(serial -> new LinkedCondition<>(serial, Clause.AND))
                 .ifPresent(this::registerCondition);
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     public ArrayValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
@@ -57,7 +57,7 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
                 .map(serial -> new LinkedCondition<>(serial, Clause.AND))
                 .ifPresent(this::registerCondition);
 
-        return (ArrayValidation<T>) this;
+        return self();
     }
 
     @Override
@@ -132,5 +132,9 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
         return Arrays.stream(this.obj)
                      .map(it -> this.toCondition(it, predicate))
                      .collect(Collectors.toList());
+    }
+
+    private ArrayValidation<T> self() {
+        return (ArrayValidation<T>) this;
     }
 }

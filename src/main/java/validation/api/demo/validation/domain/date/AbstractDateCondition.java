@@ -14,13 +14,13 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     public DateValidation isAfter(LocalDate otherDate) {
         this.registerCondition(DateConditions.isAfter(otherDate));
 
-        return (DateValidation) this;
+        return self();
     }
 
     public DateValidation isBefore(LocalDate otherDate) {
         this.registerCondition(DateConditions.isBefore(otherDate));
 
-        return (DateValidation) this;
+        return self();
     }
 
     @Override
@@ -83,5 +83,9 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     @Override
     public <R> DateValidation deepInspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (DateValidation) super.deepInspecting(mapper, validator);
+    }
+
+    private DateValidation self() {
+        return (DateValidation) this;
     }
 }

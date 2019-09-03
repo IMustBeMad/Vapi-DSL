@@ -67,15 +67,15 @@ public enum TerminatorFacade {
     }
 
     private <T> Terminator getTerminator(List<ConditionCluster<T>> conditionClusters) {
-        return isSingleCluster(conditionClusters) ? SimpleTerminator.INSTANCE : TernaryTerminator.INSTANCE;
+        return isSingleGroup(conditionClusters) ? SimpleTerminator.INSTANCE : TernaryTerminator.INSTANCE;
     }
 
-    private <T> boolean isSingleCluster(List<ConditionCluster<T>> clusters) {
+    private <T> boolean isSingleGroup(List<ConditionCluster<T>> clusters) {
         return clusters.size() == 1;
     }
 
     private <T> TerminationMode getTerminationMode(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters) {
-        boolean singleGroup = conditionClusters.size() == 1;
+        boolean singleGroup = isSingleGroup(conditionClusters);
         PurposeMode purposeMode = modeManager.getPurposeMode();
 
         if (purposeMode == PurposeMode.FAIL) {

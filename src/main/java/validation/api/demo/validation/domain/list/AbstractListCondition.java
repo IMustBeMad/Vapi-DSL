@@ -19,31 +19,31 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
     public ListValidation<T> contains(T element) {
         this.registerCondition(ListConditions.contains(element));
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> ofSize(int size) {
         this.registerCondition(ListConditions.ofSize(size));
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> hasNoDuplicates() {
         this.registerCondition(ListConditions.hasNoDuplicates());
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> isEmpty() {
         this.registerCondition(ListConditions.isEmpty());
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> isNotEmpty() {
         this.registerCondition(ListConditions.isNotEmpty());
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> each(SingleCondition<T> condition) {
@@ -53,7 +53,7 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
                 .map(serial -> new LinkedCondition<>(serial, Clause.AND))
                 .ifPresent(this::registerCondition);
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     public ListValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
@@ -62,7 +62,7 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
                 .map(serial -> new LinkedCondition<>(serial, Clause.AND))
                 .ifPresent(this::registerCondition);
 
-        return (ListValidation<T>) this;
+        return self();
     }
 
     @Override
@@ -137,5 +137,9 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
         return this.obj.stream()
                        .map(it -> this.toCondition(it, predicate))
                        .collect(Collectors.toList());
+    }
+
+    private ListValidation<T> self() {
+        return (ListValidation<T>) this;
     }
 }

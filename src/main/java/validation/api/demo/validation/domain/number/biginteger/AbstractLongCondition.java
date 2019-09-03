@@ -13,39 +13,39 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     public LongValidation isGt(Long otherLong) {
         this.registerCondition(LongConditions.isGt(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     public LongValidation isGte(Long otherLong) {
         this.registerCondition(LongConditions.isGte(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     public LongValidation isLt(Long otherLong) {
         this.registerCondition(LongConditions.isLt(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     public LongValidation isLte(Long otherLong) {
         this.registerCondition(LongConditions.isLte(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     @Override
     public LongValidation isEqualTo(Long otherLong) {
         this.registerCondition(LongConditions.isEqualTo(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     @Override
     public LongValidation isNotEqualTo(Long otherLong) {
         registerCondition(LongConditions.isNotEqualTo(otherLong));
 
-        return (LongValidation) this;
+        return self();
     }
 
     @Override
@@ -98,5 +98,9 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long>
     @Override
     public <R> LongValidation deepInspecting(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (LongValidation) super.deepInspecting(mapper, validator);
+    }
+
+    private LongValidation self() {
+        return (LongValidation) this;
     }
 }

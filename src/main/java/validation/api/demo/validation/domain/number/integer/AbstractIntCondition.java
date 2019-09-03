@@ -13,89 +13,93 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     public IntValidation isGt(Integer otherInteger) {
         this.registerCondition(IntConditions.isGt(otherInteger));
 
-        return (IntValidation) this;
+        return self();
     }
 
     public IntValidation isGte(Integer otherInteger) {
         this.registerCondition(IntConditions.isGte(otherInteger));
 
-        return (IntValidation) this;
+        return self();
     }
 
     public IntValidation isLt(Integer otherInteger) {
         this.registerCondition(IntConditions.isLt(otherInteger));
 
-        return (IntValidation) this;
+        return self();
     }
 
     public IntValidation isLte(Integer otherInteger) {
         this.registerCondition(IntConditions.isLte(otherInteger));
 
+        return self();
+    }
+
+    @Override
+    protected IntValidation isNull() {
+        return (IntValidation) super.isNull();
+    }
+
+    @Override
+    protected IntValidation isNotNull() {
+        return (IntValidation) super.isNotNull();
+    }
+
+    @Override
+    protected IntValidation isEqualTo(Integer otherObj) {
+        return (IntValidation) super.isEqualTo(otherObj);
+    }
+
+    @Override
+    protected IntValidation isNotEqualTo(Integer otherObj) {
+        return (IntValidation) super.isNotEqualTo(otherObj);
+    }
+
+    @Override
+    protected IntValidation withTerm(Predicate<Integer> predicate) {
+        return (IntValidation) super.withTerm(predicate);
+    }
+
+    @Override
+    protected IntValidation withTerm(Supplier<Boolean> supplier) {
+        return (IntValidation) super.withTerm(supplier);
+    }
+
+    @Override
+    protected IntValidation withTerm(Function<Integer, AbstractBaseValidation<Integer>> validator) {
+        return (IntValidation) super.withTerm(validator);
+    }
+
+    @Override
+    protected IntValidation isAnyOf(SingleCondition<Integer>... conditions) {
+        return (IntValidation) super.isAnyOf(conditions);
+    }
+
+    @Override
+    protected IntValidation isAllOf(SingleCondition<Integer>... conditions) {
+        return (IntValidation) super.isAllOf(conditions);
+    }
+
+    @Override
+    protected IntValidation log(String msg, Object... values) {
+        return (IntValidation) super.log(msg, values);
+    }
+
+    @Override
+    protected <R> IntValidation inspecting(Function<Integer, R> mapper, Predicate<R> predicate) {
+        return (IntValidation) super.inspecting(mapper, predicate);
+    }
+
+    @Override
+    protected <R> IntValidation inspecting(Function<Integer, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return (IntValidation) super.inspecting(mapper, condition);
+    }
+
+    @Override
+    protected <R> IntValidation deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+        return (IntValidation) super.deepInspecting(mapper, validator);
+    }
+
+    private IntValidation self() {
         return (IntValidation) this;
-    }
-
-    @Override
-    protected AbstractIntCondition isNull() {
-        return (AbstractIntCondition) super.isNull();
-    }
-
-    @Override
-    protected AbstractIntCondition isNotNull() {
-        return (AbstractIntCondition) super.isNotNull();
-    }
-
-    @Override
-    protected AbstractIntCondition isEqualTo(Integer otherObj) {
-        return (AbstractIntCondition) super.isEqualTo(otherObj);
-    }
-
-    @Override
-    protected AbstractIntCondition isNotEqualTo(Integer otherObj) {
-        return (AbstractIntCondition) super.isNotEqualTo(otherObj);
-    }
-
-    @Override
-    protected AbstractIntCondition withTerm(Predicate<Integer> predicate) {
-        return (AbstractIntCondition) super.withTerm(predicate);
-    }
-
-    @Override
-    protected AbstractIntCondition withTerm(Supplier<Boolean> supplier) {
-        return (AbstractIntCondition) super.withTerm(supplier);
-    }
-
-    @Override
-    protected AbstractIntCondition withTerm(Function<Integer, AbstractBaseValidation<Integer>> validator) {
-        return (AbstractIntCondition) super.withTerm(validator);
-    }
-
-    @Override
-    protected AbstractIntCondition isAnyOf(SingleCondition<Integer>... conditions) {
-        return (AbstractIntCondition) super.isAnyOf(conditions);
-    }
-
-    @Override
-    protected AbstractIntCondition isAllOf(SingleCondition<Integer>... conditions) {
-        return (AbstractIntCondition) super.isAllOf(conditions);
-    }
-
-    @Override
-    protected AbstractIntCondition log(String msg, Object... values) {
-        return (AbstractIntCondition) super.log(msg, values);
-    }
-
-    @Override
-    protected <R> AbstractIntCondition inspecting(Function<Integer, R> mapper, Predicate<R> predicate) {
-        return (AbstractIntCondition) super.inspecting(mapper, predicate);
-    }
-
-    @Override
-    protected <R> AbstractIntCondition inspecting(Function<Integer, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (AbstractIntCondition) super.inspecting(mapper, condition);
-    }
-
-    @Override
-    protected <R> AbstractIntCondition deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (AbstractIntCondition) super.deepInspecting(mapper, validator);
     }
 }
