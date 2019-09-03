@@ -1,13 +1,13 @@
 package validation.api.demo.validation.domain.object.impl;
 
-import lombok.extern.slf4j.Slf4j;
-import validation.api.demo.validation.dict.*;
+import validation.api.demo.validation.dict.ErrorMode;
+import validation.api.demo.validation.dict.MatchMode;
+import validation.api.demo.validation.dict.PurposeMode;
 import validation.api.demo.validation.domain.object.AbstractObjectClause;
 import validation.api.demo.validation.exception.SystemMessage;
 
 import java.util.List;
 
-@Slf4j
 public class ObjectValidation<T> extends AbstractObjectClause<T> {
 
     public ObjectValidation(T obj, MatchMode matchMode, PurposeMode purposeMode) {
