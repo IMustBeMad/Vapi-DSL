@@ -26,11 +26,17 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
         return super.examine(errorMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayValidation<T> onError(String error) {
         return (ArrayValidation<T>) super.onError(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayValidation<T> groupError(String error) {
         return (ArrayValidation<T>) super.groupError(error);

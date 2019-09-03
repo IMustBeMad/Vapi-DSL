@@ -24,11 +24,17 @@ public class IntValidation extends AbstractIntClause {
         return super.examine(errorMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public IntValidation onError(String error) {
         return (IntValidation) super.onError(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public IntValidation groupError(String error) {
         return (IntValidation) super.groupError(error);

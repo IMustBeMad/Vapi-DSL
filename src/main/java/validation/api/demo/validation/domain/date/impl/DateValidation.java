@@ -25,11 +25,17 @@ public class DateValidation extends AbstractDateClause {
         return super.examine(errorMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DateValidation onError(String error) {
         return (DateValidation) super.onError(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DateValidation groupError(String error) {
         return (DateValidation) super.groupError(error);

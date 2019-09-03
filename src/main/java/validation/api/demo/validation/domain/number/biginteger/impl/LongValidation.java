@@ -24,11 +24,17 @@ public class LongValidation extends AbstractLongClause {
         return super.examine(errorMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LongValidation onError(String error) {
         return (LongValidation) super.onError(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LongValidation groupError(String error) {
         return (LongValidation) super.groupError(error);

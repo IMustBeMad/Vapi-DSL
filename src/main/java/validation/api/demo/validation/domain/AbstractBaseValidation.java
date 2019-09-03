@@ -98,19 +98,34 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this.inspect(mapper.apply(this.obj), validator);
     }
 
+    /**
+     * Adds an {@code String} error to the current condition, so it will be used when condition is considered to be failed.
+     *
+     * @param error {@code String} message to use.
+     * @return {@code this} validation object.
+     */
     protected AbstractBaseValidation<T> onError(String error) {
         this.getCurrentCondition().setOnError(error);
 
         return this;
     }
 
+    /**
+     * Adds an {@code String} error to the current condition group {@link validation.api.demo.validation.common.ConditionCluster},
+     * so it will be used when condition group is considered to be failed.
+     *
+     * Overrides {@link #onError(String)} value for the whole group.
+     *
+     * @param error {@code String} message to use.
+     * @return {@code this} validation object.
+     */
     protected AbstractBaseValidation<T> groupError(String error) {
         this.getCurrentCluster().setOnError(error);
 
         return this;
     }
 
-    private  <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
+    private <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
         this.memoize(this.toCondition(obj, validator));
 
         return this;

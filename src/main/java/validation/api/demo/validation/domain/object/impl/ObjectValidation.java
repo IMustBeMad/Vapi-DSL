@@ -26,11 +26,17 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
         return super.examine(errorMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ObjectValidation<T> onError(String error) {
         return (ObjectValidation<T>) super.onError(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ObjectValidation<T> groupError(String error) {
         return (ObjectValidation<T>) super.groupError(error);
