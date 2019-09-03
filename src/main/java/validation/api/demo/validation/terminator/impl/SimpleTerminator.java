@@ -9,9 +9,6 @@ import validation.api.demo.validation.terminator.Terminator;
 import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public enum SimpleTerminator implements Terminator {
     INSTANCE;
@@ -63,20 +60,10 @@ public enum SimpleTerminator implements Terminator {
     @Override
     public <T> List<SystemMessage> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> conditionCluster = conditionClusters.get(0);
-
         List<SystemMessage> systemMessages = this.failFast(conditionCluster, obj);
 
         if (systemMessages.isEmpty()) {
-            String onError = conditionCluster.getOnError();
-
-            if (!isEmpty(onError)) {
-                return Collections.singletonList(SystemMessage.withError("group", onError));
-            }
-
-            return conditionCluster.getConditions().stream()
-                                   .map(Condition::getOnError)
-                                   .map(it -> SystemMessage.withError("", it))
-                                   .collect(Collectors.toList());
+            return getErrorReason(conditionCluster);
         }
 
         return Collections.emptyList();

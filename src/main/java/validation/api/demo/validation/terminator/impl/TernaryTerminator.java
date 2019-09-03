@@ -1,6 +1,5 @@
 package validation.api.demo.validation.terminator.impl;
 
-import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.result.ValidationResult;
@@ -10,9 +9,6 @@ import validation.api.demo.validation.tester.impl.TesterFacade;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public enum TernaryTerminator implements Terminator {
     INSTANCE;
@@ -52,16 +48,7 @@ public enum TernaryTerminator implements Terminator {
             ValidationResult result = getFirstError(tester, conditionCluster, obj);
 
             if (result == null) {
-                String onError = conditionCluster.getOnError();
-
-                if (!isEmpty(onError)) {
-                    return Collections.singletonList(SystemMessage.withError("group", onError));
-                }
-
-                return conditionCluster.getConditions().stream()
-                                       .map(Condition::getOnError)
-                                       .map(it -> SystemMessage.withError("", it))
-                                       .collect(Collectors.toList());
+                return getErrorReason(conditionCluster);
             }
         }
 
