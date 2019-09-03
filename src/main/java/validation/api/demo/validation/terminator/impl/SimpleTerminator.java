@@ -10,12 +10,15 @@ import validation.api.demo.validation.terminator.Terminator;
 import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> matchLazily(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> unMatchLazily(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
 
@@ -31,7 +34,7 @@ public enum SimpleTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> matchEagerly(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> unMatchEagerly(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
         Set<SystemMessage> errors = new HashSet<>();
@@ -55,7 +58,7 @@ public enum SimpleTerminator implements Terminator {
 
     @Override
     public <T> List<SystemMessage> matchAllMatched(ConditionCluster<T> conditionCluster, T obj) {
-        List<SystemMessage> systemMessages = this.matchEagerly(conditionCluster, obj);
+        List<SystemMessage> systemMessages = this.unMatchEagerly(conditionCluster, obj);
 
         if (systemMessages.isEmpty()) {
             if (conditionCluster.getConditions().size() == 1) {
@@ -74,12 +77,27 @@ public enum SimpleTerminator implements Terminator {
     @Override
     public <T> List<SystemMessage> matchNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         throw new UnsupportedOperationException();
-//        return this.failOnFirstError(conditionClusters.get(0), obj, Tester.TestMode.STRAIGHT);
     }
 
     @Override
-    public <T> List<SystemMessage> matchGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
-        throw new UnsupportedOperationException();
-//        return this.failOnNoErrors(conditionClusters.get(0), obj);
+    public <T> List<SystemMessage> matchByGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
+        ConditionCluster<T> conditionCluster = conditionClusters.get(0);
+
+        List<SystemMessage> systemMessages = this.unMatchLazily(conditionCluster, obj);
+
+        if (systemMessages.isEmpty()) {
+            String onError = conditionCluster.getOnError();
+
+            if (!isEmpty(onError)) {
+                return Collections.singletonList(SystemMessage.withError("group", onError));
+            }
+
+            return conditionCluster.getConditions().stream()
+                                   .map(Condition::getOnError)
+                                   .map(it -> SystemMessage.withError("", it))
+                                   .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
     }
 }

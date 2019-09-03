@@ -1,10 +1,10 @@
 package validation.api.demo.validation.terminator.impl;
 
+import validation.api.demo.validation.common.Condition;
 import validation.api.demo.validation.common.ConditionCluster;
 import validation.api.demo.validation.exception.SystemMessage;
 import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.terminator.Terminator;
-import validation.api.demo.validation.tester.Tester;
 import validation.api.demo.validation.tester.impl.TesterFacade;
 
 import java.util.ArrayList;
@@ -12,16 +12,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public enum TernaryTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> matchLazily(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> unMatchLazily(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> matchEagerly(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<SystemMessage> unMatchEagerly(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
@@ -48,14 +50,23 @@ public enum TernaryTerminator implements Terminator {
     }
 
     @Override
-    public <T> List<SystemMessage> matchGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<SystemMessage> matchByGroupLazily(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {
-            List<ValidationResult> result = getGroupErrors(tester, conditionCluster, obj);
+            ValidationResult result = getFirstError(tester, conditionCluster, obj);
 
-            if (!result.isEmpty()) {
-                return getErrorReason(result, conditionCluster.getOnError());
+            if (result == null) {
+                String onError = conditionCluster.getOnError();
+
+                if (!isEmpty(onError)) {
+                    return Collections.singletonList(SystemMessage.withError("group", onError));
+                }
+
+                return conditionCluster.getConditions().stream()
+                                       .map(Condition::getOnError)
+                                       .map(it -> SystemMessage.withError("", it))
+                                       .collect(Collectors.toList());
             }
         }
 
@@ -68,12 +79,5 @@ public enum TernaryTerminator implements Terminator {
                                .filter(result -> !result.isValid())
                                .findFirst()
                                .orElse(null);
-    }
-
-    private <T> List<ValidationResult> getGroupErrors(TesterFacade tester, ConditionCluster<T> conditionCluster, T obj) {
-        return conditionCluster.getConditions().stream()
-                               .map(condition -> tester.test(condition, obj, Tester.TestMode.INVERTED))
-                               .filter(result -> !result.isValid())
-                               .collect(Collectors.toList());
     }
 }

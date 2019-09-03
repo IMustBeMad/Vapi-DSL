@@ -17,7 +17,15 @@ public class ValidationException extends RuntimeException {
         return new ValidationException(joinCodes(messages));
     }
 
+    private static String joinMessages(List<List<SystemMessage>> messages) {
+        return messages.stream()
+                       .map(ValidationException::joinCodes)
+                       .collect(Collectors.joining("\n<OR>\n"));
+    }
+
     private static String joinCodes(List<SystemMessage> messages) {
-        return messages.stream().map(SystemMessage::getReasonCode).collect(Collectors.joining("\n"));
+        return messages.stream()
+                       .map(SystemMessage::getReasonCode)
+                       .collect(Collectors.joining("\n"));
     }
 }

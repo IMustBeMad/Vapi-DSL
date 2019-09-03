@@ -6,17 +6,9 @@ import validation.api.demo.validation.result.ValidationResult;
 
 public interface Tester {
 
-    <T> ValidationResult test(Condition<T> condition, T obj, TestMode testMode);
+    <T> ValidationResult test(Condition<T> condition, T obj);
 
-    default ValidationResult getResult(boolean predicatePassed, String onError, TestMode testMode) {
-        if (testMode == TestMode.INVERTED) {
-            return predicatePassed ? Validation.failed(onError) : Validation.ok();
-        }
-
+    default ValidationResult getResult(boolean predicatePassed, String onError) {
         return predicatePassed ? Validation.ok() : Validation.failed(onError);
-    }
-
-    enum TestMode {
-        STRAIGHT, INVERTED
     }
 }

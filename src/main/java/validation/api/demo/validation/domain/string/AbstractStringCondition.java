@@ -13,19 +13,31 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     public StringValidation matches(String pattern) {
         this.registerCondition(StringConditions.matches(pattern));
 
-        return (StringValidation) this;
+        return self();
     }
 
     public StringValidation isEmpty() {
         this.registerCondition(StringConditions.isEmpty());
 
-        return (StringValidation) this;
+        return self();
     }
 
     public StringValidation isNotEmpty() {
         this.registerCondition(StringConditions.isNotEmpty());
 
-        return (StringValidation) this;
+        return self();
+    }
+
+    public StringValidation startsWith(String prefix) {
+        this.registerCondition(StringConditions.startsWith(prefix));
+
+        return self();
+    }
+
+    public StringValidation ofLength(int length) {
+        this.registerCondition(StringConditions.ofLength(length));
+
+        return self();
     }
 
     @Override
@@ -88,5 +100,9 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     @Override
     public <R> StringValidation deepInspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
         return (StringValidation) super.deepInspecting(mapper, validator);
+    }
+
+    private StringValidation self() {
+        return (StringValidation) this;
     }
 }

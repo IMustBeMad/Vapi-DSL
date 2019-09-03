@@ -62,7 +62,7 @@ public class DeepInspectingTest {
                   .ofSize(3)
                   .deepInspecting(
                           it -> it.get(0),
-                          item -> Validation.failIf(item, MatchMode.EAGER)
+                          item -> Validation.failIf(item)
                                             .isNotNull()
                                             .isEqualTo("test1")
                                             .deepInspecting(

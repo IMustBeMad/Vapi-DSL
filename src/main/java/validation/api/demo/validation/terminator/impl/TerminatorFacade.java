@@ -53,17 +53,17 @@ public enum TerminatorFacade {
     private <T> List<SystemMessage> failOnFirstError(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).matchLazily(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).unMatchLazily(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnLastError(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
-        return getTerminator(conditionClusters).matchEagerly(firstConditionCluster, obj);
+        return getTerminator(conditionClusters).unMatchEagerly(firstConditionCluster, obj);
     }
 
     private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
-        return getTerminator(conditionClusters).matchGroupLazily(conditionClusters, obj);
+        return getTerminator(conditionClusters).matchByGroupLazily(conditionClusters, obj);
     }
 
     private <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
@@ -87,23 +87,20 @@ public enum TerminatorFacade {
         PurposeMode purposeMode = modeManager.getPurposeMode();
 
         if (purposeMode == PurposeMode.FAIL) {
-            if (modeManager.getMatchMode() == MatchMode.LAZY) {
-                return singleGroup ? TerminationMode.NO_ERROR_ENCOUNTERED
-                                   : TerminationMode.FIRST_GROUP_MATCH;
-            }
-
-            return TerminationMode.LAST_ERROR_ENCOUNTERED;
+            return TerminationMode.FIRST_GROUP_MATCH;
         }
         if (purposeMode == PurposeMode.SUCCESS) {
             if (modeManager.getMatchMode() == MatchMode.LAZY) {
                 return singleGroup ? TerminationMode.FIRST_ERROR_ENCOUNTERED
                                    : TerminationMode.NONE_GROUP_MATCH;
+            } else {
+                if (singleGroup) {
+                    return TerminationMode.LAST_ERROR_ENCOUNTERED;
+                }
             }
-
-            return TerminationMode.LAST_ERROR_ENCOUNTERED;
         }
 
-        return TerminationMode.FIRST_ERROR_ENCOUNTERED;
+        throw new UnsupportedOperationException();
     }
 
     private boolean shouldThrowError(BaseDataHolder.ModeManager modeManager, List<SystemMessage> errors) {

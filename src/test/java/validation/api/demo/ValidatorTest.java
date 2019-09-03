@@ -1,126 +1,147 @@
 package validation.api.demo;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import validation.api.demo.data.common.InnerTestObject;
-import validation.api.demo.data.common.TestObject;
 import validation.api.demo.validation.Validation;
-import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.MatchMode;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ValidatorTest {
 
-    @Test
-    public void test() {
-        Validation.failIf("test")
-                  .isNotNull().onError("no null")
-                  .isEqualTo("test")
-                  .examine();
+    public static class StringTest {
 
-//        Validation.verifyIf("test")
-//                  .matches("test").onError("error")
-//                  .isNotEmpty()
-//                  .failOn(TerminationMode.LAST_ERROR_ENCOUNTERED)
-//                  .examine();
-    }
+        private static final String STRING = "test";
+        private static final String PREFIX = "tes";
 
-    @Test
-    public void testString() {
-        String issueNumber = "IR20180203123";
+        private static final String INVALID_STRING = "not test";
 
-        Validation.succeedIf(issueNumber)
-                  .isNotNull()
-                  .isEqualTo("test")
-                  .matches("IR.*")
-                  .examine();
-    }
+        public static class SucceedIfTest {
 
-    @Test
-    public void testDate() {
-        LocalDate now = LocalDate.now();
+            private static void lazySimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
+                simpleTest(MatchMode.LAZY, isEqualTo, startsWith, ofLength);
+            }
 
-        Validation.succeedIf(now)
-                  .isEqualTo(now.plusDays(1))
-                  .isAfter(now.minusDays(1))
-                  .examine(ErrorMode.RETURN);
-    }
+            private static void eagerSimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
+                simpleTest(MatchMode.EAGER, isEqualTo, startsWith, ofLength);
+            }
 
-    @Test
-    public void testLong() {
-        Validation.failIf(42L, MatchMode.EAGER)
-                  .isNull()
-                  .isEqualTo(43L)
-                  .isGt(45L)
-                  .examine(ErrorMode.RETURN);
-    }
+            private static void simpleTest(MatchMode matchMode, String isEqualTo, String startsWith, int ofLength) {
+                Validation.succeedIf(STRING, matchMode)
+                          .isEqualTo(isEqualTo).onError("is.not.eq.test")
+                          .startsWith(startsWith).onError("does.not.start.with")
+                          .ofLength(ofLength).onError("length.is.invalid")
+                          .examine();
+            }
 
-    @Test
-    public void testList() {
-        List<String> names = List.of("John", "Rick", "Mathew", "Max", "Jamie", "John");
+            private static void groupTest(String isEqualTo, String startsWith, int ofLength) {
+                Validation.succeedIf(STRING)
+                          .isEqualTo(isEqualTo).onError("is.not.eq.test")
+                          .or()
+                          .startsWith(startsWith).onError("does.not.start.with")
+                          .ofLength(ofLength).onError("length.is.invalid")
+                          .examine();
+            }
 
-        Validation.failIf(names)
-                  .ofSize(3)
-                  .or()
-                  .isNotNull()
-                  .contains("Rick")
-                  .hasNoDuplicates()
-                  .examine();
-    }
-//
-//    @Test
-//    public void testObject() {
-//        TestObject testObj = getTestObj();
-//
-//        Validation.verifyIf(testObj)
-//                  .isNotNull()
-//                  .isEqualTo(testObj)
-//                  .withTerm(this::isSavedInRepository)
-//                  .inspecting(TestObject::getName, name -> name.matches("Fancy.*"))
-//                  .inspecting(
-//                          TestObject::getId,
-//                          id -> Validation.verifyIf(id)
-//                                          .isNull(ERROR_IS_NULL)
-//                                          .isGt(41L, ERROR_NOT_GT)
-//                  )
-//                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
-//    }
-//
-//    @Test
-//    public void testArray() {
-//        String[] strings = {"test", "test2"};
-//
-//        Validation.verifyIf(strings)
-//                  .contains("test")
-//                  .ofSize(2)
-//                  .inspecting(array -> array[0], el -> el.equals("test"))
-//                  .failOn(TerminationMode.FIRST_ERROR_ENCOUNTERED);
-//    }
+            @Test
+            public void should_pass_when_allConditionsAreMatched_withAnyMode() {
+                lazySimpleTestStub(STRING, PREFIX, 4);
+                eagerSimpleTestStub(STRING, PREFIX, 4);
+            }
 
-    /*repository check for instance*/
-    private boolean isSavedInRepository(TestObject testObject) {
-        return true;
-    }
+            @Test
+            public void should_pass_when_allConditionsOfAnyGroupAreMatched() {
+                groupTest(STRING, PREFIX, 4);
+            }
 
-    private TestObject getTestObj() {
-        TestObject testObject = new TestObject();
-        testObject.setId(42L);
-        testObject.setName("Fancy (bad) name");
-        testObject.setLinkedNames(List.of("super", "duper", "names", "to", "concatenated"));
-        testObject.setInnerTestObject(InnerTestObject.of(43L, "Inner object name", LocalDate.now()));
-        testObject.setInnerTestObjects(
-                List.of(
-                        InnerTestObject.of(44L, "List object", LocalDate.now().minusDays(1)),
-                        new InnerTestObject()
-                )
-        );
+            @Test
+            public void should_fail_when_noneGroupConditionsAreMatched() {
+                Assertions.assertThatThrownBy(() -> groupTest(INVALID_STRING, INVALID_STRING, 3))
+                          .hasMessage("is.not.eq.test\ndoes.not.start.with");
+            }
 
-        return testObject;
+            @Test
+            public void should_fail_when_firstErrorMet_withLazyMode() {
+                Assertions.assertThatThrownBy(() -> lazySimpleTestStub(INVALID_STRING, PREFIX, 4))
+                          .hasMessage("is.not.eq.test");
+            }
+
+            @Test
+            public void should_failWithFirstError_when_firstErrorMetDespiteSeveralErrors_withLazyMode() {
+                Assertions.assertThatThrownBy(() -> lazySimpleTestStub(INVALID_STRING, INVALID_STRING, 4))
+                          .hasMessage("is.not.eq.test");
+            }
+
+            @Test
+            public void should_failWithAllErrors_withEagerMode() {
+                Assertions.assertThatThrownBy(() -> eagerSimpleTestStub(INVALID_STRING, INVALID_STRING, 4))
+                          .hasMessage("is.not.eq.test\ndoes.not.start.with");
+            }
+        }
+
+        public static class FailedIfTest {
+
+            private static void lazySimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
+                simpleTest(MatchMode.LAZY, isEqualTo, startsWith, ofLength);
+            }
+
+            private static void eagerSimpleTestStub(String isEqualTo, String startsWith, int ofLength) {
+                simpleTest(MatchMode.EAGER, isEqualTo, startsWith, ofLength);
+            }
+
+            private static void simpleTest(MatchMode matchMode, String isEqualTo, String startsWith, int ofLength) {
+                Validation.failIf(STRING, matchMode)
+                          .isEqualTo(isEqualTo).onError("is.not.eq.test")
+                          .startsWith(startsWith).onError("does.not.start.with")
+                          .ofLength(ofLength).onError("length.is.invalid")
+                          .examine();
+            }
+
+            private static void groupTest(String isEqualTo, String startsWith, int ofLength) {
+                Validation.failIf(STRING)
+                          .isEqualTo(isEqualTo).onError("is.not.eq.test")
+                          .or()
+                          .startsWith(startsWith).onError("does.not.start.with")
+                          .or()
+                          .ofLength(ofLength).onError("length.is.invalid")
+                          .onGroupError("group.error")
+                          .examine();
+            }
+
+            @Test
+            public void should_failWithAllErrors_when_allConditionsAreMatched_withAnyMode() {
+                Assertions.assertThatThrownBy(() -> lazySimpleTestStub(STRING, PREFIX, 4))
+                          .hasMessage("is.not.eq.test\ndoes.not.start.with\nlength.is.invalid");
+
+                Assertions.assertThatThrownBy(() -> eagerSimpleTestStub(STRING, PREFIX, 4))
+                          .hasMessage("is.not.eq.test\ndoes.not.start.with\nlength.is.invalid");
+            }
+
+            @Test
+            public void should_pass_when_anyConditionIsNotMet_withAnyMode() {
+                lazySimpleTestStub(INVALID_STRING, PREFIX, 4);
+                eagerSimpleTestStub(INVALID_STRING, PREFIX, 4);
+            }
+
+            @Test
+            public void should_failWithGroupError_when_groupConditionsMatchedAndGroupHasError() {
+                Assertions.assertThatThrownBy(() -> groupTest(INVALID_STRING, INVALID_STRING, 4))
+                          .hasMessage("group.error");
+            }
+
+            @Test
+            public void should_failWithError_when_groupConditionsMatchedAndNoGroupErrorPresent() {
+                Assertions.assertThatThrownBy(() -> groupTest(STRING, INVALID_STRING, 3))
+                          .hasMessage("is.not.eq.test");
+            }
+
+            @Test
+            public void should_pass_when_noneGroupConditionsMatched() {
+                groupTest(INVALID_STRING, INVALID_STRING, 3);
+            }
+        }
     }
 }
