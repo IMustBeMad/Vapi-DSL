@@ -4,7 +4,7 @@ import validation.dict.ErrorMode;
 import validation.dict.MatchMode;
 import validation.dict.PurposeMode;
 import validation.domain.number.biginteger.AbstractLongClause;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 
 import java.util.List;
 
@@ -17,12 +17,12 @@ public class LongValidation extends AbstractLongClause {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

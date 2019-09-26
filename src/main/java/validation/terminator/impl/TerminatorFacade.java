@@ -6,7 +6,7 @@ import validation.dict.MatchMode;
 import validation.dict.PurposeMode;
 import validation.dict.TerminationMode;
 import validation.domain.BaseDataHolder;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 import validation.exception.ValidationException;
 import validation.terminator.Terminator;
 
@@ -16,9 +16,9 @@ import java.util.List;
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> List<SystemMessage> terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<ValidationError> terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
         TerminationMode terminationMode = getTerminationMode(modeManager, conditionClusters);
-        List<SystemMessage> errors = getErrors(terminationMode, conditionClusters, obj);
+        List<ValidationError> errors = getErrors(terminationMode, conditionClusters, obj);
 
         if (shouldThrowError(modeManager, errors)) {
             throw ValidationException.withError(errors);
@@ -27,7 +27,7 @@ public enum TerminatorFacade {
         return errors;
     }
 
-    private <T> List<SystemMessage> getErrors(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<ValidationError> getErrors(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
         switch (terminationMode) {
             case FAIL_FAST:
                 return failFast(conditionClusters, obj);
@@ -42,23 +42,23 @@ public enum TerminatorFacade {
         return Collections.emptyList();
     }
 
-    private <T> List<SystemMessage> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<ValidationError> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
         return getTerminator(conditionClusters).failFast(firstConditionCluster, obj);
     }
 
-    private <T> List<SystemMessage> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<ValidationError> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
         return getTerminator(conditionClusters).failSafe(firstConditionCluster, obj);
     }
 
-    private <T> List<SystemMessage> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<ValidationError> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
         return getTerminator(conditionClusters).failOnFirstGroupMatched(conditionClusters, obj);
     }
 
-    private <T> List<SystemMessage> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> List<ValidationError> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
         return getTerminator(conditionClusters).failOnNoneGroupMatched(conditionClusters, obj);
     }
 
@@ -95,7 +95,7 @@ public enum TerminatorFacade {
         throw new UnsupportedOperationException();
     }
 
-    private boolean shouldThrowError(BaseDataHolder.ModeManager modeManager, List<SystemMessage> errors) {
+    private boolean shouldThrowError(BaseDataHolder.ModeManager modeManager, List<ValidationError> errors) {
         return modeManager.getErrorMode() == ErrorMode.THROW && !errors.isEmpty();
     }
 }

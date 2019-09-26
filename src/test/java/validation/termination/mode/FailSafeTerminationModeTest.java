@@ -7,7 +7,7 @@ import validation.Validation;
 import validation.dict.ErrorMode;
 import validation.dict.MatchMode;
 import validation.domain.list.ListConditions;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 import validation.exception.ValidationException;
 import validation.domain.date.DateConditions;
 
@@ -29,13 +29,13 @@ public class FailSafeTerminationModeTest {
         String sizeError = "incorrect.size";
         String allOfClauseError = "incorrect.all.of";
 
-        List<SystemMessage> messages = Validation.succeedIf(testList, MatchMode.EAGER)
-                                                 .ofSize(4).onError(sizeError)
-                                                 .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
-                                                 .inspecting(it -> it.get(0), it -> it.matches("test.*"))
-                                                 .examine(ErrorMode.RETURN);
+        List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
+                                                   .ofSize(4).onError(sizeError)
+                                                   .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
+                                                   .inspecting(it -> it.get(0), it -> it.matches("test.*"))
+                                                   .examine(ErrorMode.RETURN);
 
-        assertThat(messages).extracting(SystemMessage::getReasonCode)
+        assertThat(messages).extracting(ValidationError::getReasonCode)
                             .containsExactlyInAnyOrder(sizeError, allOfClauseError);
     }
 

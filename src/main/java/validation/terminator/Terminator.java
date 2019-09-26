@@ -1,17 +1,17 @@
 package validation.terminator;
 
 import validation.common.ConditionCluster;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 
 import java.util.List;
 
 public interface Terminator extends ReasonExtractor {
 
-    <T> List<SystemMessage> failFast(ConditionCluster<T> conditionCluster, T obj);
+    <T> List<ValidationError> failFast(ConditionCluster<T> conditionCluster, T obj);
 
-    <T> List<SystemMessage> failSafe(ConditionCluster<T> conditionCluster, T obj);
+    <T> List<ValidationError> failSafe(ConditionCluster<T> conditionCluster, T obj);
 
-    <T> List<SystemMessage> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj);
+    <T> List<ValidationError> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj);
 
-    <T> List<SystemMessage> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj);
+    <T> List<ValidationError> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj);
 }

@@ -1,10 +1,10 @@
 package validation.domain.date.impl;
 
+import validation.common.ValidationError;
 import validation.dict.ErrorMode;
 import validation.dict.MatchMode;
 import validation.dict.PurposeMode;
 import validation.domain.date.AbstractDateClause;
-import validation.exception.SystemMessage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,12 +18,12 @@ public class DateValidation extends AbstractDateClause {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

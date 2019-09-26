@@ -1,6 +1,6 @@
 package validation.result.impl;
 
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 import validation.result.ValidationResult;
 
 public class ValidationResultImpl implements ValidationResult {
@@ -23,7 +23,7 @@ public class ValidationResultImpl implements ValidationResult {
     }
 
     @Override
-    public SystemMessage getReason() {
-        return this.valid ? null : SystemMessage.withError("", codeOnError);
+    public ValidationError getReason() {
+        return this.valid ? null : ValidationError.withCode(codeOnError);
     }
 }

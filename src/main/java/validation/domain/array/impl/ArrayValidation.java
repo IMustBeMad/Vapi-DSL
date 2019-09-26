@@ -4,7 +4,7 @@ import validation.dict.ErrorMode;
 import validation.dict.MatchMode;
 import validation.dict.PurposeMode;
 import validation.domain.array.AbstractArrayClause;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 import validation.domain.BaseDataHolder;
 
 import java.util.List;
@@ -18,12 +18,12 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

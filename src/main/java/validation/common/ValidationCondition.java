@@ -1,7 +1,7 @@
 package validation.common;
 
 import lombok.*;
-import validation.exception.SystemMessage;
+import validation.common.ValidationError;
 import validation.dict.FlowType;
 
 import java.util.Collections;
@@ -22,10 +22,10 @@ public class ValidationCondition<T> implements Condition<T> {
 
     private Predicate<T> predicate;
     private FlowType flowType = FlowType.COMMON;
-    private Supplier<List<SystemMessage>> supplier;
+    private Supplier<List<ValidationError>> supplier;
     private String onError;
 
-    public ValidationCondition(Predicate<T> predicate, Supplier<List<SystemMessage>> supplier) {
+    public ValidationCondition(Predicate<T> predicate, Supplier<List<ValidationError>> supplier) {
         this.predicate = predicate;
         this.supplier = supplier;
     }
@@ -46,7 +46,7 @@ public class ValidationCondition<T> implements Condition<T> {
 
     private List<String> getErrorCodes() {
         return this.supplier.get().stream()
-                            .map(SystemMessage::getReasonCode)
+                            .map(ValidationError::getReasonCode)
                             .collect(Collectors.toList());
     }
 }
