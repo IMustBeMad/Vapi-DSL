@@ -3,13 +3,14 @@ package validation.domain;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import validation.common.ConditionCluster;
 import validation.common.LinkedCondition;
 import validation.common.SingleCondition;
 import validation.dict.Clause;
 import validation.domain.object.ObjectConditions;
-import validation.common.ConditionCluster;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -84,7 +85,8 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        this.memoize(this.toCondition(mapper.apply(this.obj), predicate));
+        R mapped = Optional.ofNullable(this.obj).map(mapper).orElse(null);
+        this.memoize(this.toCondition(mapped, predicate));
 
         return this;
     }
