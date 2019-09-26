@@ -1,7 +1,7 @@
 package validation.api.demo.validation.terminator.impl;
 
 import validation.api.demo.validation.common.ConditionCluster;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.result.ValidationResult;
 import validation.api.demo.validation.terminator.Terminator;
 import validation.api.demo.validation.tester.impl.TesterFacade;
@@ -14,19 +14,19 @@ public enum TernaryTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<SystemMessage> failFast(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<ValidationError> failFast(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> failSafe(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> List<ValidationError> failSafe(ConditionCluster<T> conditionCluster, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<SystemMessage> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<ValidationError> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
-        List<SystemMessage> systemMessages = new ArrayList<>();
+        List<ValidationError> validationErrors = new ArrayList<>();
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {
             ValidationResult result = getFirstError(tester, conditionCluster, obj);
@@ -34,14 +34,14 @@ public enum TernaryTerminator implements Terminator {
             if (result == null) {
                 return Collections.emptyList();
             }
-            systemMessages.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
+            validationErrors.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
         }
 
-        return systemMessages;
+        return validationErrors;
     }
 
     @Override
-    public <T> List<SystemMessage> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> List<ValidationError> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
 
         for (ConditionCluster<T> conditionCluster : conditionClusters) {

@@ -1,10 +1,10 @@
 package validation.api.demo.validation.result;
 
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 
 public interface ValidationResult {
 
     boolean isValid();
 
-    SystemMessage getReason();
+    ValidationError getReason();
 }

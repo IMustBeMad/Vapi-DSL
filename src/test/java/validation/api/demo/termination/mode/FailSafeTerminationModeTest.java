@@ -7,7 +7,7 @@ import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.domain.list.ListConditions;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.exception.ValidationException;
 
 import java.time.LocalDate;
@@ -29,13 +29,13 @@ public class FailSafeTerminationModeTest {
         String sizeError = "incorrect.size";
         String allOfClauseError = "incorrect.all.of";
 
-        List<SystemMessage> messages = Validation.succeedIf(testList, MatchMode.EAGER)
-                                                 .ofSize(4).onError(sizeError)
-                                                 .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
-                                                 .inspecting(it -> it.get(0), it -> it.matches("test.*"))
-                                                 .examine(ErrorMode.RETURN);
+        List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
+                                                   .ofSize(4).onError(sizeError)
+                                                   .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
+                                                   .inspecting(it -> it.get(0), it -> it.matches("test.*"))
+                                                   .examine(ErrorMode.RETURN);
 
-        assertThat(messages).extracting(SystemMessage::getReasonCode)
+        assertThat(messages).extracting(ValidationError::getReasonCode)
                             .containsExactlyInAnyOrder(sizeError, allOfClauseError);
     }
 

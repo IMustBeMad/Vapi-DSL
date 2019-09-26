@@ -1,7 +1,7 @@
 package validation.api.demo.validation.domain.number.biginteger.impl;
 
 import validation.api.demo.validation.dict.*;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.domain.number.biginteger.AbstractLongClause;
 
 import java.util.List;
@@ -15,12 +15,12 @@ public class LongValidation extends AbstractLongClause {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

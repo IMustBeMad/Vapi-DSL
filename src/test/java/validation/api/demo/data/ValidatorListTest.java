@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.domain.number.biginteger.LongConditions;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 
 import java.util.List;
 
@@ -17,12 +17,12 @@ public class ValidatorListTest {
     public void should_beNoErrors_when_eachElementIsCorrect() {
         List<Long> longs = List.of(1L, 2L, 3L, 42L);
 
-        List<SystemMessage> messages = Validation.succeedIf(longs)
-                                                 .ofSize(4).onError("incorrect.size")
-                                                 .isAllOf()
-                                                 .inspecting(it -> it.get(3), it -> it == 42L).onError("not.equal")
-                                                 .each(LongConditions.isGt(0L)).onError("not.greater")
-                                                 .examine();
+        List<ValidationError> messages = Validation.succeedIf(longs)
+                                                   .ofSize(4).onError("incorrect.size")
+                                                   .isAllOf()
+                                                   .inspecting(it -> it.get(3), it -> it == 42L).onError("not.equal")
+                                                   .each(LongConditions.isGt(0L)).onError("not.greater")
+                                                   .examine();
 
         Assertions.assertThat(messages).isEmpty();
     }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import validation.api.demo.validation.common.*;
 import validation.api.demo.validation.dict.*;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.terminator.impl.TerminatorFacade;
 
 import java.util.ArrayList;
@@ -23,15 +23,15 @@ public abstract class BaseDataHolder<T> {
 
     private @Getter(AccessLevel.PACKAGE) ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
-    private @Getter(AccessLevel.PACKAGE) List<SystemMessage> errors;
+    private @Getter(AccessLevel.PACKAGE) List<ValidationError> errors;
 
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
-    protected List<SystemMessage> examine() {
+    protected List<ValidationError> examine() {
         return examine(ErrorMode.THROW);
     }
 
-    protected List<SystemMessage> examine(ErrorMode errorMode) {
+    protected List<ValidationError> examine(ErrorMode errorMode) {
         this.modeManager.setErrorMode(errorMode);
 
         return this.terminate();
@@ -67,11 +67,11 @@ public abstract class BaseDataHolder<T> {
         this.currentCluster = conditionCluster;
     }
 
-    private List<SystemMessage> terminate() {
-        List<SystemMessage> systemMessages = TerminatorFacade.INSTANCE.terminate(this.modeManager, this.conditionClusters, this.obj);
-        this.errors = systemMessages;
+    private List<ValidationError> terminate() {
+        List<ValidationError> validationErrors = TerminatorFacade.INSTANCE.terminate(this.modeManager, this.conditionClusters, this.obj);
+        this.errors = validationErrors;
 
-        return systemMessages;
+        return validationErrors;
     }
 
     private SingleCondition<T> copyCondition(SingleCondition<T> condition) {

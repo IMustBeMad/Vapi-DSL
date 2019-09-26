@@ -1,5 +1,7 @@
 package validation.api.demo.validation.exception;
 
+import validation.api.demo.validation.common.ValidationError;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,23 +11,23 @@ public class ValidationException extends RuntimeException {
         super(message);
     }
 
-    public static ValidationException withError(SystemMessage message) {
+    public static ValidationException withError(ValidationError message) {
         return new ValidationException(message.getReasonCode());
     }
 
-    public static ValidationException withError(List<SystemMessage> messages) {
+    public static ValidationException withError(List<ValidationError> messages) {
         return new ValidationException(joinCodes(messages));
     }
 
-    private static String joinMessages(List<List<SystemMessage>> messages) {
+    private static String joinMessages(List<List<ValidationError>> messages) {
         return messages.stream()
                        .map(ValidationException::joinCodes)
                        .collect(Collectors.joining("\n<OR>\n"));
     }
 
-    private static String joinCodes(List<SystemMessage> messages) {
+    private static String joinCodes(List<ValidationError> messages) {
         return messages.stream()
-                       .map(SystemMessage::getReasonCode)
+                       .map(ValidationError::getReasonCode)
                        .collect(Collectors.joining("\n"));
     }
 }

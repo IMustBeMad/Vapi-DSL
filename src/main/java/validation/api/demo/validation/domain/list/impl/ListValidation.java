@@ -4,7 +4,7 @@ import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.dict.MatchMode;
 import validation.api.demo.validation.dict.PurposeMode;
 import validation.api.demo.validation.domain.list.AbstractListClause;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 
 import java.util.List;
 
@@ -17,12 +17,12 @@ public class ListValidation<T> extends AbstractListClause<T> {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

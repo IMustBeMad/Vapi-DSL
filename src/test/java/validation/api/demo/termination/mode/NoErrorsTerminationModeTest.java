@@ -6,7 +6,7 @@ import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.domain.string.impl.StringValidation;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.exception.ValidationException;
 
 import java.util.List;
@@ -22,9 +22,9 @@ public class NoErrorsTerminationModeTest {
 
     @Test
     public void should_returnError_when_noErrorsEncountered() {
-        List<SystemMessage> messages = getStringValidation().examine(ErrorMode.RETURN);
+        List<ValidationError> messages = getStringValidation().examine(ErrorMode.RETURN);
 
-        assertThat(messages).extracting(SystemMessage::getReasonCode)
+        assertThat(messages).extracting(ValidationError::getReasonCode)
                             .containsOnly(ERROR);
     }
 

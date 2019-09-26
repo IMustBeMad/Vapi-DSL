@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.exception.ValidationException;
 
 import java.time.LocalDate;
@@ -22,13 +22,13 @@ public class FailFastTerminationModeTest {
         String testString = "test";
         String errorCode = "is.not.equal.to";
 
-        List<SystemMessage> messages = Validation.succeedIf(testString)
-                                                 .isNotNull()
-                                                 .isEqualTo("test42").onError(errorCode)
-                                                 .matches("error")
-                                                 .examine(ErrorMode.RETURN);
+        List<ValidationError> messages = Validation.succeedIf(testString)
+                                                   .isNotNull()
+                                                   .isEqualTo("test42").onError(errorCode)
+                                                   .matches("error")
+                                                   .examine(ErrorMode.RETURN);
 
-        assertThat(messages).extracting(SystemMessage::getReasonCode)
+        assertThat(messages).extracting(ValidationError::getReasonCode)
                             .containsOnly(errorCode);
     }
 
@@ -51,13 +51,13 @@ public class FailFastTerminationModeTest {
         LocalDate date = LocalDate.now();
         String groupError = "invalid.date";
 
-        List<SystemMessage> messages = Validation.succeedIf(date)
-                                                 .isEqualTo(LocalDate.now().plusDays(1))
-                                                 .isAfter(LocalDate.now().minusDays(1))
-                                                 .groupError(groupError)
-                                                 .examine(ErrorMode.RETURN);
+        List<ValidationError> messages = Validation.succeedIf(date)
+                                                   .isEqualTo(LocalDate.now().plusDays(1))
+                                                   .isAfter(LocalDate.now().minusDays(1))
+                                                   .groupError(groupError)
+                                                   .examine(ErrorMode.RETURN);
 
-        assertThat(messages).extracting(SystemMessage::getReasonCode)
+        assertThat(messages).extracting(ValidationError::getReasonCode)
                             .containsOnly(groupError);
     }
 }

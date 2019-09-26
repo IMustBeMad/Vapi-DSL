@@ -1,7 +1,7 @@
 package validation.api.demo.validation.domain.date.impl;
 
 import validation.api.demo.validation.dict.*;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 import validation.api.demo.validation.domain.date.AbstractDateClause;
 
 import java.time.LocalDate;
@@ -16,12 +16,12 @@ public class DateValidation extends AbstractDateClause {
     }
 
     @Override
-    public List<SystemMessage> examine() {
+    public List<ValidationError> examine() {
         return super.examine();
     }
 
     @Override
-    public List<SystemMessage> examine(ErrorMode errorMode) {
+    public List<ValidationError> examine(ErrorMode errorMode) {
         return super.examine(errorMode);
     }
 

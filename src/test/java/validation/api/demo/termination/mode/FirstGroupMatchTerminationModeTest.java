@@ -7,7 +7,7 @@ import org.junit.runners.JUnit4;
 import validation.api.demo.validation.Validation;
 import validation.api.demo.validation.dict.ErrorMode;
 import validation.api.demo.validation.domain.number.biginteger.impl.LongValidation;
-import validation.api.demo.validation.exception.SystemMessage;
+import validation.api.demo.validation.common.ValidationError;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ public class FirstGroupMatchTerminationModeTest {
     public void should_returnError_whenAnyGroupIsMatched() {
         String errorMsg = "invalid.number";
 
-        List<SystemMessage> messages = getErroneousValidation(errorMsg).examine(ErrorMode.RETURN);
+        List<ValidationError> messages = getErroneousValidation(errorMsg).examine(ErrorMode.RETURN);
 
         Assertions.assertThat(messages).hasSize(1)
-                  .extracting(SystemMessage::getReasonCode)
+                  .extracting(ValidationError::getReasonCode)
                   .containsExactly(errorMsg);
     }
 
