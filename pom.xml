@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>vapi.dsl</groupId>
-  <artifactId>vapi.dsl.core</artifactId>
-  <version>1.0.0</version>
-  <name>vapi.dsl</name>
+  <groupId>vapidsl</groupId>
+  <artifactId>vapidsl-core</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>vapi-dsl</name>
 
   <properties>
     <java.version>1.9</java.version>
@@ -18,6 +18,17 @@
     <version>2.1.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <url>http://dev3:8081/nexus/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <url>http://dev3:8081/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
