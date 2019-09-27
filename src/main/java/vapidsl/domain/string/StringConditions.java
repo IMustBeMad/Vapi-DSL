@@ -24,6 +24,14 @@ public class StringConditions {
         return new SingleCondition<>(it -> !it.isEmpty());
     }
 
+    public static SingleCondition<String> isBlank() {
+        return new SingleCondition<>(it -> it == null || it.isEmpty());
+    }
+
+    public static SingleCondition<String> isNotBlank() {
+        return new SingleCondition<>(it -> it != null && !it.isEmpty());
+    }
+
     public static SingleCondition<String> startsWith(String prefix) {
         return new SingleCondition<>(it -> it.startsWith(prefix));
     }
