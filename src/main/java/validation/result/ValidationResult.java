@@ -1,10 +1,11 @@
 package validation.result;
 
-import validation.exception.SystemMessage;
+
+import validation.common.ValidationError;
 
 public interface ValidationResult {
 
     boolean isValid();
 
-    SystemMessage getReason();
+    ValidationError getReason();
 }

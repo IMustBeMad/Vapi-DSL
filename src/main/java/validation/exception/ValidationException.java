@@ -1,6 +1,6 @@
 package validation.exception;
 
-import validation.api.demo.validation.common.ValidationError;
+import validation.common.ValidationError;
 
 import java.util.List;
 import java.util.stream.Collectors;
