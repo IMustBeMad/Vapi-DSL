@@ -7,6 +7,7 @@ import vapidsl.dict.FlowType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
@@ -35,5 +36,18 @@ public class LinkedCondition<T> implements Condition<T> {
                          .map(Condition::getPredicates)
                          .flatMap(Collection::stream)
                          .collect(toList());
+    }
+
+    @Override
+    public String getOnError() {
+        if (onError != null) {
+            return onError;
+        }
+
+        return conditions.stream()
+                         .map(Condition::getOnError)
+                         .filter(Objects::nonNull)
+                         .findFirst()
+                         .orElse(null);
     }
 }

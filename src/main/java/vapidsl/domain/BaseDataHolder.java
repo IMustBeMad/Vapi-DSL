@@ -8,12 +8,12 @@ import vapidsl.common.*;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.common.ValidationError;
 import vapidsl.terminator.impl.TerminatorFacade;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -49,6 +49,12 @@ public abstract class BaseDataHolder<T> {
 
     protected <R> SingleCondition<T> toCondition(R obj, Predicate<R> predicate) {
         return new SingleCondition<>(it -> predicate.test(obj));
+    }
+
+    protected <R, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, Function<Map.Entry<K, V>, AbstractBaseValidation<R>> validator) {
+        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+
+        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
     }
 
     protected <R> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R>> validator) {
