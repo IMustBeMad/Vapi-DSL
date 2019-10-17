@@ -53,7 +53,13 @@ public abstract class BaseDataHolder<T> {
     }
 
     protected <R, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K,? super V, AbstractBaseValidation<R>> validator) {
-        AbstractBaseValidation<R> innerValidation = validator.apply(obj.getKey(), obj.getValue());
+        AbstractBaseValidation<R> innerValidation;
+
+        if (obj == null) {
+            innerValidation = validator.apply(null, null);
+        } else {
+            innerValidation = validator.apply(obj.getKey(), obj.getValue());
+        }
 
         return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
     }

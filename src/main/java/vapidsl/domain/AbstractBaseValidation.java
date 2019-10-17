@@ -87,7 +87,10 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        R mapped = Optional.ofNullable(this.obj).map(mapper).orElse(null);
+        R mapped = Optional.ofNullable(this.obj)
+                           .map(mapper)
+                           .orElse(null);
+
         this.memoize(this.toCondition(mapped, predicate));
 
         return this;
@@ -100,7 +103,11 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return this.inspect(mapper.apply(this.obj), validator);
+        R mapped = Optional.ofNullable(this.obj)
+                           .map(mapper)
+                           .orElse(null);
+
+        return this.inspect(mapped, validator);
     }
 
     /**

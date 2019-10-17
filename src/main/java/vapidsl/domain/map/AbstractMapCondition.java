@@ -7,6 +7,7 @@ import vapidsl.dict.Clause;
 import vapidsl.domain.AbstractBaseValidation;
 import vapidsl.domain.map.impl.MapValidation;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -106,6 +107,10 @@ public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<
     }
 
     private <R> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
+        if (this.obj == null) {
+            return Collections.singletonList(this.toCondition(null, validator));
+        }
+
         return this.obj.entrySet()
                        .stream()
                        .map(it -> this.toCondition(it, validator))
