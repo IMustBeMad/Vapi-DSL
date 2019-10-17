@@ -22,7 +22,7 @@ public class LinkedCondition<T> implements Condition<T> {
     private List<Condition<T>> conditions = new ArrayList<>();
     private FlowType flowType = FlowType.COMMON;
     private Clause linkClause;
-    private String onError;
+    private List<ValidationError> onError = new ArrayList<>();
 
     public LinkedCondition(List<Condition<T>> conditions, Clause linkClause) {
         this.conditions = conditions;
@@ -35,5 +35,18 @@ public class LinkedCondition<T> implements Condition<T> {
                          .map(Condition::getPredicates)
                          .flatMap(Collection::stream)
                          .collect(toList());
+    }
+
+    @Override
+    public List<ValidationError> getOnError() {
+        if (!onError.isEmpty()) {
+            return onError;
+        }
+
+        return conditions.stream()
+                         .map(Condition::getOnError)
+                         .filter(it -> !it.isEmpty())
+                         .findFirst()
+                         .orElse(null);
     }
 }

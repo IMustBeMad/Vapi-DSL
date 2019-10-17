@@ -9,9 +9,9 @@ public interface Condition<T> {
 
     List<Predicate<T>> getPredicates();
 
-    String getOnError();
+    List<ValidationError> getOnError();
 
-    void setOnError(String error);
+    void setOnError(List<ValidationError> errors);
 
     FlowType getFlowType();
 }

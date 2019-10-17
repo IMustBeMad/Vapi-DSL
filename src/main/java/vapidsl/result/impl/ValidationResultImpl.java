@@ -3,18 +3,20 @@ package vapidsl.result.impl;
 import vapidsl.common.ValidationError;
 import vapidsl.result.ValidationResult;
 
+import java.util.List;
+
 public class ValidationResultImpl implements ValidationResult {
 
     private boolean valid;
-    private String codeOnError;
+    private List<ValidationError> validationError;
 
     public ValidationResultImpl(boolean valid) {
         this.valid = valid;
     }
 
-    public ValidationResultImpl(boolean valid, String codeOnError) {
+    public ValidationResultImpl(boolean valid, List<ValidationError> validationError) {
         this.valid = valid;
-        this.codeOnError = codeOnError;
+        this.validationError = validationError;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class ValidationResultImpl implements ValidationResult {
     }
 
     @Override
-    public ValidationError getReason() {
-        return this.valid ? null : ValidationError.withCode(codeOnError);
+    public List<ValidationError> getReason() {
+        return this.valid ? null : validationError;
     }
 }

@@ -6,9 +6,11 @@ import org.apache.logging.log4j.Logger;
 import vapidsl.common.ConditionCluster;
 import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
+import vapidsl.common.ValidationError;
 import vapidsl.dict.Clause;
 import vapidsl.domain.object.ObjectConditions;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -60,13 +62,13 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
         return this.inspect(this.obj, validator);
     }
 
-    protected AbstractBaseValidation<T> isAnyOf(SingleCondition<T>... conditions) {
+    protected AbstractBaseValidation<T> satisfiesAny(SingleCondition<T>... conditions) {
         this.memoize(new LinkedCondition<>(List.of(conditions), Clause.OR));
 
         return this;
     }
 
-    protected AbstractBaseValidation<T> isAllOf(SingleCondition<T>... conditions) {
+    protected AbstractBaseValidation<T> satisfiesAll(SingleCondition<T>... conditions) {
         this.memoize(new LinkedCondition<>(List.of(conditions), Clause.AND));
 
         return this;
@@ -85,7 +87,10 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        R mapped = Optional.ofNullable(this.obj).map(mapper).orElse(null);
+        R mapped = Optional.ofNullable(this.obj)
+                           .map(mapper)
+                           .orElse(null);
+
         this.memoize(this.toCondition(mapped, predicate));
 
         return this;
@@ -98,7 +103,11 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
     }
 
     protected <R> AbstractBaseValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return this.inspect(mapper.apply(this.obj), validator);
+        R mapped = Optional.ofNullable(this.obj)
+                           .map(mapper)
+                           .orElse(null);
+
+        return this.inspect(mapped, validator);
     }
 
     /**
@@ -108,7 +117,16 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
      * @return {@code this} validation object.
      */
     protected AbstractBaseValidation<T> onError(String error) {
-        this.getCurrentCondition().setOnError(error);
+        this.getCurrentCondition().setOnError(Collections.singletonList(ValidationError.withCode(error)));
+
+        return this;
+    }
+
+    /**
+     * @see #onError(String) ()
+     */
+    protected AbstractBaseValidation<T> onError(String field, String error) {
+        this.getCurrentCondition().setOnError(Collections.singletonList(ValidationError.of(field, error)));
 
         return this;
     }
@@ -123,7 +141,7 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
      * @return {@code this} validation object.
      */
     protected AbstractBaseValidation<T> groupError(String error) {
-        this.getCurrentCluster().setOnError(error);
+        this.getCurrentCluster().setOnError(ValidationError.of("group", error));
 
         return this;
     }

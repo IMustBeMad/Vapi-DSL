@@ -92,14 +92,14 @@ public abstract class AbstractArrayCondition<T> extends AbstractBaseValidation<T
 
     @Override
     @SafeVarargs
-    public final ArrayValidation<T> isAnyOf(SingleCondition<T[]>... conditions) {
-        return (ArrayValidation<T>) super.isAnyOf(conditions);
+    public final ArrayValidation<T> satisfiesAny(SingleCondition<T[]>... conditions) {
+        return (ArrayValidation<T>) super.satisfiesAny(conditions);
     }
 
     @Override
     @SafeVarargs
-    public final ArrayValidation<T> isAllOf(SingleCondition<T[]>... conditions) {
-        return (ArrayValidation<T>) super.isAllOf(conditions);
+    public final ArrayValidation<T> satisfiesAll(SingleCondition<T[]>... conditions) {
+        return (ArrayValidation<T>) super.satisfiesAll(conditions);
     }
 
     @Override

@@ -3,13 +3,11 @@ package vapidsl.common;
 import lombok.*;
 import vapidsl.dict.FlowType;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Getter
 @Setter
@@ -22,7 +20,7 @@ public class ValidationCondition<T> implements Condition<T> {
     private Predicate<T> predicate;
     private FlowType flowType = FlowType.COMMON;
     private Supplier<List<ValidationError>> supplier;
-    private String onError;
+    private List<ValidationError> onError = new ArrayList<>();
 
     public ValidationCondition(Predicate<T> predicate, Supplier<List<ValidationError>> supplier) {
         this.predicate = predicate;
@@ -35,17 +33,11 @@ public class ValidationCondition<T> implements Condition<T> {
     }
 
     @Override
-    public String getOnError() {
-        if (!isEmpty(this.onError)) {
+    public List<ValidationError> getOnError() {
+        if (!this.onError.isEmpty()) {
             return this.onError;
         }
 
-        return String.join(",\n", getErrorCodes());
-    }
-
-    private List<String> getErrorCodes() {
-        return this.supplier.get().stream()
-                            .map(ValidationError::getReasonCode)
-                            .collect(Collectors.toList());
+        return this.supplier.get();
     }
 }

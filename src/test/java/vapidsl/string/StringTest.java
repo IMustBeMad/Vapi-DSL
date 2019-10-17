@@ -115,7 +115,7 @@ public class StringTest extends ValidatorTest {
         @Test
         public void should_failWithGroupError_when_groupConditionsMatchedAndGroupHasError() {
             Assertions.assertThatThrownBy(() -> groupTest(INVALID_STRING, INVALID_STRING, 4))
-                      .hasMessage("group.error");
+                      .hasMessage("group:group.error");
         }
 
         @Test

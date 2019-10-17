@@ -1,13 +1,18 @@
 package vapidsl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.domain.array.AbstractArrayCondition;
 import vapidsl.domain.array.impl.ArrayValidation;
+import vapidsl.domain.bool.AbstractBoolCondition;
+import vapidsl.domain.bool.impl.BoolValidation;
 import vapidsl.domain.date.AbstractDateCondition;
 import vapidsl.domain.date.impl.DateValidation;
 import vapidsl.domain.list.AbstractListCondition;
 import vapidsl.domain.list.impl.ListValidation;
+import vapidsl.domain.map.AbstractMapCondition;
+import vapidsl.domain.map.impl.MapValidation;
 import vapidsl.domain.number.biginteger.AbstractLongCondition;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
 import vapidsl.domain.number.integer.AbstractIntCondition;
@@ -21,6 +26,7 @@ import vapidsl.result.impl.ValidationResultImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class Validation {
 
@@ -72,6 +78,18 @@ public class Validation {
         return new LongValidation(aLong, matchMode, PurposeMode.SUCCESS);
     }
 
+    public static AbstractBoolCondition failIf(Boolean bool) {
+        return new BoolValidation(bool, null, PurposeMode.FAIL);
+    }
+
+    public static AbstractBoolCondition succeedIf(Boolean bool) {
+        return new BoolValidation(bool, MatchMode.LAZY, PurposeMode.SUCCESS);
+    }
+
+    public static AbstractBoolCondition succeedIf(Boolean bool, MatchMode matchMode) {
+        return new BoolValidation(bool, matchMode, PurposeMode.SUCCESS);
+    }
+
     public static AbstractDateCondition failIf(LocalDate date) {
         return new DateValidation(date, null, PurposeMode.FAIL);
     }
@@ -96,6 +114,18 @@ public class Validation {
         return new ListValidation<>(list, matchMode, PurposeMode.SUCCESS);
     }
 
+    public static <K, V> AbstractMapCondition<K, V> failIf(Map<K, V> map) {
+        return new MapValidation<>(map, null, PurposeMode.FAIL);
+    }
+
+    public static <K, V> AbstractMapCondition<K, V> succeedIf(Map<K, V> map) {
+        return new MapValidation<>(map, MatchMode.LAZY, PurposeMode.SUCCESS);
+    }
+
+    public static <K, V> AbstractMapCondition<K, V> succeedIf(Map<K, V> map, MatchMode matchMode) {
+        return new MapValidation<>(map, matchMode, PurposeMode.SUCCESS);
+    }
+
     public static <T> AbstractArrayCondition<T> failIf(T[] array) {
         return new ArrayValidation<>(array, null, PurposeMode.FAIL);
     }
@@ -112,7 +142,7 @@ public class Validation {
         return new ValidationResultImpl(true);
     }
 
-    public static ValidationResult failed(String codeOnError) {
-        return new ValidationResultImpl(false, codeOnError);
+    public static ValidationResult failed(List<ValidationError> validationError) {
+        return new ValidationResultImpl(false, validationError);
     }
 }

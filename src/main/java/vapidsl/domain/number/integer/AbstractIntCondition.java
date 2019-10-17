@@ -70,13 +70,13 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     }
 
     @Override
-    protected IntValidation isAnyOf(SingleCondition<Integer>... conditions) {
-        return (IntValidation) super.isAnyOf(conditions);
+    protected IntValidation satisfiesAny(SingleCondition<Integer>... conditions) {
+        return (IntValidation) super.satisfiesAny(conditions);
     }
 
     @Override
-    protected IntValidation isAllOf(SingleCondition<Integer>... conditions) {
-        return (IntValidation) super.isAllOf(conditions);
+    protected IntValidation satisfiesAll(SingleCondition<Integer>... conditions) {
+        return (IntValidation) super.satisfiesAll(conditions);
     }
 
     @Override

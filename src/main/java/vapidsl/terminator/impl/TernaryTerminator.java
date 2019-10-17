@@ -34,7 +34,7 @@ public enum TernaryTerminator implements Terminator {
             if (result == null) {
                 return Collections.emptyList();
             }
-            validationErrors.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
+            validationErrors.addAll(getErrorReason(result, conditionCluster));
         }
 
         return validationErrors;

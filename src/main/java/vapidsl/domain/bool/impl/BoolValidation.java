@@ -1,19 +1,19 @@
-package vapidsl.domain.list.impl;
+package vapidsl.domain.bool.impl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.list.AbstractListClause;
-import vapidsl.common.ValidationError;
 import vapidsl.domain.BaseDataHolder;
+import vapidsl.domain.bool.AbstractBoolClause;
 
 import java.util.List;
 
-public class ListValidation<T> extends AbstractListClause<T> {
+public class BoolValidation extends AbstractBoolClause {
 
-    public ListValidation(List<T> list, MatchMode matchMode, PurposeMode purposeMode) {
+    public BoolValidation(Boolean obj, MatchMode matchMode, PurposeMode purposeMode) {
         super();
-        this.obj = list;
+        this.obj = obj;
         this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
     }
 
@@ -31,23 +31,23 @@ public class ListValidation<T> extends AbstractListClause<T> {
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> onError(String error) {
-        return (ListValidation<T>) super.onError(error);
+    public BoolValidation onError(String error) {
+        return (BoolValidation) super.onError(error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> onError(String field, String error) {
-        return (ListValidation<T>) super.onError(field, error);
+    public BoolValidation onError(String field, String error) {
+        return (BoolValidation) super.onError(field, error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> groupError(String error) {
-        return (ListValidation<T>) super.groupError(error);
+    public BoolValidation groupError(String error) {
+        return (BoolValidation) super.groupError(error);
     }
 }
