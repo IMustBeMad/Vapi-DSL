@@ -18,6 +18,18 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<Map<K, V>> {
 
+    public MapValidation<K, V> isEmpty() {
+        this.registerCondition(MapConditions.isEmpty());
+
+        return self();
+    }
+
+    public MapValidation<K, V> isNotEmpty() {
+        this.registerCondition(MapConditions.isNotEmpty());
+
+        return self();
+    }
+
     public <R> MapValidation<K, V> every(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
         Optional.of(validator)
                 .map(this::toSerialCondition)
