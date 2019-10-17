@@ -39,6 +39,14 @@ public class ListValidation<T> extends AbstractListClause<T> {
      * {@inheritDoc}
      */
     @Override
+    public ListValidation<T> onError(String field, String error) {
+        return (ListValidation<T>) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ListValidation<T> groupError(String error) {
         return (ListValidation<T>) super.groupError(error);
     }

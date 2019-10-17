@@ -5,54 +5,44 @@ import vapidsl.common.ConditionCluster;
 import vapidsl.common.ValidationError;
 import vapidsl.result.ValidationResult;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public interface ReasonExtractor {
 
-    default List<ValidationError> getErrorReason(List<ValidationResult> results, String groupError) {
-        if (!isEmpty(groupError)) {
-            return getErrors("group", groupError);
+    default <T> List<ValidationError> getErrorReason(ValidationResult result, ConditionCluster<T> conditionCluster) {
+        ValidationError groupError = conditionCluster.getOnError();
+        if (groupError != null) {
+            return Collections.singletonList(groupError);
         }
 
-        List<ValidationError> messages = getReasons(results);
+        List<ValidationError> messages = result.getReason();
 
-        return messages.isEmpty() ? getErrors("validation", "validation.error.no.error.code")
-                                  : messages;
+        return result.getReason() == null ? Collections.singletonList(ValidationError.of("validation", "validation.error.no.error.code"))
+                                          : messages;
     }
 
     default <T> List<ValidationError> getErrorReason(ConditionCluster<T> conditionCluster) {
-        String groupError = conditionCluster.getOnError();
-        if (!isEmpty(groupError)) {
-            return getErrors("group", groupError);
+        ValidationError groupError = conditionCluster.getOnError();
+        if (groupError != null) {
+            return Collections.singletonList(groupError);
         }
 
-        List<String> conditionErrors = getConditionErrors(conditionCluster);
+        List<ValidationError> conditionErrors = getConditionErrors(conditionCluster);
         if (conditionErrors.isEmpty()) {
-            return getErrors("validation", "validation.error.no.error.code");
+            return Collections.singletonList(ValidationError.of("validation", "validation.error.no.error.code"));
         }
 
-        return conditionErrors.stream()
-                              .map(ValidationError::withCode)
-                              .collect(toList());
+        return conditionErrors;
     }
 
-    private <T> List<String> getConditionErrors(ConditionCluster<T> conditionCluster) {
+    private <T> List<ValidationError> getConditionErrors(ConditionCluster<T> conditionCluster) {
         return conditionCluster.getConditions().stream()
                                .map(Condition::getOnError)
+                               .flatMap(Collection::stream)
                                .collect(toList());
-    }
-
-    private List<ValidationError> getReasons(List<ValidationResult> results) {
-        return results.stream()
-                      .map(ValidationResult::getReason)
-                      .collect(toList());
-    }
-
-    private List<ValidationError> getErrors(String field, String onError) {
-        return Collections.singletonList(ValidationError.of(field, onError));
     }
 }

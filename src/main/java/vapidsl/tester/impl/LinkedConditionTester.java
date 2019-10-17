@@ -3,14 +3,13 @@ package vapidsl.tester.impl;
 import vapidsl.Validation;
 import vapidsl.common.Condition;
 import vapidsl.common.LinkedCondition;
+import vapidsl.common.ValidationError;
 import vapidsl.dict.Clause;
 import vapidsl.result.ValidationResult;
 import vapidsl.tester.Tester;
 
 import java.util.List;
 import java.util.function.Predicate;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public enum LinkedConditionTester implements Tester {
     INSTANCE;
@@ -38,9 +37,9 @@ public enum LinkedConditionTester implements Tester {
             boolean isValid = partialCondition.getPredicates().stream().allMatch(it -> it.test(obj));
 
             if (!isValid) {
-                String onError = condition.getOnError();
+                List<ValidationError> onError = condition.getOnError();
 
-                if (isEmpty(onError)) {
+                if (onError.isEmpty()) {
                     condition.setOnError(partialCondition.getOnError());
                 }
 

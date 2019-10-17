@@ -39,6 +39,14 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
      * {@inheritDoc}
      */
     @Override
+    public ArrayValidation<T> onError(String field, String error) {
+        return (ArrayValidation<T>) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayValidation<T> groupError(String error) {
         return (ArrayValidation<T>) super.groupError(error);
     }

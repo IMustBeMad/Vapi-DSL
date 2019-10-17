@@ -14,7 +14,7 @@ import java.util.List;
 public class ConditionCluster<T> {
 
     private List<Condition<T>> conditions = new ArrayList<>();
-    private String onError;
+    private ValidationError onError;
 
     public void add(Condition<T> condition) {
         this.conditions.add(condition);

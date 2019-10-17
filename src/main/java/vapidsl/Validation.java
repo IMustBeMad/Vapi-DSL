@@ -1,5 +1,6 @@
 package vapidsl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.domain.array.AbstractArrayCondition;
@@ -141,7 +142,7 @@ public class Validation {
         return new ValidationResultImpl(true);
     }
 
-    public static ValidationResult failed(String codeOnError) {
-        return new ValidationResultImpl(false, codeOnError);
+    public static ValidationResult failed(List<ValidationError> validationError) {
+        return new ValidationResultImpl(false, validationError);
     }
 }

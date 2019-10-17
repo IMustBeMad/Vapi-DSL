@@ -30,7 +30,7 @@ public class FirstGroupMatchTerminationModeTest {
         String errorMsg = "invalid.number";
 
         Assertions.assertThatThrownBy(() -> getErroneousValidation(errorMsg).examine())
-                  .hasMessage(errorMsg);
+                  .hasMessage("group:" + errorMsg);
     }
 
     @Test

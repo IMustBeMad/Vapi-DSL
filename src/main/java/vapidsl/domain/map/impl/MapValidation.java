@@ -40,6 +40,14 @@ public class MapValidation<K, V> extends AbstractMapClause<K, V> {
      * {@inheritDoc}
      */
     @Override
+    public MapValidation<K, V> onError(String field, String error) {
+        return (MapValidation<K, V>) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public MapValidation<K, V> groupError(String error) {
         return (MapValidation<K, V>) super.groupError(error);
     }

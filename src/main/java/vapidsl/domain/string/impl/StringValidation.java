@@ -39,6 +39,14 @@ public class StringValidation extends AbstractStringClause {
      * {@inheritDoc}
      */
     @Override
+    public StringValidation onError(String field, String error) {
+        return (StringValidation) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public StringValidation groupError(String error) {
         return (StringValidation) super.groupError(error);
     }

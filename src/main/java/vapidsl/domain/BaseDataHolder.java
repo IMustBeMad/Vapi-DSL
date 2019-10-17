@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -51,8 +52,8 @@ public abstract class BaseDataHolder<T> {
         return new SingleCondition<>(it -> predicate.test(obj));
     }
 
-    protected <R, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, Function<Map.Entry<K, V>, AbstractBaseValidation<R>> validator) {
-        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+    protected <R, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K,? super V, AbstractBaseValidation<R>> validator) {
+        AbstractBaseValidation<R> innerValidation = validator.apply(obj.getKey(), obj.getValue());
 
         return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
     }

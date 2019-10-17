@@ -22,7 +22,7 @@ public enum SimpleTerminator implements Terminator {
             ValidationResult result = tester.test(condition, obj);
 
             if (!result.isValid()) {
-                return getErrorReason(Collections.singletonList(result), conditionCluster.getOnError());
+                return getErrorReason(result, conditionCluster);
             }
         }
 
@@ -39,13 +39,13 @@ public enum SimpleTerminator implements Terminator {
             ValidationResult result = tester.test(condition, obj);
 
             if (!result.isValid()) {
-                ValidationError reason = result.getReason();
+                List<ValidationError> reason = result.getReason();
 
                 if (condition.getFlowType() == FlowType.EARLY_EXIT) {
-                    return Collections.singletonList(reason);
+                    return reason;
                 }
 
-                errors.addAll(getErrorReason(Collections.singletonList(result), conditionCluster.getOnError()));
+                errors.addAll(getErrorReason(result, conditionCluster));
             }
         }
 

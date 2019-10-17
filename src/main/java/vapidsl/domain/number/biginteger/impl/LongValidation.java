@@ -38,6 +38,14 @@ public class LongValidation extends AbstractLongClause {
      * {@inheritDoc}
      */
     @Override
+    public LongValidation onError(String field, String error) {
+        return (LongValidation) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public LongValidation groupError(String error) {
         return (LongValidation) super.groupError(error);
     }

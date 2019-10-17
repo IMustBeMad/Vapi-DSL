@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class NoErrorsTerminationModeTest {
 
     private static final String TEST = "test";
-    private static final String ERROR = "incorrect.string";
+    private static final String ERROR = "group:incorrect.string";
 
     @Test
     public void should_returnError_when_noErrorsEncountered() {
@@ -32,7 +32,7 @@ public class NoErrorsTerminationModeTest {
     public void should_throwError_when_noErrorsEncountered() {
         assertThatThrownBy(() -> getStringValidation().examine())
                 .isInstanceOf(ValidationException.class)
-                .hasMessage(ERROR);
+                .hasMessage("group:" + ERROR);
     }
 
     @Test

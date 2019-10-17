@@ -31,7 +31,7 @@ public class FailSafeTerminationModeTest {
 
         List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
                                                    .ofSize(4).onError(sizeError)
-                                                   .isAllOf(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
+                                                   .satisfiesAll(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                    .inspecting(it -> it.get(0), it -> it.matches("test.*"))
                                                    .examine(ErrorMode.RETURN);
 
@@ -49,10 +49,10 @@ public class FailSafeTerminationModeTest {
         assertThatThrownBy(() -> Validation.succeedIf(date, MatchMode.EAGER)
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
-                                           .isAnyOf(DateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
+                                           .satisfiesAny(DateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
                                            .groupError(groupError)
                                            .examine())
                 .isInstanceOf(ValidationException.class)
-                .hasMessage(groupError);
+                .hasMessage("group:" + groupError);
     }
 }

@@ -10,6 +10,7 @@ import vapidsl.domain.map.impl.MapValidation;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<Map<K, V>> {
 
-    public <R> MapValidation<K, V> each(Function<Map.Entry<K, V>, AbstractBaseValidation<R>> validator) {
+    public <R> MapValidation<K, V> every(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
         Optional.of(validator)
                 .map(this::toSerialCondition)
                 .map(serial -> new LinkedCondition<>(serial, Clause.AND))
@@ -58,14 +59,14 @@ public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<
 
     @Override
     @SafeVarargs
-    public final MapValidation<K, V> isAnyOf(SingleCondition<Map<K, V>>... conditions) {
-        return (MapValidation<K, V>) super.isAnyOf(conditions);
+    public final MapValidation<K, V> satisfiesAny(SingleCondition<Map<K, V>>... conditions) {
+        return (MapValidation<K, V>) super.satisfiesAny(conditions);
     }
 
     @Override
     @SafeVarargs
-    public final MapValidation<K, V> isAllOf(SingleCondition<Map<K, V>>... conditions) {
-        return (MapValidation<K, V>) super.isAllOf(conditions);
+    public final MapValidation<K, V> satisfiesAll(SingleCondition<Map<K, V>>... conditions) {
+        return (MapValidation<K, V>) super.satisfiesAll(conditions);
     }
 
     @Override
@@ -92,7 +93,7 @@ public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<
         return (MapValidation<K, V>) this;
     }
 
-    private <R> List<Condition<Map<K, V>>> toSerialCondition(Function<Map.Entry<K, V>, AbstractBaseValidation<R>> validator) {
+    private <R> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
         return this.obj.entrySet()
                        .stream()
                        .map(it -> this.toCondition(it, validator))

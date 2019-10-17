@@ -38,6 +38,14 @@ public class IntValidation extends AbstractIntClause {
      * {@inheritDoc}
      */
     @Override
+    public IntValidation onError(String field, String error) {
+        return (IntValidation) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public IntValidation groupError(String error) {
         return (IntValidation) super.groupError(error);
     }

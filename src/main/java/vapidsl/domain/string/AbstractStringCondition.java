@@ -72,14 +72,14 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
 
     @Override
     @SafeVarargs
-    public final StringValidation isAnyOf(SingleCondition<String>... conditions) {
-        return (StringValidation) super.isAnyOf(conditions);
+    public final StringValidation satisfiesAny(SingleCondition<String>... conditions) {
+        return (StringValidation) super.satisfiesAny(conditions);
     }
 
     @Override
     @SafeVarargs
-    public final StringValidation isAllOf(SingleCondition<String>... conditions) {
-        return (StringValidation) super.isAllOf(conditions);
+    public final StringValidation satisfiesAll(SingleCondition<String>... conditions) {
+        return (StringValidation) super.satisfiesAll(conditions);
     }
 
     @Override

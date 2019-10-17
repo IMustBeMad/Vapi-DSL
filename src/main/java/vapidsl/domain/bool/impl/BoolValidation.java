@@ -39,6 +39,14 @@ public class BoolValidation extends AbstractBoolClause {
      * {@inheritDoc}
      */
     @Override
+    public BoolValidation onError(String field, String error) {
+        return (BoolValidation) super.onError(field, error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public BoolValidation groupError(String error) {
         return (BoolValidation) super.groupError(error);
     }
