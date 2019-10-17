@@ -19,7 +19,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-public abstract class BaseDataHolder<T> {
+public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
+
+    protected SELF self;
 
     protected T obj;
     protected ModeManager modeManager;
@@ -27,6 +29,11 @@ public abstract class BaseDataHolder<T> {
     private @Getter(AccessLevel.PACKAGE) ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
     private @Getter(AccessLevel.PACKAGE) List<ValidationError> errors;
+
+    @SuppressWarnings("unchecked")
+    protected BaseDataHolder(Class<?> selfType) {
+        this.self = (SELF) selfType.cast(this);
+    }
 
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
@@ -52,8 +59,8 @@ public abstract class BaseDataHolder<T> {
         return new SingleCondition<>(it -> predicate.test(obj));
     }
 
-    protected <R, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K,? super V, AbstractBaseValidation<R>> validator) {
-        AbstractBaseValidation<R> innerValidation;
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K,? super V, AbstractBaseValidation<R, OTHER>> validator) {
+        AbstractBaseValidation<R, OTHER> innerValidation;
 
         if (obj == null) {
             innerValidation = validator.apply(null, null);
@@ -64,8 +71,8 @@ public abstract class BaseDataHolder<T> {
         return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
     }
 
-    protected <R> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R>> validator) {
-        AbstractBaseValidation<R> innerValidation = validator.apply(obj);
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R ,OTHER>> validator) {
+        AbstractBaseValidation<R, OTHER> innerValidation = validator.apply(obj);
 
         return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
     }

@@ -8,126 +8,124 @@ import vapidsl.domain.AbstractBaseValidation;
 import vapidsl.domain.list.impl.ListValidation;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractListCondition<T> extends AbstractBaseValidation<List<T>> {
+public abstract class AbstractListCondition<T, SELF extends ListValidation<T, SELF>> extends AbstractBaseValidation<List<T>, SELF> {
 
-    public ListValidation<T> contains(T element) {
+    protected AbstractListCondition(Class<?> selfType) {
+        super(selfType);
+    }
+
+    public SELF contains(T element) {
         this.registerCondition(ListConditions.contains(element));
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> ofSize(int size) {
+    public SELF ofSize(int size) {
         this.registerCondition(ListConditions.ofSize(size));
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> hasNoDuplicates() {
+    public SELF hasNoDuplicates() {
         this.registerCondition(ListConditions.hasNoDuplicates());
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> isEmpty() {
+    public SELF isEmpty() {
         this.registerCondition(ListConditions.isEmpty());
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> isNotEmpty() {
+    public SELF isNotEmpty() {
         this.registerCondition(ListConditions.isNotEmpty());
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> each(SingleCondition<T> condition) {
-        Optional.of(condition)
-                .map(SingleCondition::getPredicate)
-                .map(this::toSerialCondition)
-                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
-                .ifPresent(this::registerCondition);
+    public SELF every(SingleCondition<T> condition) {
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(this.toSerialCondition(condition.getPredicate()), Clause.AND);
+        this.registerCondition(linkedCondition);
 
-        return self();
+        return self;
     }
 
-    public ListValidation<T> each(Function<T, AbstractBaseValidation<T>> validator) {
-        Optional.of(validator)
-                .map(this::toSerialCondition)
-                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
-                .ifPresent(this::registerCondition);
+    public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF every(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(this.toSerialCondition(validator), Clause.AND);
+        this.registerCondition(linkedCondition);
 
-        return self();
+        return self;
     }
 
     @Override
-    public ListValidation<T> isNull() {
-        return (ListValidation<T>) super.isNull();
+    public SELF isNull() {
+        return super.isNull();
     }
 
     @Override
-    public ListValidation<T> isNotNull() {
-        return (ListValidation<T>) super.isNotNull();
+    public SELF isNotNull() {
+        return super.isNotNull();
     }
 
     @Override
-    public ListValidation<T> isEqualTo(List<T> otherList) {
-        return (ListValidation<T>) super.isEqualTo(otherList);
+    public SELF isEqualTo(List<T> otherList) {
+        return super.isEqualTo(otherList);
     }
 
     @Override
-    public ListValidation<T> isNotEqualTo(List<T> otherList) {
-        return (ListValidation<T>) super.isNotEqualTo(otherList);
+    public SELF isNotEqualTo(List<T> otherList) {
+        return super.isNotEqualTo(otherList);
     }
 
     @Override
-    public ListValidation<T> withTerm(Predicate<List<T>> predicate) {
-        return (ListValidation<T>) super.withTerm(predicate);
+    public SELF withTerm(Predicate<List<T>> predicate) {
+        return super.withTerm(predicate);
     }
 
     @Override
-    public ListValidation<T> withTerm(Supplier<Boolean> supplier) {
-        return (ListValidation<T>) super.withTerm(supplier);
+    public SELF withTerm(Supplier<Boolean> supplier) {
+        return super.withTerm(supplier);
     }
 
     @Override
     @SafeVarargs
-    public final ListValidation<T> satisfiesAny(SingleCondition<List<T>>... conditions) {
-        return (ListValidation<T>) super.satisfiesAny(conditions);
+    public final SELF satisfiesAny(SingleCondition<List<T>>... conditions) {
+        return super.satisfiesAny(conditions);
     }
 
     @Override
     @SafeVarargs
-    public final ListValidation<T> satisfiesAll(SingleCondition<List<T>>... conditions) {
-        return (ListValidation<T>) super.satisfiesAll(conditions);
+    public final SELF satisfiesAll(SingleCondition<List<T>>... conditions) {
+        return super.satisfiesAll(conditions);
     }
 
     @Override
-    public ListValidation<T> log(String msg, Object... values) {
-        return (ListValidation<T>) super.log(msg, values);
+    public SELF log(String msg, Object... values) {
+        return super.log(msg, values);
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Predicate<R> predicate) {
-        return (ListValidation<T>) super.inspecting(mapper, predicate);
+    public <R> SELF inspecting(Function<List<T>, R> mapper, Predicate<R> predicate) {
+        return super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> ListValidation<T> inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (ListValidation<T>) super.inspecting(mapper, condition);
+    public <R> SELF inspecting(Function<List<T>, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> ListValidation<T> deepInspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (ListValidation<T>) super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.deepInspecting(mapper, validator);
     }
 
-    private List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T>> validator) {
+    private <OTHER extends AbstractBaseValidation<T, OTHER>> List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
         return this.obj.stream()
                        .map(it -> this.toCondition(it, validator))
                        .collect(Collectors.toList());
@@ -137,9 +135,5 @@ public abstract class AbstractListCondition<T> extends AbstractBaseValidation<Li
         return this.obj.stream()
                        .map(it -> this.toCondition(it, predicate))
                        .collect(Collectors.toList());
-    }
-
-    private ListValidation<T> self() {
-        return (ListValidation<T>) this;
     }
 }

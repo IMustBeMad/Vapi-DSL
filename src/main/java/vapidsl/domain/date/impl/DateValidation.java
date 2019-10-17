@@ -12,7 +12,7 @@ import java.util.List;
 public class DateValidation extends AbstractDateClause {
 
     public DateValidation(LocalDate date, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(DateValidation.class);
         this.obj = date;
         this.modeManager = new ModeManager(matchMode, purposeMode);
     }
@@ -32,7 +32,7 @@ public class DateValidation extends AbstractDateClause {
      */
     @Override
     public DateValidation onError(String error) {
-        return (DateValidation) super.onError(error);
+        return super.onError(error);
     }
 
     /**
@@ -40,7 +40,7 @@ public class DateValidation extends AbstractDateClause {
      */
     @Override
     public DateValidation onError(String field, String error) {
-        return (DateValidation) super.onError(field, error);
+        return super.onError(field, error);
     }
 
     /**
@@ -48,6 +48,6 @@ public class DateValidation extends AbstractDateClause {
      */
     @Override
     public DateValidation groupError(String error) {
-        return (DateValidation) super.groupError(error);
+        return super.groupError(error);
     }
 }

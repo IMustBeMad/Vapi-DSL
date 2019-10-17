@@ -3,31 +3,31 @@ package vapidsl.domain.bool;
 import vapidsl.domain.AbstractBaseValidation;
 import vapidsl.domain.bool.impl.BoolValidation;
 
-public abstract class AbstractBoolCondition extends AbstractBaseValidation<Boolean> {
+public abstract class AbstractBoolCondition extends AbstractBaseValidation<Boolean, BoolValidation> {
+
+    protected AbstractBoolCondition(Class<?> selfType) {
+        super(selfType);
+    }
 
     public BoolValidation isTrue() {
         this.registerCondition(BoolConditions.isTrue());
 
-        return self();
+        return self;
     }
 
     public BoolValidation isFalse() {
         this.registerCondition(BoolConditions.isFalse());
 
-        return self();
+        return self;
     }
 
     @Override
     public BoolValidation isNull() {
-        return (BoolValidation) super.isNull();
+        return super.isNull();
     }
 
     @Override
     public BoolValidation isNotNull() {
-        return (BoolValidation) super.isNotNull();
-    }
-
-    private BoolValidation self() {
-        return (BoolValidation) this;
+        return super.isNotNull();
     }
 }

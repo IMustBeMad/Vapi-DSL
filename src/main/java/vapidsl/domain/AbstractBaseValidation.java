@@ -1,6 +1,5 @@
 package vapidsl.domain;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vapidsl.common.ConditionCluster;
@@ -17,92 +16,95 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@Slf4j
-public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
+public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidation<T, SELF>> extends BaseDataHolder<T, SELF> {
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractBaseValidation.class);
 
-    protected AbstractBaseValidation<T> isNull() {
+    protected AbstractBaseValidation(Class<?> selfType) {
+        super(selfType);
+    }
+
+    protected SELF isNull() {
         this.registerCondition(ObjectConditions.isNull());
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> isNotNull() {
+    protected SELF isNotNull() {
         this.registerCondition(ObjectConditions.isNotNull());
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> isEqualTo(T otherObj) {
+    protected SELF isEqualTo(T otherObj) {
         this.registerCondition(ObjectConditions.isEqualTo(otherObj));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> isNotEqualTo(T otherObj) {
+    protected SELF isNotEqualTo(T otherObj) {
         this.registerCondition(ObjectConditions.isNotEqualTo(otherObj));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> withTerm(Predicate<T> predicate) {
+    protected SELF withTerm(Predicate<T> predicate) {
         this.memoize(new SingleCondition<>(predicate));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> withTerm(Supplier<Boolean> supplier) {
+    protected SELF withTerm(Supplier<Boolean> supplier) {
         this.memoize(new SingleCondition<>(it -> supplier.get()));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> withTerm(Function<T, AbstractBaseValidation<T>> validator) {
+    protected SELF withTerm(Function<T, AbstractBaseValidation<T, SELF>> validator) {
         return this.inspect(this.obj, validator);
     }
 
-    protected AbstractBaseValidation<T> satisfiesAny(SingleCondition<T>... conditions) {
+    protected SELF satisfiesAny(SingleCondition<T>... conditions) {
         this.memoize(new LinkedCondition<>(List.of(conditions), Clause.OR));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> satisfiesAll(SingleCondition<T>... conditions) {
+    protected SELF satisfiesAll(SingleCondition<T>... conditions) {
         this.memoize(new LinkedCondition<>(List.of(conditions), Clause.AND));
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> or() {
+    protected AbstractBaseValidation<T, SELF> or() {
         this.registerCluster();
 
-        return this;
+        return self;
     }
 
-    protected AbstractBaseValidation<T> log(String msg, Object... values) {
+    protected SELF log(String msg, Object... values) {
         LOGGER.debug(msg, values);
 
-        return this;
+        return self;
     }
 
-    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Predicate<R> predicate) {
+    protected <R> SELF inspecting(Function<T, R> mapper, Predicate<R> predicate) {
         R mapped = Optional.ofNullable(this.obj)
                            .map(mapper)
                            .orElse(null);
 
         this.memoize(this.toCondition(mapped, predicate));
 
-        return this;
+        return self;
     }
 
-    protected <R> AbstractBaseValidation<T> inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
+    protected <R> SELF inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
         this.memoize(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it))));
 
-        return this;
+        return self;
     }
 
-    protected <R> AbstractBaseValidation<T> deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
         R mapped = Optional.ofNullable(this.obj)
                            .map(mapper)
                            .orElse(null);
@@ -116,19 +118,19 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
      * @param error {@code String} message to use.
      * @return {@code this} validation object.
      */
-    protected AbstractBaseValidation<T> onError(String error) {
+    protected SELF onError(String error) {
         this.getCurrentCondition().setOnError(Collections.singletonList(ValidationError.withCode(error)));
 
-        return this;
+        return self;
     }
 
     /**
      * @see #onError(String) ()
      */
-    protected AbstractBaseValidation<T> onError(String field, String error) {
+    protected SELF onError(String field, String error) {
         this.getCurrentCondition().setOnError(Collections.singletonList(ValidationError.of(field, error)));
 
-        return this;
+        return self;
     }
 
     /**
@@ -140,15 +142,15 @@ public abstract class AbstractBaseValidation<T> extends BaseDataHolder<T> {
      * @param error {@code String} message to use.
      * @return {@code this} validation object.
      */
-    protected AbstractBaseValidation<T> groupError(String error) {
+    protected SELF groupError(String error) {
         this.getCurrentCluster().setOnError(ValidationError.of("group", error));
 
-        return this;
+        return self;
     }
 
-    private <R> AbstractBaseValidation<T> inspect(R obj, Function<R, AbstractBaseValidation<R>> validator) {
+    private <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspect(R obj, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
         this.memoize(this.toCondition(obj, validator));
 
-        return this;
+        return self;
     }
 }

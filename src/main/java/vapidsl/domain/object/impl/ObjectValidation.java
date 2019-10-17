@@ -8,10 +8,10 @@ import vapidsl.common.ValidationError;
 
 import java.util.List;
 
-public class ObjectValidation<T> extends AbstractObjectClause<T> {
+public class ObjectValidation<T, SELF extends ObjectValidation<T, SELF>> extends AbstractObjectClause<T, SELF> {
 
     public ObjectValidation(T obj, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(ObjectValidation.class);
         this.obj = obj;
         this.modeManager = new ModeManager(matchMode, purposeMode);
     }
@@ -30,23 +30,23 @@ public class ObjectValidation<T> extends AbstractObjectClause<T> {
      * {@inheritDoc}
      */
     @Override
-    public ObjectValidation<T> onError(String error) {
-        return (ObjectValidation<T>) super.onError(error);
+    public SELF onError(String error) {
+        return super.onError(error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ObjectValidation<T> onError(String field, String error) {
-        return (ObjectValidation<T>) super.onError(field, error);
+    public SELF onError(String field, String error) {
+        return super.onError(field, error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ObjectValidation<T> groupError(String error) {
-        return (ObjectValidation<T>) super.groupError(error);
+    public SELF groupError(String error) {
+        return super.groupError(error);
     }
 }

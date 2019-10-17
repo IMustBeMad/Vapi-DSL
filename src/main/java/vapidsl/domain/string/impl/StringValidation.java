@@ -12,7 +12,7 @@ import java.util.List;
 public class StringValidation extends AbstractStringClause {
 
     public StringValidation(String obj, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(StringValidation.class);
         this.obj = obj;
         this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
     }
@@ -32,7 +32,7 @@ public class StringValidation extends AbstractStringClause {
      */
     @Override
     public StringValidation onError(String error) {
-        return (StringValidation) super.onError(error);
+        return super.onError(error);
     }
 
     /**
@@ -40,7 +40,7 @@ public class StringValidation extends AbstractStringClause {
      */
     @Override
     public StringValidation onError(String field, String error) {
-        return (StringValidation) super.onError(field, error);
+        return super.onError(field, error);
     }
 
     /**
@@ -48,6 +48,6 @@ public class StringValidation extends AbstractStringClause {
      */
     @Override
     public StringValidation groupError(String error) {
-        return (StringValidation) super.groupError(error);
+        return super.groupError(error);
     }
 }

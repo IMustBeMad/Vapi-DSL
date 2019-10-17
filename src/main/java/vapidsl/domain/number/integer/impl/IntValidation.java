@@ -11,7 +11,7 @@ import java.util.List;
 public class IntValidation extends AbstractIntClause {
 
     public IntValidation(Integer value, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(IntValidation.class);
         this.obj = value;
         this.modeManager = new ModeManager(matchMode, purposeMode);
     }
@@ -31,7 +31,7 @@ public class IntValidation extends AbstractIntClause {
      */
     @Override
     public IntValidation onError(String error) {
-        return (IntValidation) super.onError(error);
+        return super.onError(error);
     }
 
     /**
@@ -39,7 +39,7 @@ public class IntValidation extends AbstractIntClause {
      */
     @Override
     public IntValidation onError(String field, String error) {
-        return (IntValidation) super.onError(field, error);
+        return super.onError(field, error);
     }
 
     /**
@@ -47,6 +47,6 @@ public class IntValidation extends AbstractIntClause {
      */
     @Override
     public IntValidation groupError(String error) {
-        return (IntValidation) super.groupError(error);
+        return super.groupError(error);
     }
 }

@@ -1,9 +1,15 @@
 package vapidsl.domain.map;
 
-public abstract class AbstractMapClause<K, V> extends AbstractMapCondition<K, V> {
+import vapidsl.domain.map.impl.MapValidation;
+
+public abstract class AbstractMapClause<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractMapCondition<K, V, SELF> {
+
+    protected AbstractMapClause(Class<?> selfType) {
+        super(selfType);
+    }
 
     @Override
-    public AbstractMapCondition<K, V> or() {
-        return (AbstractMapCondition<K, V>) super.or();
+    public AbstractMapCondition<K, V, SELF> or() {
+        return (AbstractMapCondition<K, V, SELF>) super.or();
     }
 }

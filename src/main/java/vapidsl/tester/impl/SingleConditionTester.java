@@ -15,6 +15,6 @@ public enum SingleConditionTester implements Tester {
         List<Predicate<T>> predicates = condition.getPredicates();
         Predicate<T> predicate = predicates.get(0);
 
-        return getResult(predicate.test(obj), condition.getOnError());
+        return getResult(predicate.test(obj), condition::getOnError);
     }
 }

@@ -9,10 +9,10 @@ import vapidsl.domain.BaseDataHolder;
 
 import java.util.List;
 
-public class ArrayValidation<T> extends AbstractArrayClause<T> {
+public class ArrayValidation<T, SELF extends ArrayValidation<T, SELF>> extends AbstractArrayClause<T, SELF> {
 
     public ArrayValidation(T[] array, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(ArrayValidation.class);
         this.obj = array;
         this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
     }
@@ -31,23 +31,23 @@ public class ArrayValidation<T> extends AbstractArrayClause<T> {
      * {@inheritDoc}
      */
     @Override
-    public ArrayValidation<T> onError(String error) {
-        return (ArrayValidation<T>) super.onError(error);
+    public SELF onError(String error) {
+        return super.onError(error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayValidation<T> onError(String field, String error) {
-        return (ArrayValidation<T>) super.onError(field, error);
+    public SELF onError(String field, String error) {
+        return super.onError(field, error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayValidation<T> groupError(String error) {
-        return (ArrayValidation<T>) super.groupError(error);
+    public SELF groupError(String error) {
+        return super.groupError(error);
     }
 }

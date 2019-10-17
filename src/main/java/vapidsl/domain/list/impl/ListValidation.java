@@ -9,10 +9,10 @@ import vapidsl.domain.BaseDataHolder;
 
 import java.util.List;
 
-public class ListValidation<T> extends AbstractListClause<T> {
+public class ListValidation<T, SELF extends ListValidation<T, SELF>> extends AbstractListClause<T, SELF> {
 
     public ListValidation(List<T> list, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(ListValidation.class);
         this.obj = list;
         this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
     }
@@ -31,23 +31,23 @@ public class ListValidation<T> extends AbstractListClause<T> {
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> onError(String error) {
-        return (ListValidation<T>) super.onError(error);
+    public SELF onError(String error) {
+        return super.onError(error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> onError(String field, String error) {
-        return (ListValidation<T>) super.onError(field, error);
+    public SELF onError(String field, String error) {
+        return super.onError(field, error);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListValidation<T> groupError(String error) {
-        return (ListValidation<T>) super.groupError(error);
+    public SELF groupError(String error) {
+        return super.groupError(error);
     }
 }
