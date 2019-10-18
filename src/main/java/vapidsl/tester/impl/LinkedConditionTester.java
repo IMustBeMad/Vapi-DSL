@@ -1,6 +1,5 @@
 package vapidsl.tester.impl;
 
-import vapidsl.Validation;
 import vapidsl.common.Condition;
 import vapidsl.common.LinkedCondition;
 import vapidsl.common.ValidationError;
@@ -27,7 +26,7 @@ public enum LinkedConditionTester implements Tester {
 
         return getResult(
                 predicates.stream().anyMatch(it -> it.test(obj)),
-                condition.getOnError()
+                condition::getOnError
         );
     }
 
@@ -43,10 +42,10 @@ public enum LinkedConditionTester implements Tester {
                     condition.setOnError(partialCondition.getOnError());
                 }
 
-                return Validation.failed(condition.getOnError());
+                return ValidationResult.failed(condition.getOnError());
             }
         }
 
-        return Validation.ok();
+        return ValidationResult.ok();
     }
 }

@@ -10,103 +10,100 @@ import vapidsl.domain.map.impl.MapValidation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractMapCondition<K, V> extends AbstractBaseValidation<Map<K, V>> {
+public abstract class AbstractMapCondition<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
 
-    public MapValidation<K, V> isEmpty() {
+    protected AbstractMapCondition(Class<?> selfType) {
+        super(selfType);
+    }
+
+    public SELF isEmpty() {
         this.registerCondition(MapConditions.isEmpty());
 
-        return self();
+        return self;
     }
 
-    public MapValidation<K, V> isNotEmpty() {
+    public SELF isNotEmpty() {
         this.registerCondition(MapConditions.isNotEmpty());
 
-        return self();
+        return self;
     }
 
-    public <R> MapValidation<K, V> every(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
-        Optional.of(validator)
-                .map(this::toSerialCondition)
-                .map(serial -> new LinkedCondition<>(serial, Clause.AND))
-                .ifPresent(this::registerCondition);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF every(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
+        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(toSerialCondition(validator), Clause.AND);
+        registerCondition(linkedCondition);
 
-        return self();
-    }
-
-    @Override
-    public MapValidation<K, V> isNull() {
-        return (MapValidation<K, V>) super.isNull();
+        return self;
     }
 
     @Override
-    public MapValidation<K, V> isNotNull() {
-        return (MapValidation<K, V>) super.isNotNull();
+    public SELF isNull() {
+        return super.isNull();
     }
 
     @Override
-    public MapValidation<K, V> isEqualTo(Map<K, V> otherMap) {
-        return (MapValidation<K, V>) super.isEqualTo(otherMap);
+    public SELF isNotNull() {
+        return super.isNotNull();
     }
 
     @Override
-    public MapValidation<K, V> isNotEqualTo(Map<K, V> otherMap) {
-        return (MapValidation<K, V>) super.isNotEqualTo(otherMap);
+    public SELF isEqualTo(Map<K, V> otherMap) {
+        return super.isEqualTo(otherMap);
     }
 
     @Override
-    public MapValidation<K, V> withTerm(Predicate<Map<K, V>> predicate) {
-        return (MapValidation<K, V>) super.withTerm(predicate);
+    public SELF isNotEqualTo(Map<K, V> otherMap) {
+        return super.isNotEqualTo(otherMap);
     }
 
     @Override
-    public MapValidation<K, V> withTerm(Supplier<Boolean> supplier) {
-        return (MapValidation<K, V>) super.withTerm(supplier);
+    public SELF withTerm(Predicate<Map<K, V>> predicate) {
+        return super.withTerm(predicate);
+    }
+
+    @Override
+    public SELF withTerm(Supplier<Boolean> supplier) {
+        return super.withTerm(supplier);
     }
 
     @Override
     @SafeVarargs
-    public final MapValidation<K, V> satisfiesAny(SingleCondition<Map<K, V>>... conditions) {
-        return (MapValidation<K, V>) super.satisfiesAny(conditions);
+    public final SELF satisfiesAny(SingleCondition<Map<K, V>>... conditions) {
+        return super.satisfiesAny(conditions);
     }
 
     @Override
     @SafeVarargs
-    public final MapValidation<K, V> satisfiesAll(SingleCondition<Map<K, V>>... conditions) {
-        return (MapValidation<K, V>) super.satisfiesAll(conditions);
+    public final SELF satisfiesAll(SingleCondition<Map<K, V>>... conditions) {
+        return super.satisfiesAll(conditions);
     }
 
     @Override
-    public MapValidation<K, V> log(String msg, Object... values) {
-        return (MapValidation<K, V>) super.log(msg, values);
+    public SELF log(String msg, Object... values) {
+        return super.log(msg, values);
     }
 
     @Override
-    public <R> MapValidation<K, V> inspecting(Function<Map<K, V>, R> mapper, Predicate<R> predicate) {
-        return (MapValidation<K, V>) super.inspecting(mapper, predicate);
+    public <R> SELF inspecting(Function<Map<K, V>, R> mapper, Predicate<R> predicate) {
+        return super.inspecting(mapper, predicate);
     }
 
     @Override
-    public <R> MapValidation<K, V> inspecting(Function<Map<K, V>, R> mapper, Supplier<SingleCondition<R>> condition) {
-        return (MapValidation<K, V>) super.inspecting(mapper, condition);
+    public <R> SELF inspecting(Function<Map<K, V>, R> mapper, Supplier<SingleCondition<R>> condition) {
+        return super.inspecting(mapper, condition);
     }
 
     @Override
-    public <R> MapValidation<K, V> deepInspecting(Function<Map<K, V>, R> mapper, Function<R, AbstractBaseValidation<R>> validator) {
-        return (MapValidation<K, V>) super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<Map<K, V>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.deepInspecting(mapper, validator);
     }
 
-    private MapValidation<K, V> self() {
-        return (MapValidation<K, V>) this;
-    }
-
-    private <R> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R>> validator) {
+    private <R, OTHER extends AbstractBaseValidation<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
         if (this.obj == null) {
             return Collections.singletonList(this.toCondition(null, validator));
         }

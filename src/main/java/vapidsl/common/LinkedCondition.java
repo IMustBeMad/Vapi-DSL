@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 @ToString
 public class LinkedCondition<T> implements Condition<T> {
 
-    private List<Condition<T>> conditions = new ArrayList<>();
+    private List<Condition<T>> conditions;
     private FlowType flowType = FlowType.COMMON;
     private Clause linkClause;
     private List<ValidationError> onError = new ArrayList<>();
@@ -27,6 +27,10 @@ public class LinkedCondition<T> implements Condition<T> {
     public LinkedCondition(List<Condition<T>> conditions, Clause linkClause) {
         this.conditions = conditions;
         this.linkClause = linkClause;
+    }
+
+    public List<Condition<T>> getConditions() {
+        return conditions;
     }
 
     @Override

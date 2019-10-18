@@ -12,7 +12,7 @@ import java.util.List;
 public class BoolValidation extends AbstractBoolClause {
 
     public BoolValidation(Boolean obj, MatchMode matchMode, PurposeMode purposeMode) {
-        super();
+        super(BoolValidation.class);
         this.obj = obj;
         this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
     }
@@ -32,7 +32,7 @@ public class BoolValidation extends AbstractBoolClause {
      */
     @Override
     public BoolValidation onError(String error) {
-        return (BoolValidation) super.onError(error);
+        return super.onError(error);
     }
 
     /**
@@ -40,7 +40,7 @@ public class BoolValidation extends AbstractBoolClause {
      */
     @Override
     public BoolValidation onError(String field, String error) {
-        return (BoolValidation) super.onError(field, error);
+        return super.onError(field, error);
     }
 
     /**
@@ -48,6 +48,6 @@ public class BoolValidation extends AbstractBoolClause {
      */
     @Override
     public BoolValidation groupError(String error) {
-        return (BoolValidation) super.groupError(error);
+        return super.groupError(error);
     }
 }
