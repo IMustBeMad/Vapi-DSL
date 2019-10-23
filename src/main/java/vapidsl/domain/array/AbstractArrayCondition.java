@@ -5,7 +5,6 @@ import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
 import vapidsl.domain.AbstractBaseValidation;
-import vapidsl.domain.array.impl.ArrayValidation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractArrayCondition<T, SELF extends ArrayValidation<T, SELF>> extends AbstractBaseValidation<T[], SELF> {
+public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondition<T, SELF>> extends AbstractBaseValidation<T[], SELF> {
 
     AbstractArrayCondition(Class<?> selfType) {
         super(selfType);

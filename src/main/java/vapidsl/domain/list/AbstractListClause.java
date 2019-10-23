@@ -2,7 +2,7 @@ package vapidsl.domain.list;
 
 import vapidsl.domain.list.impl.ListValidation;
 
-public abstract class AbstractListClause<T, SELF extends ListValidation<T, SELF>> extends AbstractListCondition<T, SELF> {
+public abstract class AbstractListClause<T, SELF extends AbstractListClause<T, SELF>> extends AbstractListCondition<T, SELF> {
 
     protected AbstractListClause(Class<?> selfType) {
         super(selfType);

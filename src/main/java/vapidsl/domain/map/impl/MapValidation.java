@@ -10,7 +10,7 @@ import vapidsl.domain.map.AbstractMapClause;
 import java.util.List;
 import java.util.Map;
 
-public class MapValidation<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractMapClause<K, V, SELF> {
+public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K, V>> {
 
     public MapValidation(Map<K, V> map, MatchMode matchMode, PurposeMode purposeMode) {
         super(MapValidation.class);
@@ -32,7 +32,7 @@ public class MapValidation<K, V, SELF extends MapValidation<K, V, SELF>> extends
      * {@inheritDoc}
      */
     @Override
-    public SELF onError(String error) {
+    public MapValidation<K, V> onError(String error) {
         return super.onError(error);
     }
 
@@ -40,7 +40,7 @@ public class MapValidation<K, V, SELF extends MapValidation<K, V, SELF>> extends
      * {@inheritDoc}
      */
     @Override
-    public SELF onError(String field, String error) {
+    public MapValidation<K, V> onError(String field, String error) {
         return super.onError(field, error);
     }
 
@@ -48,7 +48,7 @@ public class MapValidation<K, V, SELF extends MapValidation<K, V, SELF>> extends
      * {@inheritDoc}
      */
     @Override
-    public SELF groupError(String error) {
+    public MapValidation<K, V> groupError(String error) {
         return super.groupError(error);
     }
 }

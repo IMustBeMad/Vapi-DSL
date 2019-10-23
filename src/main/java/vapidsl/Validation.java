@@ -27,15 +27,15 @@ import java.util.Map;
 
 public class Validation {
 
-    public static <T, SELF extends ObjectValidation<T, SELF>> AbstractObjectCondition<T, SELF> failIf(T obj) {
+    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> failIf(T obj) {
         return new ObjectValidation<>(obj, null, PurposeMode.FAIL);
     }
 
-    public static <T, SELF extends ObjectValidation<T, SELF>> AbstractObjectCondition<T, SELF> succeedIf(T obj) {
+    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> succeedIf(T obj) {
         return new ObjectValidation<>(obj, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T, SELF extends ObjectValidation<T, SELF>> AbstractObjectCondition<T, SELF> succeedIf(T obj, MatchMode matchMode) {
+    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> succeedIf(T obj, MatchMode matchMode) {
         return new ObjectValidation<>(obj, matchMode, PurposeMode.SUCCESS);
     }
 
@@ -99,39 +99,39 @@ public class Validation {
         return new DateValidation(date, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <T, SELF extends ListValidation<T, SELF>> AbstractListCondition<T, SELF> failIf(List<T> list) {
+    public static <T> AbstractListCondition<T, ListValidation<T>> failIf(List<T> list) {
         return new ListValidation<>(list, null, PurposeMode.FAIL);
     }
 
-    public static <T, SELF extends ListValidation<T, SELF>> AbstractListCondition<T, SELF> succeedIf(List<T> list) {
+    public static <T> AbstractListCondition<T, ListValidation<T>> succeedIf(List<T> list) {
         return new ListValidation<>(list, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T, SELF extends ListValidation<T, SELF>> AbstractListCondition<T, SELF> succeedIf(List<T> list, MatchMode matchMode) {
+    public static <T> AbstractListCondition<T, ListValidation<T>> succeedIf(List<T> list, MatchMode matchMode) {
         return new ListValidation<>(list, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <K, V, SELF extends MapValidation<K, V, SELF>> AbstractMapCondition<K, V, SELF> failIf(Map<K, V> map) {
+    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> failIf(Map<K, V> map) {
         return new MapValidation<>(map, null, PurposeMode.FAIL);
     }
 
-    public static <K, V, SELF extends MapValidation<K, V, SELF>> AbstractMapCondition<K, V, SELF> succeedIf(Map<K, V> map) {
+    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map) {
         return new MapValidation<>(map, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <K, V, SELF extends MapValidation<K, V, SELF>> AbstractMapCondition<K, V, SELF> succeedIf(Map<K, V> map, MatchMode matchMode) {
+    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map, MatchMode matchMode) {
         return new MapValidation<>(map, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <T, SELF extends ArrayValidation<T, SELF>> AbstractArrayCondition<T, SELF> failIf(T[] array) {
+    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> failIf(T[] array) {
         return new ArrayValidation<>(array, null, PurposeMode.FAIL);
     }
 
-    public static <T, SELF extends ArrayValidation<T, SELF>> AbstractArrayCondition<T, SELF> succeedIf(T[] array) {
+    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> succeedIf(T[] array) {
         return new ArrayValidation<>(array, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T, SELF extends ArrayValidation<T, SELF>> AbstractArrayCondition<T, SELF> succeedIf(T[] array, MatchMode matchMode) {
+    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> succeedIf(T[] array, MatchMode matchMode) {
         return new ArrayValidation<>(array, matchMode, PurposeMode.SUCCESS);
     }
 }

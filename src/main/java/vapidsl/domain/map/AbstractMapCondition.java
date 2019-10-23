@@ -5,7 +5,6 @@ import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
 import vapidsl.domain.AbstractBaseValidation;
-import vapidsl.domain.map.impl.MapValidation;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractMapCondition<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
+public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapCondition<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
 
     AbstractMapCondition(Class<?> selfType) {
         super(selfType);

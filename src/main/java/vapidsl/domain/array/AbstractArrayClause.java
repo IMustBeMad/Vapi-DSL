@@ -1,8 +1,6 @@
 package vapidsl.domain.array;
 
-import vapidsl.domain.array.impl.ArrayValidation;
-
-public abstract class AbstractArrayClause<T, SELF extends ArrayValidation<T, SELF>> extends AbstractArrayCondition<T, SELF> {
+public abstract class AbstractArrayClause<T, SELF extends AbstractArrayClause<T, SELF>> extends AbstractArrayCondition<T, SELF> {
 
     protected AbstractArrayClause(Class<?> selfType) {
         super(selfType);

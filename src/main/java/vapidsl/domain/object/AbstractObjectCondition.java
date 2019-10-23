@@ -2,13 +2,12 @@ package vapidsl.domain.object;
 
 import vapidsl.common.SingleCondition;
 import vapidsl.domain.AbstractBaseValidation;
-import vapidsl.domain.object.impl.ObjectValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractObjectCondition<T, SELF extends ObjectValidation<T, SELF>> extends AbstractBaseValidation<T, SELF> {
+public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCondition<T, SELF>> extends AbstractBaseValidation<T, SELF> {
 
     AbstractObjectCondition(Class<?> selfType) {
         super(selfType);
