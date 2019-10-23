@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractDateCondition extends AbstractBaseValidation<LocalDate, DateValidation> {
 
-    protected AbstractDateCondition(Class<?> selfType) {
+    AbstractDateCondition(Class<?> selfType) {
         super(selfType);
     }
 

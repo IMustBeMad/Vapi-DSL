@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractLongCondition extends AbstractBaseValidation<Long, LongValidation> {
 
-    protected AbstractLongCondition(Class<?> selfType) {
+    AbstractLongCondition(Class<?> selfType) {
         super(selfType);
     }
 

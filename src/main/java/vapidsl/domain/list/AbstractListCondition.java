@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractListCondition<T, SELF extends ListValidation<T, SELF>> extends AbstractBaseValidation<List<T>, SELF> {
 
-    protected AbstractListCondition(Class<?> selfType) {
+    AbstractListCondition(Class<?> selfType) {
         super(selfType);
     }
 

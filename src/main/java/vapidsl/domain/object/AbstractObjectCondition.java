@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractObjectCondition<T, SELF extends ObjectValidation<T, SELF>> extends AbstractBaseValidation<T, SELF> {
 
-    protected AbstractObjectCondition(Class<?> selfType) {
+    AbstractObjectCondition(Class<?> selfType) {
         super(selfType);
     }
 

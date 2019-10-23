@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractArrayCondition<T, SELF extends ArrayValidation<T, SELF>> extends AbstractBaseValidation<T[], SELF> {
 
-    protected AbstractArrayCondition(Class<?> selfType) {
+    AbstractArrayCondition(Class<?> selfType) {
         super(selfType);
     }
 

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractMapCondition<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
 
-    protected AbstractMapCondition(Class<?> selfType) {
+    AbstractMapCondition(Class<?> selfType) {
         super(selfType);
     }
 
