@@ -21,8 +21,8 @@ public interface ReasonExtractor {
 
         List<ValidationError> messages = result.getReason();
 
-        return result.getReason() == null ? Collections.singletonList(ValidationError.of("validation", "validation.error.no.error.code"))
-                                          : messages;
+        return result.getReason().isEmpty() ? Collections.singletonList(ValidationError.of("validation", "validation.error.no.error.code"))
+                                            : messages;
     }
 
     default <T> List<ValidationError> getErrorReason(ConditionCluster<T> conditionCluster) {
