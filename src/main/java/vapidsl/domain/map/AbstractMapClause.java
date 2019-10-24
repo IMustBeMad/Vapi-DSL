@@ -2,7 +2,7 @@ package vapidsl.domain.map;
 
 import vapidsl.domain.map.impl.MapValidation;
 
-public abstract class AbstractMapClause<K, V, SELF extends MapValidation<K, V, SELF>> extends AbstractMapCondition<K, V, SELF> {
+public abstract class AbstractMapClause<K, V, SELF extends AbstractMapClause<K, V, SELF>> extends AbstractMapCondition<K, V, SELF> {
 
     protected AbstractMapClause(Class<?> selfType) {
         super(selfType);

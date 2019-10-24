@@ -5,7 +5,6 @@ import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
 import vapidsl.domain.AbstractBaseValidation;
-import vapidsl.domain.list.impl.ListValidation;
 
 import java.util.List;
 import java.util.function.Function;
@@ -13,9 +12,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractListCondition<T, SELF extends ListValidation<T, SELF>> extends AbstractBaseValidation<List<T>, SELF> {
+public abstract class AbstractListCondition<T, SELF extends AbstractListCondition<T, SELF>> extends AbstractBaseValidation<List<T>, SELF> {
 
-    protected AbstractListCondition(Class<?> selfType) {
+    AbstractListCondition(Class<?> selfType) {
         super(selfType);
     }
 

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractStringCondition extends AbstractBaseValidation<String, StringValidation> {
 
-    protected AbstractStringCondition(Class<?> selfType) {
+    AbstractStringCondition(Class<?> selfType) {
         super(selfType);
     }
 

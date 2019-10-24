@@ -5,7 +5,7 @@ import vapidsl.domain.bool.impl.BoolValidation;
 
 public abstract class AbstractBoolCondition extends AbstractBaseValidation<Boolean, BoolValidation> {
 
-    protected AbstractBoolCondition(Class<?> selfType) {
+    AbstractBoolCondition(Class<?> selfType) {
         super(selfType);
     }
 

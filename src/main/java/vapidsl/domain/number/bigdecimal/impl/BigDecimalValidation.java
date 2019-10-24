@@ -1,21 +1,20 @@
-package vapidsl.domain.map.impl;
+package vapidsl.domain.number.bigdecimal.impl;
 
 import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.BaseDataHolder;
-import vapidsl.domain.map.AbstractMapClause;
+import vapidsl.domain.number.bigdecimal.AbstractBigDecimalClause;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
-public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K, V>> {
+public class BigDecimalValidation extends AbstractBigDecimalClause {
 
-    public MapValidation(Map<K, V> map, MatchMode matchMode, PurposeMode purposeMode) {
-        super(MapValidation.class);
-        this.obj = map;
-        this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
+    public BigDecimalValidation(BigDecimal value, MatchMode matchMode, PurposeMode purposeMode) {
+        super(BigDecimalValidation.class);
+        this.obj = value;
+        this.modeManager = new ModeManager(matchMode, purposeMode);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K
      * {@inheritDoc}
      */
     @Override
-    public MapValidation<K, V> onError(String error) {
+    public BigDecimalValidation onError(String error) {
         return super.onError(error);
     }
 
@@ -40,7 +39,7 @@ public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K
      * {@inheritDoc}
      */
     @Override
-    public MapValidation<K, V> onError(String field, String error) {
+    public BigDecimalValidation onError(String field, String error) {
         return super.onError(field, error);
     }
 
@@ -48,7 +47,7 @@ public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K
      * {@inheritDoc}
      */
     @Override
-    public MapValidation<K, V> groupError(String error) {
+    public BigDecimalValidation groupError(String error) {
         return super.groupError(error);
     }
 }

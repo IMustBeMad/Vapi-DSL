@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractDateCondition extends AbstractBaseValidation<LocalDate, DateValidation> {
 
-    protected AbstractDateCondition(Class<?> selfType) {
+    AbstractDateCondition(Class<?> selfType) {
         super(selfType);
     }
 
@@ -23,6 +23,18 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
 
     public DateValidation isBefore(LocalDate otherDate) {
         this.registerCondition(DateConditions.isBefore(otherDate));
+
+        return self;
+    }
+
+    public DateValidation isAfterOrEqual(LocalDate otherDate) {
+        this.registerCondition(DateConditions.isAfterOrEqual(otherDate));
+
+        return self;
+    }
+
+    public DateValidation isBeforeOrEqual(LocalDate otherDate) {
+        this.registerCondition(DateConditions.isBeforeOrEqual(otherDate));
 
         return self;
     }

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public abstract class AbstractIntCondition extends AbstractBaseValidation<Integer, IntValidation> {
 
-    protected AbstractIntCondition(Class<?> selfType) {
+    AbstractIntCondition(Class<?> selfType) {
         super(selfType);
     }
 
@@ -39,62 +39,64 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     }
 
     @Override
-    protected IntValidation isNull() {
+    public IntValidation isNull() {
         return super.isNull();
     }
 
     @Override
-    protected IntValidation isNotNull() {
+    public IntValidation isNotNull() {
         return super.isNotNull();
     }
 
     @Override
-    protected IntValidation isEqualTo(Integer otherObj) {
+    public IntValidation isEqualTo(Integer otherObj) {
         return super.isEqualTo(otherObj);
     }
 
     @Override
-    protected IntValidation isNotEqualTo(Integer otherObj) {
+    public IntValidation isNotEqualTo(Integer otherObj) {
         return super.isNotEqualTo(otherObj);
     }
 
     @Override
-    protected IntValidation withTerm(Predicate<Integer> predicate) {
+    public IntValidation withTerm(Predicate<Integer> predicate) {
         return super.withTerm(predicate);
     }
 
     @Override
-    protected IntValidation withTerm(Supplier<Boolean> supplier) {
+    public IntValidation withTerm(Supplier<Boolean> supplier) {
         return super.withTerm(supplier);
     }
 
     @Override
-    protected IntValidation satisfiesAny(SingleCondition<Integer>... conditions) {
+    @SafeVarargs
+    public final IntValidation satisfiesAny(SingleCondition<Integer>... conditions) {
         return super.satisfiesAny(conditions);
     }
 
     @Override
-    protected IntValidation satisfiesAll(SingleCondition<Integer>... conditions) {
+    @SafeVarargs
+    public final IntValidation satisfiesAll(SingleCondition<Integer>... conditions) {
         return super.satisfiesAll(conditions);
     }
 
     @Override
-    protected IntValidation log(String msg, Object... values) {
+    public IntValidation log(String msg, Object... values) {
         return super.log(msg, values);
     }
 
     @Override
-    protected <R> IntValidation inspecting(Function<Integer, R> mapper, Predicate<R> predicate) {
+    public  <R> IntValidation inspecting(Function<Integer, R> mapper, Predicate<R> predicate) {
         return super.inspecting(mapper, predicate);
     }
 
     @Override
-    protected <R> IntValidation inspecting(Function<Integer, R> mapper, Supplier<SingleCondition<R>> condition) {
+    public  <R> IntValidation inspecting(Function<Integer, R> mapper, Supplier<SingleCondition<R>> condition) {
         return super.inspecting(mapper, condition);
     }
 
     @Override
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> IntValidation deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public  <R, OTHER extends AbstractBaseValidation<R, OTHER>> IntValidation deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
         return super.deepInspecting(mapper, validator);
     }
 }
