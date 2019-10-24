@@ -8,6 +8,8 @@ import vapidsl.common.*;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
+import vapidsl.exception.ValidationException;
+import vapidsl.result.ValidationResult;
 import vapidsl.terminator.impl.TerminatorFacade;
 
 import java.util.ArrayList;
@@ -28,10 +30,10 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
 
     private @Getter(AccessLevel.PACKAGE) ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
-    private @Getter(AccessLevel.PACKAGE) List<ValidationError> errors;
+    private @Getter(AccessLevel.PACKAGE) ValidationResult result;
 
     @SuppressWarnings("unchecked")
-    protected BaseDataHolder(Class<?> selfType) {
+    BaseDataHolder(Class<?> selfType) {
         this.self = (SELF) selfType.cast(this);
     }
 
@@ -43,8 +45,20 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
 
     protected List<ValidationError> examine(ErrorMode errorMode) {
         this.modeManager.setErrorMode(errorMode);
+        this.terminate();
 
-        return this.terminate();
+        return getValidationResult(self.getResult());
+    }
+
+    private List<ValidationError> getValidationResult(ValidationResult validationResult) {
+        List<ValidationError> reason = validationResult.getReason();
+
+        if (validationResult.isValid()) {
+            return reason;
+        }
+
+        return reason.isEmpty() ? Collections.singletonList(ValidationError.of("validation", "validation.error.no.error.code"))
+                                : reason;
     }
 
     protected void registerCondition(SingleCondition<T> condition) {
@@ -59,7 +73,7 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
         return new SingleCondition<>(it -> predicate.test(obj));
     }
 
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K,? super V, AbstractBaseValidation<R, OTHER>> validator) {
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
         AbstractBaseValidation<R, OTHER> innerValidation;
 
         if (obj == null) {
@@ -68,13 +82,13 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
             innerValidation = validator.apply(obj.getKey(), obj.getValue());
         }
 
-        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
+        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), () -> getValidationResult(innerValidation.getResult()));
     }
 
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R ,OTHER>> validator) {
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
         AbstractBaseValidation<R, OTHER> innerValidation = validator.apply(obj);
 
-        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), innerValidation::getErrors);
+        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), () -> getValidationResult(innerValidation.getResult()));
     }
 
     void memoize(Condition<T> condition) {
@@ -89,11 +103,12 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
         this.currentCluster = conditionCluster;
     }
 
-    private List<ValidationError> terminate() {
-        List<ValidationError> validationErrors = TerminatorFacade.INSTANCE.terminate(this.modeManager, this.conditionClusters, this.obj);
-        this.errors = validationErrors;
+    private void terminate() {
+        this.result = TerminatorFacade.INSTANCE.terminate(this.modeManager, this.conditionClusters, this.obj);
 
-        return validationErrors;
+        if (this.modeManager.getErrorMode() == ErrorMode.THROW && !this.result.isValid()) {
+            throw ValidationException.withError(getValidationResult(this.result));
+        }
     }
 
     private SingleCondition<T> copyCondition(SingleCondition<T> condition) {

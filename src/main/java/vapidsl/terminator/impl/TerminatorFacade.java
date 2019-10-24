@@ -1,33 +1,25 @@
 package vapidsl.terminator.impl;
 
 import vapidsl.common.ConditionCluster;
-import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.dict.TerminationMode;
 import vapidsl.domain.BaseDataHolder;
-import vapidsl.common.ValidationError;
-import vapidsl.exception.ValidationException;
+import vapidsl.result.ValidationResult;
 import vapidsl.terminator.Terminator;
 
-import java.util.Collections;
 import java.util.List;
 
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> List<ValidationError> terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> ValidationResult terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
         TerminationMode terminationMode = getTerminationMode(modeManager, conditionClusters);
-        List<ValidationError> errors = getErrors(terminationMode, conditionClusters, obj);
 
-        if (shouldThrowError(modeManager, errors)) {
-            throw ValidationException.withError(errors);
-        }
-
-        return errors;
+        return getValidationResult(terminationMode, conditionClusters, obj);
     }
 
-    private <T> List<ValidationError> getErrors(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> ValidationResult getValidationResult(TerminationMode terminationMode, List<ConditionCluster<T>> conditionClusters, T obj) {
         switch (terminationMode) {
             case FAIL_FAST:
                 return failFast(conditionClusters, obj);
@@ -39,26 +31,26 @@ public enum TerminatorFacade {
                 return failOnFirstGroupMatch(conditionClusters, obj);
         }
 
-        return Collections.emptyList();
+        return ValidationResult.ok();
     }
 
-    private <T> List<ValidationError> failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> ValidationResult failFast(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
         return getTerminator(conditionClusters).failFast(firstConditionCluster, obj);
     }
 
-    private <T> List<ValidationError> failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> ValidationResult failSafe(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> firstConditionCluster = getFirstConditionCluster(conditionClusters);
 
         return getTerminator(conditionClusters).failSafe(firstConditionCluster, obj);
     }
 
-    private <T> List<ValidationError> failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> ValidationResult failOnFirstGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
         return getTerminator(conditionClusters).failOnFirstGroupMatched(conditionClusters, obj);
     }
 
-    private <T> List<ValidationError> failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
+    private <T> ValidationResult failOnNoneGroupMatch(List<ConditionCluster<T>> conditionClusters, T obj) {
         return getTerminator(conditionClusters).failOnNoneGroupMatched(conditionClusters, obj);
     }
 
@@ -93,9 +85,5 @@ public enum TerminatorFacade {
         }
 
         throw new UnsupportedOperationException();
-    }
-
-    private boolean shouldThrowError(BaseDataHolder.ModeManager modeManager, List<ValidationError> errors) {
-        return modeManager.getErrorMode() == ErrorMode.THROW && !errors.isEmpty();
     }
 }
