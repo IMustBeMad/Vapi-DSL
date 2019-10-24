@@ -27,6 +27,18 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
         return self;
     }
 
+    public DateValidation isAfterOrEqual(LocalDate otherDate) {
+        this.registerCondition(DateConditions.isAfterOrEqual(otherDate));
+
+        return self;
+    }
+
+    public DateValidation isBeforeOrEqual(LocalDate otherDate) {
+        this.registerCondition(DateConditions.isBeforeOrEqual(otherDate));
+
+        return self;
+    }
+
     @Override
     public DateValidation isNull() {
         return super.isNull();
