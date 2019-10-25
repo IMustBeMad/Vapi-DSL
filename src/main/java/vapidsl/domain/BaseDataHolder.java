@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 
 public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
@@ -82,13 +82,11 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
             innerValidation = validator.apply(obj.getKey(), obj.getValue());
         }
 
-        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), () -> getValidationResult(innerValidation.getResult()));
+        return new ValidationCondition<>(() -> innerValidation.examine(ErrorMode.RETURN));
     }
 
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(R obj, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        AbstractBaseValidation<R, OTHER> innerValidation = validator.apply(obj);
-
-        return new ValidationCondition<>(it -> innerValidation.examine(ErrorMode.RETURN).isEmpty(), () -> getValidationResult(innerValidation.getResult()));
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(Supplier<AbstractBaseValidation<R, OTHER>> validationSupplier) {
+        return new ValidationCondition<>(() -> validationSupplier.get().examine(ErrorMode.RETURN));
     }
 
     void memoize(Condition<T> condition) {

@@ -31,11 +31,11 @@ public class DateTest extends ValidatorTest {
 
             Assertions.assertThat(Validation.succeedIf(firstDate)
                                             .deepInspecting(Function.identity(),
-                                                    it -> Validation.succeedIf(it)
-                                                                    .isNull()
-                                                                    .or()
-                                                                    .withTerm(() -> secondDate != null)
-                                                                    .isAfter(secondDate)
+                                                            it -> Validation.succeedIf(it)
+                                                                            .isNull()
+                                                                            .or()
+                                                                            .withTerm(() -> secondDate != null)
+                                                                            .isAfter(secondDate)
                                             )
                                             .groupError("test")
                                             .examine(ErrorMode.RETURN))
@@ -59,7 +59,28 @@ public class DateTest extends ValidatorTest {
                       .extracting(ValidationError::getReasonCode)
                       .containsExactly("test");
         }
+
+        @Test
+        public void should_pass_when_validatableIsNull() {
+            DateHolder dateHolder = DateHolder.of(null, LocalDate.now());
+
+            Validation.succeedIf(dateHolder)
+                      .isNotNull().onError("holder is null")
+                      .deepInspecting(DateHolder::getStartDate,
+                                      it -> Validation.succeedIf(it)
+                                                      .isNotNull().onError("start date is null")
+                                                      .isAfter(LocalDate.now()).onError("start date is invalid")
+                      )
+                      .or()
+                      .deepInspecting(DateHolder::getEndDate,
+                                      it -> Validation.succeedIf(it)
+                                                      .isNotNull()
+                                                      .isEqualTo(LocalDate.now())
+                      )
+                      .examine();
+        }
     }
+
 
     public static class FailedIfTest {
 

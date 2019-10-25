@@ -18,17 +18,21 @@ import java.util.function.Supplier;
 public class ValidationCondition<T> implements Condition<T> {
 
     private Predicate<T> predicate;
-    private FlowType flowType = FlowType.COMMON;
-    private Supplier<List<ValidationError>> supplier;
-    private List<ValidationError> onError = new ArrayList<>();
+    private Supplier<List<ValidationError>> validationSupplier;
 
-    public ValidationCondition(Predicate<T> predicate, Supplier<List<ValidationError>> supplier) {
-        this.predicate = predicate;
-        this.supplier = supplier;
+    private List<ValidationError> onError = new ArrayList<>();
+    private List<ValidationError> errorsByValidation = new ArrayList<>();
+
+    private FlowType flowType = FlowType.COMMON;
+
+    public ValidationCondition(Supplier<List<ValidationError>> validationSupplier) {
+        this.validationSupplier = validationSupplier;
     }
 
     @Override
     public List<Predicate<T>> getPredicates() {
+        initPredicate();
+
         return Collections.singletonList(this.predicate);
     }
 
@@ -38,6 +42,14 @@ public class ValidationCondition<T> implements Condition<T> {
             return this.onError;
         }
 
-        return this.supplier.get();
+        return this.errorsByValidation;
+    }
+
+    private void initPredicate() {
+        if (this.predicate == null) {
+            this.errorsByValidation = validationSupplier.get();
+
+            this.predicate = (it) -> this.errorsByValidation.isEmpty();
+        }
     }
 }

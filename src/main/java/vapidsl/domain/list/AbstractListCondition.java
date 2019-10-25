@@ -126,7 +126,7 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
 
     private <OTHER extends AbstractBaseValidation<T, OTHER>> List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
         return this.obj.stream()
-                       .map(it -> this.toCondition(it, validator))
+                       .map(it -> this.toCondition(() -> validator.apply(it)))
                        .collect(Collectors.toList());
     }
 

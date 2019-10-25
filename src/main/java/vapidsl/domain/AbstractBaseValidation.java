@@ -2,10 +2,7 @@ package vapidsl.domain;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import vapidsl.common.ConditionCluster;
-import vapidsl.common.LinkedCondition;
-import vapidsl.common.SingleCondition;
-import vapidsl.common.ValidationError;
+import vapidsl.common.*;
 import vapidsl.dict.Clause;
 import vapidsl.domain.object.ObjectConditions;
 
@@ -61,7 +58,9 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
     }
 
     protected SELF withTerm(Function<T, AbstractBaseValidation<T, SELF>> validator) {
-        return this.inspect(this.obj, validator);
+        this.memoize(this.toCondition(() -> validator.apply(this.obj)));
+
+        return self;
     }
 
     protected SELF satisfiesAny(SingleCondition<T>... conditions) {
@@ -105,11 +104,9 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
     }
 
     protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        R mapped = Optional.ofNullable(this.obj)
-                           .map(mapper)
-                           .orElse(null);
+        this.memoize(this.toCondition(() -> validator.apply(mapper.apply(this.obj))));
 
-        return this.inspect(mapped, validator);
+        return self;
     }
 
     /**
@@ -144,12 +141,6 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
      */
     protected SELF groupError(String error) {
         this.getCurrentCluster().setOnError(ValidationError.of("group", error));
-
-        return self;
-    }
-
-    private <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspect(R obj, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        this.memoize(this.toCondition(obj, validator));
 
         return self;
     }
