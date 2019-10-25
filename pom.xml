@@ -5,7 +5,7 @@
 
   <groupId>vapidsl</groupId>
   <artifactId>vapidsl-core</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <name>vapi-dsl</name>
 
   <properties>
