@@ -3,18 +3,18 @@ package vapidsl.terminator.impl;
 import vapidsl.common.Condition;
 import vapidsl.common.ConditionCluster;
 import vapidsl.dict.FlowType;
-import vapidsl.common.ValidationError;
 import vapidsl.result.ValidationResult;
 import vapidsl.terminator.Terminator;
 import vapidsl.tester.impl.TesterFacade;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum SimpleTerminator implements Terminator {
     INSTANCE;
 
     @Override
-    public <T> List<ValidationError> failFast(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> ValidationResult failFast(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
 
@@ -22,50 +22,48 @@ public enum SimpleTerminator implements Terminator {
             ValidationResult result = tester.test(condition, obj);
 
             if (!result.isValid()) {
-                return getErrorReason(result, conditionCluster);
+                return getResult(result, conditionCluster);
             }
         }
 
-        return Collections.emptyList();
+        return ValidationResult.ok();
     }
 
     @Override
-    public <T> List<ValidationError> failSafe(ConditionCluster<T> conditionCluster, T obj) {
+    public <T> ValidationResult failSafe(ConditionCluster<T> conditionCluster, T obj) {
         TesterFacade tester = TesterFacade.INSTANCE;
         List<Condition<T>> conditions = conditionCluster.getConditions();
-        Set<ValidationError> errors = new HashSet<>();
+        List<ValidationResult> validationResults = new ArrayList<>();
 
         for (Condition<T> condition : conditions) {
             ValidationResult result = tester.test(condition, obj);
 
             if (!result.isValid()) {
-                List<ValidationError> reason = result.getReason();
-
                 if (condition.getFlowType() == FlowType.EARLY_EXIT) {
-                    return reason;
+                    return result;
                 }
 
-                errors.addAll(getErrorReason(result, conditionCluster));
+                validationResults.add(getResult(result, conditionCluster));
             }
         }
 
-        return new ArrayList<>(errors);
+        return getResult(validationResults);
     }
 
     @Override
-    public <T> List<ValidationError> failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> ValidationResult failOnNoneGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> List<ValidationError> failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> ValidationResult failOnFirstGroupMatched(List<ConditionCluster<T>> conditionClusters, T obj) {
         ConditionCluster<T> conditionCluster = conditionClusters.get(0);
-        List<ValidationError> validationErrors = this.failFast(conditionCluster, obj);
+        ValidationResult validationResult = this.failFast(conditionCluster, obj);
 
-        if (validationErrors.isEmpty()) {
-            return getErrorReason(conditionCluster);
+        if (validationResult.isValid()) {
+            return this.getResult(conditionCluster);
         }
 
-        return Collections.emptyList();
+        return ValidationResult.ok();
     }
 }
