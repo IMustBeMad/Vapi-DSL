@@ -12,6 +12,8 @@ import vapidsl.domain.list.AbstractListCondition;
 import vapidsl.domain.list.impl.ListValidation;
 import vapidsl.domain.map.AbstractMapCondition;
 import vapidsl.domain.map.impl.MapValidation;
+import vapidsl.domain.number.bigdecimal.AbstractBigDecimalCondition;
+import vapidsl.domain.number.bigdecimal.impl.BigDecimalValidation;
 import vapidsl.domain.number.biginteger.AbstractLongCondition;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
 import vapidsl.domain.number.integer.AbstractIntCondition;
@@ -21,6 +23,7 @@ import vapidsl.domain.object.impl.ObjectValidation;
 import vapidsl.domain.string.AbstractStringCondition;
 import vapidsl.domain.string.impl.StringValidation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +76,18 @@ public class Validation {
 
     public static AbstractLongCondition succeedIf(Long aLong, MatchMode matchMode) {
         return new LongValidation(aLong, matchMode, PurposeMode.SUCCESS);
+    }
+
+    public static AbstractBigDecimalCondition failIf(BigDecimal bigDecimal) {
+        return new BigDecimalValidation(bigDecimal, null, PurposeMode.FAIL);
+    }
+
+    public static AbstractBigDecimalCondition succeedIf(BigDecimal bigDecimal) {
+        return new BigDecimalValidation(bigDecimal, MatchMode.LAZY, PurposeMode.SUCCESS);
+    }
+
+    public static AbstractBigDecimalCondition succeedIf(BigDecimal bigDecimal, MatchMode matchMode) {
+        return new BigDecimalValidation(bigDecimal, matchMode, PurposeMode.SUCCESS);
     }
 
     public static AbstractBoolCondition failIf(Boolean bool) {
