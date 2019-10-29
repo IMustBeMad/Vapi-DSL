@@ -1,4 +1,4 @@
-package vapidsl.string;
+package vapidsl.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

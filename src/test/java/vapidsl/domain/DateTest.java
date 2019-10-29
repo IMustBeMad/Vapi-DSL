@@ -1,4 +1,4 @@
-package vapidsl.date;
+package vapidsl.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

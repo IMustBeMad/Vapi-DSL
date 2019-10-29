@@ -48,8 +48,8 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
         return self;
     }
 
-    public SELF every(SingleCondition<T> condition) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(condition.getPredicate()), Clause.AND);
+    public SELF every(Supplier<SingleCondition<T>> condition) {
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(condition.get().getPredicate()), Clause.AND);
         this.registerCondition(linkedCondition);
 
         return self;
