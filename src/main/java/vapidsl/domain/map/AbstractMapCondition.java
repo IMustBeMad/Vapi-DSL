@@ -8,10 +8,7 @@ import vapidsl.domain.AbstractBaseValidation;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapCondition<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
@@ -32,8 +29,15 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
         return self;
     }
 
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF every(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF diveEvery(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
         LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
+        registerCondition(linkedCondition);
+
+        return self;
+    }
+
+    public SELF every(BiPredicate<? super K, ? super V> predicate) {
+        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND);
         registerCondition(linkedCondition);
 
         return self;
@@ -105,6 +109,13 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
         return this.obj.entrySet()
                        .stream()
                        .map(it -> this.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
+                       .collect(Collectors.toList());
+    }
+
+    private List<Condition<Map<K, V>>> toSerialCondition(BiPredicate<? super K, ? super V> predicate) {
+        return this.obj.entrySet()
+                       .stream()
+                       .map(it -> this.toCondition(it, predicate))
                        .collect(Collectors.toList());
     }
 }

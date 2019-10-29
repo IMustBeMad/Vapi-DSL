@@ -233,8 +233,8 @@ public class LazyConditionInitTest {
 
         Assertions.assertThatThrownBy(() -> Validation.succeedIf(map)
                                                       .isNotNull().onError(IS_NULL)
-                                                      .every((key, obj) -> Validation.succeedIf(obj)
-                                                                                     .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                                                      .diveEvery((key, obj) -> Validation.succeedIf(obj)
+                                                                                         .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                                                       )
                                                       .examine())
                   .extracting(Throwable::getMessage)
@@ -247,8 +247,8 @@ public class LazyConditionInitTest {
 
         Validation.succeedIf(map)
                   .isNotNull().onError(IS_NULL)
-                  .every((key, obj) -> Validation.succeedIf(obj)
-                                                 .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                  .diveEvery((key, obj) -> Validation.succeedIf(obj)
+                                                     .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                   )
                   .examine();
     }

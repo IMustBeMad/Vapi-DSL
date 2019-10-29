@@ -17,6 +17,8 @@ import java.util.Map;
 @Suite.SuiteClasses({MapTest.SucceedIfTest.class, MapTest.FailedIfTest.class})
 public class MapTest extends ValidatorTest {
 
+    private static final String NOT_EVERY_MATCH = "every.not.match";
+
     public static class SucceedIfTest {
 
         @Test
@@ -26,12 +28,66 @@ public class MapTest extends ValidatorTest {
                       .examine();
         }
 
-
         @Test
         public void should_pass_when_mapIsNotEmpty() {
             Validation.succeedIf(Map.of("test", "test"))
                       .isNotEmpty()
                       .examine();
+        }
+
+        @Test
+        public void should_pass_when_everyElementMatches() {
+            Map<String, String> map = Map.of(
+                    "test1", "test1",
+                    "test2", "test2"
+            );
+
+            Validation.succeedIf(map)
+                      .every((key, value) -> value.matches("test.*"))
+                      .examine();
+        }
+
+        @Test
+        public void should_pass_when_diveEveryElementMatches() {
+            Map<String, String> map = Map.of(
+                    "test1", "test1",
+                    "test2", "test2"
+            );
+
+            Validation.succeedIf(map)
+                      .diveEvery((key, value) -> Validation.succeedIf(value)
+                                                           .startsWith("t")
+                                                           .matches("test.*"))
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_everyElementNotMatches() {
+            Map<String, String> map = Map.of(
+                    "test1", "test1",
+                    "test2", "invalid"
+            );
+
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(map)
+                                                          .every((key, value) -> value.matches("test.*")).onError(NOT_EVERY_MATCH)
+                                                          .examine())
+                      .hasMessage(NOT_EVERY_MATCH);
+        }
+
+        @Test
+        public void should_fail_when_diveEveryElementNotMatches() {
+            Map<String, String> map = Map.of(
+                    "test1", "test1",
+                    "test2", "invalid"
+            );
+
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(map)
+                                                          .diveEvery((key, value) -> Validation.succeedIf(value)
+                                                                                               .startsWith("t")
+                                                                                               .matches("test.*"))
+                                                          .onError(NOT_EVERY_MATCH)
+                                                          .examine())
+                      .hasMessage(NOT_EVERY_MATCH);
         }
     }
 
@@ -40,9 +96,9 @@ public class MapTest extends ValidatorTest {
         @Test
         public void should_fail_withAllFieldsAndCodes() {
             Validation.succeedIf(Map.of("t", "test"), MatchMode.EAGER)
-                      .every((key, value) -> Validation.succeedIf(key, MatchMode.EAGER)
-                                                       .isEqualTo("s").onError("key", "not equal")
-                                                       .matches("//d").onError("key", "not matches")
+                      .diveEvery((key, value) -> Validation.succeedIf(key, MatchMode.EAGER)
+                                                           .isEqualTo("s").onError("key", "not equal")
+                                                           .matches("//d").onError("key", "not matches")
                       )
                       .inspecting(it -> it.get("t"), StringConditions::isBlank).onError("key", "not blank")
                       .examine(ErrorMode.RETURN);

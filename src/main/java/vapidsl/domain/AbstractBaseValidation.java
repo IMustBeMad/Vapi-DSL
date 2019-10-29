@@ -2,13 +2,15 @@ package vapidsl.domain;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import vapidsl.common.*;
+import vapidsl.common.ConditionCluster;
+import vapidsl.common.LinkedCondition;
+import vapidsl.common.SingleCondition;
+import vapidsl.common.ValidationError;
 import vapidsl.dict.Clause;
 import vapidsl.domain.object.ObjectConditions;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -88,11 +90,7 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
     }
 
     protected <R> SELF inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        R mapped = Optional.ofNullable(this.obj)
-                           .map(mapper)
-                           .orElse(null);
-
-        this.memoize(this.toCondition(mapped, predicate));
+        this.memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it))));
 
         return self;
     }
