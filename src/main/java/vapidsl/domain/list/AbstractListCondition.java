@@ -49,14 +49,14 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
     }
 
     public SELF every(SingleCondition<T> condition) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(this.toSerialCondition(condition.getPredicate()), Clause.AND);
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(condition.getPredicate()), Clause.AND);
         this.registerCondition(linkedCondition);
 
         return self;
     }
 
     public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF every(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(this.toSerialCondition(validator), Clause.AND);
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND);
         this.registerCondition(linkedCondition);
 
         return self;

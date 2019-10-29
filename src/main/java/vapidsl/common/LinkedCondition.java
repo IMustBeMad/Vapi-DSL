@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
@@ -20,37 +21,48 @@ import static java.util.stream.Collectors.toList;
 public class LinkedCondition<T> implements Condition<T> {
 
     private List<Condition<T>> conditions;
+    private Supplier<List<Condition<T>>> conditionSupplier;
+
     private FlowType flowType = FlowType.COMMON;
     private Clause linkClause;
     private List<ValidationError> onError = new ArrayList<>();
 
-    public LinkedCondition(List<Condition<T>> conditions, Clause linkClause) {
-        this.conditions = conditions;
+    public LinkedCondition(Supplier<List<Condition<T>>> conditionSupplier, Clause linkClause) {
+        this.conditionSupplier = conditionSupplier;
         this.linkClause = linkClause;
-    }
-
-    public List<Condition<T>> getConditions() {
-        return conditions;
     }
 
     @Override
     public List<Predicate<T>> getPredicates() {
-        return conditions.stream()
-                         .map(Condition::getPredicates)
-                         .flatMap(Collection::stream)
-                         .collect(toList());
+        return this.getConditions()
+                   .stream()
+                   .map(Condition::getPredicates)
+                   .flatMap(Collection::stream)
+                   .collect(toList());
     }
 
     @Override
     public List<ValidationError> getOnError() {
-        if (!onError.isEmpty()) {
-            return onError;
+        if (!this.onError.isEmpty()) {
+            return this.onError;
         }
 
-        return conditions.stream()
-                         .map(Condition::getOnError)
-                         .filter(it -> !it.isEmpty())
-                         .findFirst()
-                         .orElse(null);
+        return this.conditions.stream()
+                              .map(Condition::getOnError)
+                              .filter(it -> !it.isEmpty())
+                              .findFirst()
+                              .orElse(null);
+    }
+
+    public List<Condition<T>> getConditions() {
+        initConditions();
+
+        return this.conditions;
+    }
+
+    private void initConditions() {
+        if (this.conditions == null) {
+            this.conditions = conditionSupplier.get();
+        }
     }
 }

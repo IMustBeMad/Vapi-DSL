@@ -44,14 +44,14 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
     }
 
     public SELF every(SingleCondition<T> condition) {
-        LinkedCondition<T[]> linkedCondition = new LinkedCondition<>(this.toSerialCondition(condition.getPredicate()), Clause.AND);
+        LinkedCondition<T[]> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(condition.getPredicate()), Clause.AND);
         this.registerCondition(linkedCondition);
 
         return self;
     }
 
     public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF every(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
-        LinkedCondition<T[]> linkedCondition = new LinkedCondition<>(this.toSerialCondition(validator), Clause.AND);
+        LinkedCondition<T[]> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND);
         this.registerCondition(linkedCondition);
 
         return self;

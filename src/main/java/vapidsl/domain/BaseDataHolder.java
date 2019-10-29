@@ -15,8 +15,6 @@ import vapidsl.terminator.impl.TerminatorFacade;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -71,18 +69,6 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
 
     protected <R> SingleCondition<T> toCondition(R obj, Predicate<R> predicate) {
         return new SingleCondition<>(it -> predicate.test(obj));
-    }
-
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>, K, V> ValidationCondition<T> toCondition(Map.Entry<K, V> obj, BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
-        AbstractBaseValidation<R, OTHER> innerValidation;
-
-        if (obj == null) {
-            innerValidation = validator.apply(null, null);
-        } else {
-            innerValidation = validator.apply(obj.getKey(), obj.getValue());
-        }
-
-        return new ValidationCondition<>(() -> innerValidation.examine(ErrorMode.RETURN));
     }
 
     protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(Supplier<AbstractBaseValidation<R, OTHER>> validationSupplier) {

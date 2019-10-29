@@ -64,13 +64,13 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
     }
 
     protected SELF satisfiesAny(SingleCondition<T>... conditions) {
-        this.memoize(new LinkedCondition<>(List.of(conditions), Clause.OR));
+        this.memoize(new LinkedCondition<>(() -> List.of(conditions), Clause.OR));
 
         return self;
     }
 
     protected SELF satisfiesAll(SingleCondition<T>... conditions) {
-        this.memoize(new LinkedCondition<>(List.of(conditions), Clause.AND));
+        this.memoize(new LinkedCondition<>(() -> List.of(conditions), Clause.AND));
 
         return self;
     }

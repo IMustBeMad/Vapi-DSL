@@ -6,7 +6,6 @@ import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
 import vapidsl.domain.AbstractBaseValidation;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -34,7 +33,7 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
     }
 
     public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF every(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
-        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(toSerialCondition(validator), Clause.AND);
+        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
         registerCondition(linkedCondition);
 
         return self;
@@ -103,13 +102,9 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
     }
 
     private <R, OTHER extends AbstractBaseValidation<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
-        if (this.obj == null) {
-            return Collections.singletonList(this.toCondition(null, validator));
-        }
-
         return this.obj.entrySet()
                        .stream()
-                       .map(it -> this.toCondition(it, validator))
+                       .map(it -> this.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
                        .collect(Collectors.toList());
     }
 }
