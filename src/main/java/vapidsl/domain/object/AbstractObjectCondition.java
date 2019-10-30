@@ -76,7 +76,7 @@ public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCond
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

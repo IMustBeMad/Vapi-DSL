@@ -101,7 +101,7 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
         this.memoize(this.toCondition(() -> validator.apply(mapper.apply(this.obj))));
 
         return self;

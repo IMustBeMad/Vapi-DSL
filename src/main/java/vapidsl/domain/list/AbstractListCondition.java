@@ -55,7 +55,14 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
         return self;
     }
 
-    public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF every(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
+    public SELF every(Predicate<T> predicate) {
+        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(predicate), Clause.AND);
+        this.registerCondition(linkedCondition);
+
+        return self;
+    }
+
+    public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF everyDeeply(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
         LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND);
         this.registerCondition(linkedCondition);
 
@@ -120,8 +127,8 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<List<T>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 
     private <OTHER extends AbstractBaseValidation<T, OTHER>> List<Condition<List<T>>> toSerialCondition(Function<T, AbstractBaseValidation<T, OTHER>> validator) {

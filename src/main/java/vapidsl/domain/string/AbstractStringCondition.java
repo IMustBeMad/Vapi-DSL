@@ -102,7 +102,7 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> StringValidation deepInspecting(Function<String, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> StringValidation inspectingDeeply(Function<String, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

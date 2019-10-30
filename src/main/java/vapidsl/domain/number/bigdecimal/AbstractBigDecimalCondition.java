@@ -101,7 +101,7 @@ public class AbstractBigDecimalCondition extends AbstractBaseValidation<BigDecim
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> BigDecimalValidation deepInspecting(Function<BigDecimal, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> BigDecimalValidation inspectingDeeply(Function<BigDecimal, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

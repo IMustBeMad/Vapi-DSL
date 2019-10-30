@@ -97,7 +97,7 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> DateValidation deepInspecting(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> DateValidation inspectingDeeply(Function<LocalDate, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

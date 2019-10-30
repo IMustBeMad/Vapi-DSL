@@ -96,7 +96,7 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     }
 
     @Override
-    public  <R, OTHER extends AbstractBaseValidation<R, OTHER>> IntValidation deepInspecting(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public  <R, OTHER extends AbstractBaseValidation<R, OTHER>> IntValidation inspectingDeeply(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

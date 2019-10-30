@@ -48,16 +48,16 @@ public class MapTest extends ValidatorTest {
         }
 
         @Test
-        public void should_pass_when_diveEveryElementMatches() {
+        public void should_pass_when_everyDeeplyElementMatches() {
             Map<String, String> map = Map.of(
                     "test1", "test1",
                     "test2", "test2"
             );
 
             Validation.succeedIf(map)
-                      .diveEvery((key, value) -> Validation.succeedIf(value)
-                                                           .startsWith("t")
-                                                           .matches("test.*"))
+                      .everyDeeply((key, value) -> Validation.succeedIf(value)
+                                                             .startsWith("t")
+                                                             .matches("test.*"))
                       .examine();
         }
 
@@ -75,34 +75,34 @@ public class MapTest extends ValidatorTest {
         }
 
         @Test
-        public void should_fail_when_diveEveryElementNotMatches() {
+        public void should_fail_when_everyDeeplyElementNotMatches() {
             Map<String, String> map = Map.of(
                     "test1", "test1",
                     "test2", "invalid"
             );
 
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(map)
-                                                          .diveEvery((key, value) -> Validation.succeedIf(value)
-                                                                                               .startsWith("t")
-                                                                                               .matches("test.*"))
+                                                          .everyDeeply((key, value) -> Validation.succeedIf(value)
+                                                                                                 .startsWith("t")
+                                                                                                 .matches("test.*"))
                                                           .onError(NOT_EVERY_MATCH)
                                                           .examine())
                       .hasMessage(NOT_EVERY_MATCH);
         }
-    }
-
-    public static class FailedIfTest {
 
         @Test
         public void should_fail_withAllFieldsAndCodes() {
             Validation.succeedIf(Map.of("t", "test"), MatchMode.EAGER)
-                      .diveEvery((key, value) -> Validation.succeedIf(key, MatchMode.EAGER)
-                                                           .isEqualTo("s").onError("key", "not equal")
-                                                           .matches("//d").onError("key", "not matches")
+                      .everyDeeply((key, value) -> Validation.succeedIf(key, MatchMode.EAGER)
+                                                             .isEqualTo("s").onError("key", "not equal")
+                                                             .matches("//d").onError("key", "not matches")
                       )
                       .inspecting(it -> it.get("t"), StringConditions::isBlank).onError("key", "not blank")
                       .examine(ErrorMode.RETURN);
         }
+    }
+
+    public static class FailedIfTest {
 
         @Test
         public void should_fail_when_mapIsEmpty() {

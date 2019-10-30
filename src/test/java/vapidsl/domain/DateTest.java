@@ -30,7 +30,7 @@ public class DateTest extends ValidatorTest {
             LocalDate secondDate = null;
 
             Assertions.assertThat(Validation.succeedIf(firstDate)
-                                            .deepInspecting(Function.identity(),
+                                            .inspectingDeeply(Function.identity(),
                                                             it -> Validation.succeedIf(it)
                                                                             .isNull()
                                                                             .or()
@@ -66,13 +66,13 @@ public class DateTest extends ValidatorTest {
 
             Validation.succeedIf(dateHolder)
                       .isNotNull().onError("holder is null")
-                      .deepInspecting(DateHolder::getStartDate,
+                      .inspectingDeeply(DateHolder::getStartDate,
                                       it -> Validation.succeedIf(it)
                                                       .isNotNull().onError("start date is null")
                                                       .isAfter(LocalDate.now()).onError("start date is invalid")
                       )
                       .or()
-                      .deepInspecting(DateHolder::getEndDate,
+                      .inspectingDeeply(DateHolder::getEndDate,
                                       it -> Validation.succeedIf(it)
                                                       .isNotNull()
                                                       .isEqualTo(LocalDate.now())

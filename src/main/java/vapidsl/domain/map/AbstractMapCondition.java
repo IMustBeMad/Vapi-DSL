@@ -29,15 +29,15 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
         return self;
     }
 
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF diveEvery(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
-        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
+    public SELF every(BiPredicate<? super K, ? super V> predicate) {
+        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND);
         registerCondition(linkedCondition);
 
         return self;
     }
 
-    public SELF every(BiPredicate<? super K, ? super V> predicate) {
-        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF everyDeeply(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
+        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
         registerCondition(linkedCondition);
 
         return self;
@@ -101,8 +101,8 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF deepInspecting(Function<Map<K, V>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<Map<K, V>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 
     private <R, OTHER extends AbstractBaseValidation<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {

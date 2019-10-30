@@ -13,7 +13,7 @@ import vapidsl.domain.AbstractBaseValidation;
  * If none {@code ErrorMode} is specified for parent
  * {@link Validation} than the {@code THROW} mode will be used.
  * <p>
- * For inner {@link Validation} created by {@link AbstractBaseValidation#deepInspecting}
+ * For inner {@link Validation} created by {@link AbstractBaseValidation#inspectingDeeply}
  * default {@code ErrorMode} is set to {@code RETURN} and this cannot be changed.
  */
 public enum ErrorMode {

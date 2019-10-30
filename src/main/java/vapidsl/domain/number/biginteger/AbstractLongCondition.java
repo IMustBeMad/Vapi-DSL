@@ -100,7 +100,7 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long,
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> LongValidation deepInspecting(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        return super.deepInspecting(mapper, validator);
+    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> LongValidation inspectingDeeply(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+        return super.inspectingDeeply(mapper, validator);
     }
 }

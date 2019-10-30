@@ -1,21 +1,16 @@
 package vapidsl.functional;
 
-import lombok.*;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import vapidsl.Validation;
+import vapidsl.ValidatorTest;
 import vapidsl.domain.object.ObjectConditions;
 import vapidsl.domain.string.StringConditions;
 
 import java.util.List;
 import java.util.Map;
 
-public class LazyConditionInitTest {
-
-    private static final String IS_NULL = "is.null";
-    private static final String IS_NOT_NULL = "is.not.null";
-    private static final String IS_NOT_EQUAL = "is.not.equal";
-    private static final String IS_EMPTY = "is.empty";
+public class LazyConditionInitTest extends ValidatorTest {
 
     @Test
     public void should_failWith_isNullError_when_objIsNullAndPredicateInspecting() {
@@ -67,9 +62,9 @@ public class LazyConditionInitTest {
 
         Assertions.assertThatThrownBy(() -> Validation.succeedIf(obj)
                                                       .isNotNull().onError(IS_NULL)
-                                                      .deepInspecting(Obj::getProp, it -> Validation.succeedIf(it)
-                                                                                                    .isEqualTo("test")
-                                                                                                    .onError(IS_NOT_EQUAL))
+                                                      .inspectingDeeply(Obj::getProp, it -> Validation.succeedIf(it)
+                                                                                                      .isEqualTo("test")
+                                                                                                      .onError(IS_NOT_EQUAL))
                                                       .examine())
                   .extracting(Throwable::getMessage)
                   .isEqualTo(IS_NULL);
@@ -81,9 +76,9 @@ public class LazyConditionInitTest {
 
         Validation.succeedIf(obj)
                   .isNotNull().onError(IS_NULL)
-                  .deepInspecting(Obj::getProp, it -> Validation.succeedIf(it)
-                                                                .isEqualTo("test")
-                                                                .onError(IS_NOT_EQUAL))
+                  .inspectingDeeply(Obj::getProp, it -> Validation.succeedIf(it)
+                                                                  .isEqualTo("test")
+                                                                  .onError(IS_NOT_EQUAL))
                   .examine();
     }
 
@@ -137,8 +132,8 @@ public class LazyConditionInitTest {
 
         Assertions.assertThatThrownBy(() -> Validation.succeedIf(list)
                                                       .isNotNull().onError(IS_NULL)
-                                                      .every(obj -> Validation.succeedIf(obj)
-                                                                              .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                                                      .everyDeeply(obj -> Validation.succeedIf(obj)
+                                                                                    .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                                                       )
                                                       .examine())
                   .extracting(Throwable::getMessage)
@@ -151,8 +146,8 @@ public class LazyConditionInitTest {
 
         Validation.succeedIf(list)
                   .isNotNull().onError(IS_NULL)
-                  .every(obj -> Validation.succeedIf(obj)
-                                          .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                  .everyDeeply(obj -> Validation.succeedIf(obj)
+                                                .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                   )
                   .examine();
     }
@@ -207,8 +202,8 @@ public class LazyConditionInitTest {
 
         Assertions.assertThatThrownBy(() -> Validation.succeedIf(array)
                                                       .isNotNull().onError(IS_NULL)
-                                                      .every(obj -> Validation.succeedIf(obj)
-                                                                              .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                                                      .everyDeeply(obj -> Validation.succeedIf(obj)
+                                                                                    .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                                                       )
                                                       .examine())
                   .extracting(Throwable::getMessage)
@@ -221,8 +216,8 @@ public class LazyConditionInitTest {
 
         Validation.succeedIf(array)
                   .isNotNull().onError(IS_NULL)
-                  .every(obj -> Validation.succeedIf(obj)
-                                          .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                  .everyDeeply(obj -> Validation.succeedIf(obj)
+                                                .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                   )
                   .examine();
     }
@@ -233,8 +228,8 @@ public class LazyConditionInitTest {
 
         Assertions.assertThatThrownBy(() -> Validation.succeedIf(map)
                                                       .isNotNull().onError(IS_NULL)
-                                                      .diveEvery((key, obj) -> Validation.succeedIf(obj)
-                                                                                         .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                                                      .everyDeeply((key, obj) -> Validation.succeedIf(obj)
+                                                                                           .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                                                       )
                                                       .examine())
                   .extracting(Throwable::getMessage)
@@ -247,19 +242,9 @@ public class LazyConditionInitTest {
 
         Validation.succeedIf(map)
                   .isNotNull().onError(IS_NULL)
-                  .diveEvery((key, obj) -> Validation.succeedIf(obj)
-                                                     .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
+                  .everyDeeply((key, obj) -> Validation.succeedIf(obj)
+                                                       .inspecting(Obj::getProp, StringConditions::isNotEmpty).onError(IS_EMPTY)
                   )
                   .examine();
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @EqualsAndHashCode
-    private static class Obj {
-
-        private String prop;
     }
 }
