@@ -19,6 +19,20 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
         super(selfType);
     }
 
+    @Override
+    public SELF isEqualTo(T[] array) {
+        this.registerCondition(ArrayConditions.isEqualTo(array));
+
+        return self;
+    }
+
+    @Override
+    public SELF isNotEqualTo(T[] array) {
+        this.registerCondition(ArrayConditions.isNotEqualTo(array));
+
+        return self;
+    }
+
     public SELF contains(T element) {
         this.registerCondition(ArrayConditions.contains(element));
 
@@ -75,16 +89,6 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
     }
 
     @Override
-    public SELF isEqualTo(T[] otherObj) {
-        return super.isEqualTo(otherObj);
-    }
-
-    @Override
-    public SELF isNotEqualTo(T[] otherObj) {
-        return super.isNotEqualTo(otherObj);
-    }
-
-    @Override
     public SELF withTerm(Predicate<T[]> predicate) {
         return super.withTerm(predicate);
     }
@@ -95,6 +99,11 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
     }
 
     @Override
+    public SELF withTermDeeply(Function<T[], AbstractBaseValidation<T[], SELF>> validator) {
+        return super.withTermDeeply(validator);
+    }
+
+    @Override
     @SafeVarargs
     public final SELF satisfiesAny(SingleCondition<T[]>... conditions) {
         return super.satisfiesAny(conditions);
@@ -102,8 +111,8 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
 
     @Override
     @SafeVarargs
-    public final SELF satisfiesAll(SingleCondition<T[]>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final SELF satisfiesEvery(SingleCondition<T[]>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

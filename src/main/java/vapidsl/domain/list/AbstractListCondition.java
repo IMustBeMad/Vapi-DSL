@@ -107,8 +107,8 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
 
     @Override
     @SafeVarargs
-    public final SELF satisfiesAll(SingleCondition<List<T>>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final SELF satisfiesEvery(SingleCondition<List<T>>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

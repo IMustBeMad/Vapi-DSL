@@ -87,8 +87,8 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
 
     @Override
     @SafeVarargs
-    public final SELF satisfiesAll(SingleCondition<Map<K, V>>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final SELF satisfiesEvery(SingleCondition<Map<K, V>>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

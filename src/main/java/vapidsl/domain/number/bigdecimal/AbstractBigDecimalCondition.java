@@ -81,8 +81,8 @@ public class AbstractBigDecimalCondition extends AbstractBaseValidation<BigDecim
 
     @Override
     @SafeVarargs
-    public final BigDecimalValidation satisfiesAll(SingleCondition<BigDecimal>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final BigDecimalValidation satisfiesEvery(SingleCondition<BigDecimal>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

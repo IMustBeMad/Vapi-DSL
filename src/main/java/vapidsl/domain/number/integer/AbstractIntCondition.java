@@ -76,8 +76,8 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
 
     @Override
     @SafeVarargs
-    public final IntValidation satisfiesAll(SingleCondition<Integer>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final IntValidation satisfiesEvery(SingleCondition<Integer>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

@@ -6,19 +6,25 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import vapidsl.Validation;
 import vapidsl.ValidatorTest;
+import vapidsl.domain.array.ArrayConditions;
+import vapidsl.domain.list.ListConditions;
 import vapidsl.domain.object.ObjectConditions;
 import vapidsl.domain.string.StringConditions;
 import vapidsl.exception.ValidationException;
+
+import java.util.Arrays;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ArrayTest.SucceedIfTest.class, ArrayTest.FailedIfTest.class})
 public class ArrayTest extends ValidatorTest {
 
+    private static final String[] STRING_ARRAY = new String[]{"test", "test1", "test2"};
+
     public static class SucceedIfTest {
 
         @Test
         public void should_pass_when_everyElementSupplierMatch() {
-            Validation.succeedIf(new String[]{"test", "test1"})
+            Validation.succeedIf(STRING_ARRAY)
                       .isNotEmpty()
                       .every(() -> StringConditions.matches("test.*"))
                       .examine();
@@ -26,7 +32,7 @@ public class ArrayTest extends ValidatorTest {
 
         @Test
         public void should_pass_when_everyElementPredicateMatch() {
-            Validation.succeedIf(new String[]{"test", "test1"})
+            Validation.succeedIf(STRING_ARRAY)
                       .isNotEmpty()
                       .every(it -> it.matches("test.*"))
                       .examine();
@@ -60,15 +66,299 @@ public class ArrayTest extends ValidatorTest {
 
         @Test
         public void should_pass_when_contains() {
-
+            Validation.succeedIf(STRING_ARRAY)
+                      .contains("test1")
+                      .examine();
         }
 
         @Test
         public void should_fail_when_doesNotContain() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .contains("test3").onError(NOT_CONTAINS)
+                                                          .examine())
+                      .isInstanceOf(ValidationException.class)
+                      .hasMessage(NOT_CONTAINS);
+        }
 
+        @Test
+        public void should_pass_when_hasCorrectSize() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .hasSize(3)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_hasIncorrectCorrectSize() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .hasSize(2).onError(INVALID_SIZE)
+                                                          .examine())
+                      .hasMessage(INVALID_SIZE);
+        }
+
+        @Test
+        public void should_pass_when_isEmpty() {
+            Validation.succeedIf(new String[]{})
+                      .isEmpty()
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isNotEmpty() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .isEmpty().onError(IS_NOT_EMPTY)
+                                                          .examine())
+                      .hasMessage(IS_NOT_EMPTY);
+        }
+
+        @Test
+        public void should_pass_when_isNotEmpty() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .isNotEmpty()
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isEmpty() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(new String[]{})
+                                                          .isNotEmpty().onError(IS_EMPTY)
+                                                          .examine())
+                      .hasMessage(IS_EMPTY);
+        }
+
+        @Test
+        public void should_pass_when_isNull() {
+            String[] array = null;
+
+            Validation.succeedIf(array)
+                      .isNull()
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isNotNull() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .isNull().onError(IS_NOT_NULL)
+                                                          .examine())
+                      .hasMessage(IS_NOT_NULL);
+        }
+
+        @Test
+        public void should_pass_when_isNotNull() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .isNotNull()
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isNull() {
+            String[] array = null;
+
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(array)
+                                                          .isNotNull().onError(IS_NULL)
+                                                          .examine())
+                      .hasMessage(IS_NULL);
+        }
+
+        @Test
+        public void should_pass_when_isEqualTo() {
+            String[] array1 = new String[]{"test"};
+            String[] array2 = new String[]{"test"};
+
+            Validation.succeedIf(array1)
+                      .isEqualTo(array2)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isNotEqualTo() {
+            String[] array1 = new String[]{"test"};
+            String[] array2 = new String[]{"test", "test2"};
+
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(array1)
+                                                          .isEqualTo(array2).onError(IS_NOT_EQUAL)
+                                                          .examine())
+                      .hasMessage(IS_NOT_EQUAL);
+        }
+
+        @Test
+        public void should_pass_when_isNotEqualTo() {
+            String[] array1 = new String[]{"test"};
+            String[] array2 = new String[]{"test", "test2"};
+
+            Validation.succeedIf(array1)
+                      .isNotEqualTo(array2)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_isEqualTo() {
+            String[] array1 = new String[]{"test"};
+            String[] array2 = new String[]{"test"};
+
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(array1)
+                                                          .isNotEqualTo(array2).onError(IS_EQUAL)
+                                                          .examine())
+                      .hasMessage(IS_EQUAL);
+        }
+
+        @Test
+        public void should_pass_when_termPredicatePasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .withTerm(it -> it.length == 3)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_termPredicateNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .withTerm(it -> it.length == 4).onError(INVALID_SIZE)
+                                                          .examine())
+                      .hasMessage(INVALID_SIZE);
+        }
+
+        @Test
+        public void should_pass_when_termSupplierPasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .withTerm(() -> 1 == 1)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_termSupplierNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .withTerm(() -> 1 == 2).onError(IS_NOT_EQUAL)
+                                                          .examine())
+                      .hasMessage(IS_NOT_EQUAL);
+        }
+
+        @Test
+        public void should_pass_when_satisfiesAny() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .satisfiesAny(ArrayConditions.isEmpty(), ArrayConditions.hasSize(3))
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_notSatisfiesAny() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .satisfiesAny(ArrayConditions.isEmpty(), ArrayConditions.hasSize(1)).onError(NOT_SATISFIES)
+                                                          .examine())
+                      .hasMessage(NOT_SATISFIES);
+        }
+
+        @Test
+        public void should_pass_when_satisfiesEvery() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .satisfiesEvery(ArrayConditions.hasSize(3), ArrayConditions.isNotEmpty())
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_notSatisfiesEvery() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .satisfiesEvery(ArrayConditions.hasSize(2), ArrayConditions.isNotEmpty()).onError(NOT_SATISFIES)
+                                                          .examine())
+                      .hasMessage(NOT_SATISFIES);
+        }
+
+        @Test
+        public void should_log_msg() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .log("checking if empty")
+                      .isNotEmpty()
+                      .examine();
+        }
+
+        @Test
+        public void should_pass_when_inspectingPredicatePasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .inspecting(Arrays::asList, it -> it.size() == 3)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_inspectingPredicateNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .inspecting(Arrays::asList, it -> it.size() == 2).onError(INVALID_SIZE)
+                                                          .examine())
+                      .hasMessage(INVALID_SIZE);
+        }
+
+        @Test
+        public void should_pass_when_inspectingSupplierPasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .inspecting(Arrays::asList, ListConditions::isNotEmpty)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_inspectingSupplierNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .inspecting(Arrays::asList, ListConditions::isEmpty).onError(IS_NOT_EMPTY)
+                                                          .examine())
+                      .hasMessage(IS_NOT_EMPTY);
+        }
+
+        @Test
+        public void should_pass_when_withTermDeeplyPasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .withTermDeeply(it -> Validation.succeedIf(it).isNotEmpty())
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_withTermDeeplyNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .withTermDeeply(it -> Validation.succeedIf(it).isEmpty().onError(IS_NOT_EMPTY))
+                                                          .examine())
+                      .hasMessage(IS_NOT_EMPTY);
+        }
+
+        @Test
+        public void should_pass_when_inspectingDeeplyPasses() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .inspectingDeeply(Arrays::asList, it -> Validation.succeedIf(it).isNotEmpty())
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_inspectingDeeplyNotPasses() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .inspectingDeeply(Arrays::asList, it -> Validation.succeedIf(it).isEmpty().onError(IS_NOT_EMPTY))
+                                                          .examine())
+                      .hasMessage(IS_NOT_EMPTY);
+        }
+
+        @Test
+        public void should_pass_when_firstGroupMatches() {
+            String[] array = null;
+
+            Validation.succeedIf(array)
+                      .isNull().onError(IS_NOT_NULL)
+                      .or()
+                      .contains("test").onError(NOT_CONTAINS)
+                      .examine();
+        }
+
+        @Test
+        public void should_pass_when_secondGroupMatches() {
+            Validation.succeedIf(STRING_ARRAY)
+                      .isEmpty().onError(IS_NOT_EMPTY)
+                      .or()
+                      .isNotEmpty().onError(IS_EMPTY)
+                      .examine();
+        }
+
+        @Test
+        public void should_fail_when_groupsNotMatch() {
+            Assertions.assertThatThrownBy(() -> Validation.succeedIf(STRING_ARRAY)
+                                                          .isEmpty().onError(IS_NOT_EMPTY)
+                                                          .or()
+                                                          .isNull().onError(IS_NOT_NULL)
+                                                          .examine())
+                      .hasMessage(IS_NOT_EMPTY + "\n" + IS_NOT_NULL);
         }
     }
-
 
     public static class FailedIfTest {
 

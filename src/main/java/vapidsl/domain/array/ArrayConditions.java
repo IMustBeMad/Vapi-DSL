@@ -21,4 +21,12 @@ public class ArrayConditions {
     public static <T> SingleCondition<T[]> isNotEmpty() {
         return new SingleCondition<>(array -> array.length > 0);
     }
+
+    public static <T> SingleCondition<T[]> isEqualTo(T[] otherArray) {
+        return new SingleCondition<>(array -> Arrays.equals(array, otherArray));
+    }
+
+    public static <T> SingleCondition<T[]> isNotEqualTo(T[] otherArray) {
+        return new SingleCondition<>(array -> !Arrays.equals(array, otherArray));
+    }
 }

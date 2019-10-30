@@ -80,8 +80,8 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long,
 
     @Override
     @SafeVarargs
-    public final LongValidation satisfiesAll(SingleCondition<Long>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final LongValidation satisfiesEvery(SingleCondition<Long>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override

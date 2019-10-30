@@ -59,7 +59,7 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected SELF withTerm(Function<T, AbstractBaseValidation<T, SELF>> validator) {
+    protected SELF withTermDeeply(Function<T, AbstractBaseValidation<T, SELF>> validator) {
         this.memoize(this.toCondition(() -> validator.apply(this.obj)));
 
         return self;
@@ -71,7 +71,7 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected SELF satisfiesAll(SingleCondition<T>... conditions) {
+    protected SELF satisfiesEvery(SingleCondition<T>... conditions) {
         this.memoize(new LinkedCondition<>(() -> List.of(conditions), Clause.AND));
 
         return self;

@@ -31,7 +31,7 @@ public class FailSafeTerminationModeTest {
 
         List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
                                                    .hasSize(4).onError(sizeError)
-                                                   .satisfiesAll(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
+                                                   .satisfiesEvery(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                    .inspecting(it -> it.get(0), it -> it.matches("test.*"))
                                                    .examine(ErrorMode.RETURN);
 

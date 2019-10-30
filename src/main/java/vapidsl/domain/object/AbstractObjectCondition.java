@@ -44,8 +44,8 @@ public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCond
     }
 
     @Override
-    public SELF withTerm(Function<T, AbstractBaseValidation<T, SELF>> validator) {
-        return super.withTerm(validator);
+    public SELF withTermDeeply(Function<T, AbstractBaseValidation<T, SELF>> validator) {
+        return super.withTermDeeply(validator);
     }
 
     @Override
@@ -56,8 +56,8 @@ public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCond
 
     @Override
     @SafeVarargs
-    public final SELF satisfiesAll(SingleCondition<T>... conditions) {
-        return super.satisfiesAll(conditions);
+    public final SELF satisfiesEvery(SingleCondition<T>... conditions) {
+        return super.satisfiesEvery(conditions);
     }
 
     @Override
