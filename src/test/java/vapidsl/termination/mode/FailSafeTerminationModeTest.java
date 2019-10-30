@@ -30,7 +30,7 @@ public class FailSafeTerminationModeTest {
         String allOfClauseError = "incorrect.all.of";
 
         List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
-                                                   .ofSize(4).onError(sizeError)
+                                                   .hasSize(4).onError(sizeError)
                                                    .satisfiesAll(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                    .inspecting(it -> it.get(0), it -> it.matches("test.*"))
                                                    .examine(ErrorMode.RETURN);

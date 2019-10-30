@@ -31,7 +31,7 @@ public class StringTest extends ValidatorTest {
             Validation.succeedIf(STRING, matchMode)
                       .isEqualTo(isEqualTo).onError("is.not.eq.test")
                       .startsWith(startsWith).onError("does.not.start.with")
-                      .ofLength(ofLength).onError("length.is.invalid")
+                      .hasLength(ofLength).onError("length.is.invalid")
                       .examine();
         }
 
@@ -40,7 +40,7 @@ public class StringTest extends ValidatorTest {
                       .isEqualTo(isEqualTo).onError("is.not.eq.test")
                       .or()
                       .startsWith(startsWith).onError("does.not.start.with")
-                      .ofLength(ofLength).onError("length.is.invalid")
+                      .hasLength(ofLength).onError("length.is.invalid")
                       .examine();
         }
 
@@ -86,7 +86,7 @@ public class StringTest extends ValidatorTest {
             Validation.failIf(STRING)
                       .isEqualTo(isEqualTo).onError("is.not.eq.test")
                       .startsWith(startsWith).onError("does.not.start.with")
-                      .ofLength(ofLength).onError("length.is.invalid")
+                      .hasLength(ofLength).onError("length.is.invalid")
                       .examine();
         }
 
@@ -96,7 +96,7 @@ public class StringTest extends ValidatorTest {
                       .or()
                       .startsWith(startsWith).onError("does.not.start.with")
                       .or()
-                      .ofLength(ofLength).onError("length.is.invalid")
+                      .hasLength(ofLength).onError("length.is.invalid")
                       .groupError("group.error")
                       .examine();
         }

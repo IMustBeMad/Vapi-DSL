@@ -38,8 +38,8 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
         return self;
     }
 
-    public StringValidation ofLength(int length) {
-        this.registerCondition(StringConditions.ofLength(length));
+    public StringValidation hasLength(int length) {
+        this.registerCondition(StringConditions.hasLength(length));
 
         return self;
     }

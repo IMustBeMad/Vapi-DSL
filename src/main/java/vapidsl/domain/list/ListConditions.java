@@ -11,7 +11,7 @@ public class ListConditions {
         return new SingleCondition<>(it -> it.contains(element));
     }
 
-    public static <T> SingleCondition<List<T>> ofSize(int size) {
+    public static <T> SingleCondition<List<T>> hasSize(int size) {
         return new SingleCondition<>(it -> it.size() == size);
     }
 

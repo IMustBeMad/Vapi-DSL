@@ -25,8 +25,8 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
         return self;
     }
 
-    public SELF ofSize(int size) {
-        this.registerCondition(ArrayConditions.ofSize(size));
+    public SELF hasSize(int size) {
+        this.registerCondition(ArrayConditions.hasSize(size));
 
         return self;
     }

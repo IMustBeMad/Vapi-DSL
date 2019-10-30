@@ -57,7 +57,18 @@ public class ArrayTest extends ValidatorTest {
                       .isInstanceOf(ValidationException.class)
                       .hasMessage(IS_NOT_EMPTY);
         }
+
+        @Test
+        public void should_pass_when_contains() {
+
+        }
+
+        @Test
+        public void should_fail_when_doesNotContain() {
+
+        }
     }
+
 
     public static class FailedIfTest {
 

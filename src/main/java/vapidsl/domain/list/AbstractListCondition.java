@@ -24,8 +24,8 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
         return self;
     }
 
-    public SELF ofSize(int size) {
-        this.registerCondition(ListConditions.ofSize(size));
+    public SELF hasSize(int size) {
+        this.registerCondition(ListConditions.hasSize(size));
 
         return self;
     }

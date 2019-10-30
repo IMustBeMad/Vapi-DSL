@@ -36,7 +36,7 @@ public class StringConditions {
         return new SingleCondition<>(it -> it.startsWith(prefix));
     }
 
-    public static SingleCondition<String> ofLength(int length) {
+    public static SingleCondition<String> hasLength(int length) {
         return new SingleCondition<>(it -> it.length() == length);
     }
 }
