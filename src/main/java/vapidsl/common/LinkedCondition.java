@@ -6,6 +6,7 @@ import vapidsl.dict.FlowType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -51,7 +52,7 @@ public class LinkedCondition<T> implements Condition<T> {
                               .map(Condition::getOnError)
                               .filter(it -> !it.isEmpty())
                               .findFirst()
-                              .orElse(null);
+                              .orElseGet(Collections::emptyList);
     }
 
     public List<Condition<T>> getConditions() {
