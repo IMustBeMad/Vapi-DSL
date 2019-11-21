@@ -10,6 +10,12 @@ public class ValidatorTest {
     protected static final String IS_EQUAL = "is.equal";
     protected static final String IS_EMPTY = "is.empty";
     protected static final String IS_NOT_EMPTY = "is.not.empty";
+    protected static final String IS_TRUE = "is.true";
+    protected static final String IS_FALSE = "is.false";
+    protected static final String IS_NOT_AFTER = "is.not.after";
+    protected static final String IS_AFTER = "is.not.after";
+    protected static final String IS_NOT_BEFORE = "is.not.before";
+    protected static final String IS_BEFORE = "is.not.before";
     protected static final String NOT_CONTAINS = "not.contains";
     protected static final String CONTAINS = "contains";
     protected static final String NOT_SATISFIES = "not.satisfies";

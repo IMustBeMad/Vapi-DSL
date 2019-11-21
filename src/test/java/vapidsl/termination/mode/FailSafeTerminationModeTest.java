@@ -9,7 +9,7 @@ import vapidsl.dict.MatchMode;
 import vapidsl.domain.list.ListConditions;
 import vapidsl.common.ValidationError;
 import vapidsl.exception.ValidationException;
-import vapidsl.domain.date.DateConditions;
+import vapidsl.domain.date.localdate.DateConditions;
 
 import java.time.LocalDate;
 import java.util.List;

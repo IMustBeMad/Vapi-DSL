@@ -42,7 +42,6 @@ public class ListTest extends ValidatorTest {
                                                           .every(() -> ObjectConditions.isEqualTo(new Obj())).onError(IS_NOT_EQUAL)
                                                           .examine())
                       .hasMessage(IS_NOT_EQUAL);
-
         }
 
         @Test

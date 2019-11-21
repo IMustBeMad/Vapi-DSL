@@ -1,11 +1,28 @@
-package vapidsl.domain.date;
+package vapidsl.domain.date.localdate;
 
 import vapidsl.common.SingleCondition;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class DateConditions {
+
+    public static SingleCondition<LocalDate> isNull() {
+        return new SingleCondition<>(Objects::isNull);
+    }
+
+    public static SingleCondition<LocalDate> isNotNull() {
+        return new SingleCondition<>(Objects::nonNull);
+    }
+
+    public static SingleCondition<LocalDate> isEqualTo(LocalDate otherDate) {
+        return new SingleCondition<>(it -> it.isEqual(otherDate));
+    }
+
+    public static SingleCondition<LocalDate> isNoEqualTo(LocalDate otherDate) {
+        return new SingleCondition<>(it -> !it.isEqual(otherDate));
+    }
 
     public static SingleCondition<LocalDate> isAfter(LocalDate otherDate) {
         return new SingleCondition<>(it -> it.isAfter(otherDate));

@@ -1,8 +1,8 @@
-package vapidsl.domain.date;
+package vapidsl.domain.date.localdate;
 
 import vapidsl.common.SingleCondition;
 import vapidsl.domain.AbstractBaseValidation;
-import vapidsl.domain.date.impl.DateValidation;
+import vapidsl.domain.date.localdate.impl.DateValidation;
 
 import java.time.LocalDate;
 import java.util.function.Function;
@@ -67,6 +67,11 @@ public abstract class AbstractDateCondition extends AbstractBaseValidation<Local
     @Override
     public DateValidation withTerm(Supplier<Boolean> supplier) {
         return super.withTerm(supplier);
+    }
+
+    @Override
+    public DateValidation withTermDeeply(Function<LocalDate, AbstractBaseValidation<LocalDate, DateValidation>> validator) {
+        return super.withTermDeeply(validator);
     }
 
     @Override

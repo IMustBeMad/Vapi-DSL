@@ -1,4 +1,4 @@
-package vapidsl.domain.date;
+package vapidsl.domain.date.localdate;
 
 public abstract class AbstractDateClause extends AbstractDateCondition {
 

@@ -1,10 +1,10 @@
-package vapidsl.domain.date.impl;
+package vapidsl.domain.date.localdate.impl;
 
 import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.date.AbstractDateClause;
+import vapidsl.domain.date.localdate.AbstractDateClause;
 
 import java.time.LocalDate;
 import java.util.List;
