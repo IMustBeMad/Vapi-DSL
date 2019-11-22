@@ -81,12 +81,16 @@ public abstract class AbstractListCondition<T, SELF extends AbstractListConditio
 
     @Override
     public SELF isEqualTo(List<T> otherList) {
-        return super.isEqualTo(otherList);
+        this.registerCondition(ListConditions.isEqualTo(otherList));
+
+        return self;
     }
 
     @Override
     public SELF isNotEqualTo(List<T> otherList) {
-        return super.isNotEqualTo(otherList);
+        this.registerCondition(ListConditions.isNotEqualTo(otherList));
+
+        return self;
     }
 
     @Override

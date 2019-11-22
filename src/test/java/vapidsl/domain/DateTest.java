@@ -388,7 +388,7 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_pass_when_inspectingWithSupplierPasses() {
             Validation.succeedIf(LocalDate.now())
-                      .inspecting(Function.identity(), DateConditions::isNotNull)
+                      .inspecting(Function.identity(), ObjectConditions::isNotNull)
                       .examine();
         }
 
@@ -397,7 +397,7 @@ public class DateTest extends ValidatorTest {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(LocalDate.now())
                                                           .inspecting(
                                                                   Function.identity(),
-                                                                  DateConditions::isNull
+                                                                  ObjectConditions::isNull
                                                           ).onError(IS_NOT_AFTER)
                                                           .examine())
                       .hasMessage(IS_NOT_AFTER);
@@ -559,7 +559,7 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_fail_when_satisfiesAny() {
             Assertions.assertThatThrownBy(() -> Validation.failIf(LocalDate.now())
-                                                          .satisfiesAny(DateConditions.isNull(), DateConditions.isNotNull())
+                                                          .satisfiesAny(ObjectConditions.isNull(), ObjectConditions.isNotNull())
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -567,14 +567,14 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_pass_when_notSatisfiesAny() {
             Validation.failIf(LocalDate.now())
-                      .satisfiesAny(DateConditions.isNull(), DateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(NOT_SATISFIES)
+                      .satisfiesAny(ObjectConditions.isNull(), DateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(NOT_SATISFIES)
                       .examine();
         }
 
         @Test
         public void should_fail_when_satisfiesEvery() {
             Assertions.assertThatThrownBy(() -> Validation.failIf(LocalDate.now())
-                                                          .satisfiesEvery(DateConditions.isNotNull(), DateConditions.isEqualTo(LocalDate.now()))
+                                                          .satisfiesEvery(ObjectConditions.isNotNull(), DateConditions.isEqualTo(LocalDate.now()))
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -583,7 +583,7 @@ public class DateTest extends ValidatorTest {
         public void should_pass_when_notSatisfiesEvery() {
             Validation.failIf(LocalDate.now())
                       .satisfiesEvery(
-                              DateConditions.isNull(),
+                              ObjectConditions.isNull(),
                               DateConditions.isAfterOrEqual(LocalDate.now().plusDays(1))
                       ).onError(NOT_SATISFIES)
                       .examine();
@@ -613,7 +613,7 @@ public class DateTest extends ValidatorTest {
             DateHolder dateHolder = new DateHolder(LocalDate.now(), LocalDate.now());
 
             Assertions.assertThatThrownBy(() -> Validation.failIf(dateHolder)
-                                                          .inspecting(DateHolder::getEndDate, DateConditions::isNotNull)
+                                                          .inspecting(DateHolder::getEndDate, ObjectConditions::isNotNull)
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -623,7 +623,7 @@ public class DateTest extends ValidatorTest {
             DateHolder dateHolder = new DateHolder(LocalDate.now(), LocalDate.now());
 
             Validation.failIf(dateHolder)
-                      .inspecting(DateHolder::getEndDate, DateConditions::isNull)
+                      .inspecting(DateHolder::getEndDate, ObjectConditions::isNull)
                       .examine();
         }
 
@@ -683,7 +683,7 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_fail_when_inspectingWithSupplierPasses() {
             Assertions.assertThatThrownBy(() -> Validation.failIf(LocalDate.now())
-                                                          .inspecting(Function.identity(), DateConditions::isNotNull)
+                                                          .inspecting(Function.identity(), ObjectConditions::isNotNull)
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -693,7 +693,7 @@ public class DateTest extends ValidatorTest {
             Validation.failIf(LocalDate.now())
                       .inspecting(
                               Function.identity(),
-                              DateConditions::isNull
+                              ObjectConditions::isNull
                       ).onError(IS_NOT_AFTER)
                       .examine();
         }
