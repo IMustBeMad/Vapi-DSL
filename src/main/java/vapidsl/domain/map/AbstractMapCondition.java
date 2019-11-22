@@ -35,6 +35,12 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
         return self;
     }
 
+    public SELF containsKey(K keyValue) {
+        this.registerCondition(MapConditions.containsKey(keyValue));
+
+        return self;
+    }
+
     public SELF every(BiPredicate<? super K, ? super V> predicate) {
         LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND);
         registerCondition(linkedCondition);
