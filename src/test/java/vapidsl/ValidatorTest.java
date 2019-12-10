@@ -16,6 +16,14 @@ public class ValidatorTest {
     protected static final String IS_AFTER = "is.not.after";
     protected static final String IS_NOT_BEFORE = "is.not.before";
     protected static final String IS_BEFORE = "is.not.before";
+    protected static final String IS_GREATER = "is.greater";
+    protected static final String IS_NOT_GREATER = "is.not.greater";
+    protected static final String IS_GREATER_OR_EQUAL = "is.greater.or.equal";
+    protected static final String IS_NOT_GREATER_OR_EQUAL = "is.not.greater.or.equal";
+    protected static final String IS_LESSER = "is.lesser";
+    protected static final String IS_NOT_LESSER = "is.not.lesser";
+    protected static final String IS_LESSER_OR_EQUAL = "is.lesser.or.equal";
+    protected static final String IS_NOT_LESSER_OR_EQUAL = "is.not.lesser.or.equal";
     protected static final String NOT_CONTAINS = "not.contains";
     protected static final String CONTAINS = "contains";
     protected static final String NOT_SATISFIES = "not.satisfies";
