@@ -1,7 +1,9 @@
 package vapidsl.domain.string;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
+@UtilityClass
 public class StringConditions {
 
     public static SingleCondition<String> matches(String pattern) {

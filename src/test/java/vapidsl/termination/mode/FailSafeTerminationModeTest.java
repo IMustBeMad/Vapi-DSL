@@ -9,7 +9,7 @@ import vapidsl.dict.MatchMode;
 import vapidsl.domain.list.ListConditions;
 import vapidsl.common.ValidationError;
 import vapidsl.exception.ValidationException;
-import vapidsl.domain.date.localdate.DateConditions;
+import vapidsl.domain.date.localdate.LocalDateConditions;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,7 +49,7 @@ public class FailSafeTerminationModeTest {
         assertThatThrownBy(() -> Validation.succeedIf(date, MatchMode.EAGER)
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
-                                           .satisfiesAny(DateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
+                                           .satisfiesAny(LocalDateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
                                            .groupError(groupError)
                                            .examine())
                 .isInstanceOf(ValidationException.class)

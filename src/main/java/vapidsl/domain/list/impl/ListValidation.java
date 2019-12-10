@@ -3,18 +3,18 @@ package vapidsl.domain.list.impl;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.list.AbstractListClause;
+import vapidsl.domain.list.ListClauseBinder;
 import vapidsl.common.ValidationError;
-import vapidsl.domain.BaseDataHolder;
+import vapidsl.domain.Binder;
 
 import java.util.List;
 
-public class ListValidation<T> extends AbstractListClause<T, ListValidation<T>> {
+public class ListValidation<T> extends ListClauseBinder<T, ListValidation<T>> {
 
     public ListValidation(List<T> list, MatchMode matchMode, PurposeMode purposeMode) {
         super(ListValidation.class);
         this.obj = list;
-        this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
+        this.modeManager = new Binder.ModeManager(matchMode, purposeMode);
     }
 
     @Override

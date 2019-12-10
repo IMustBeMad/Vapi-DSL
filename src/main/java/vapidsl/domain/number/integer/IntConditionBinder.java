@@ -1,16 +1,16 @@
 package vapidsl.domain.number.integer;
 
 import vapidsl.common.SingleCondition;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.integer.impl.IntValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractIntCondition extends AbstractBaseValidation<Integer, IntValidation> {
+public abstract class IntConditionBinder extends ConditionBinder<Integer, IntValidation> {
 
-    AbstractIntCondition(Class<?> selfType) {
+    IntConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -96,7 +96,7 @@ public abstract class AbstractIntCondition extends AbstractBaseValidation<Intege
     }
 
     @Override
-    public  <R, OTHER extends AbstractBaseValidation<R, OTHER>> IntValidation inspectingDeeply(Function<Integer, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public  <R, OTHER extends ConditionBinder<R, OTHER>> IntValidation inspectingDeeply(Function<Integer, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 }

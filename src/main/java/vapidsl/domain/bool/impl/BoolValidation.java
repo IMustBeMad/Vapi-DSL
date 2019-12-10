@@ -4,17 +4,17 @@ import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.BaseDataHolder;
-import vapidsl.domain.bool.AbstractBoolClause;
+import vapidsl.domain.Binder;
+import vapidsl.domain.bool.BoolClauseBinder;
 
 import java.util.List;
 
-public class BoolValidation extends AbstractBoolClause {
+public class BoolValidation extends BoolClauseBinder {
 
     public BoolValidation(Boolean obj, MatchMode matchMode, PurposeMode purposeMode) {
         super(BoolValidation.class);
         this.obj = obj;
-        this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
+        this.modeManager = new Binder.ModeManager(matchMode, purposeMode);
     }
 
     @Override

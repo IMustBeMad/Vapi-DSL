@@ -1,16 +1,16 @@
 package vapidsl.domain.number.biginteger;
 
 import vapidsl.common.SingleCondition;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractLongCondition extends AbstractBaseValidation<Long, LongValidation> {
+public abstract class LongConditionBinder extends ConditionBinder<Long, LongValidation> {
 
-    AbstractLongCondition(Class<?> selfType) {
+    LongConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -100,7 +100,7 @@ public abstract class AbstractLongCondition extends AbstractBaseValidation<Long,
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> LongValidation inspectingDeeply(Function<Long, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> LongValidation inspectingDeeply(Function<Long, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 }

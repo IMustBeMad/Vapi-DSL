@@ -1,15 +1,15 @@
 package vapidsl.domain.object;
 
 import vapidsl.common.SingleCondition;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCondition<T, SELF>> extends AbstractBaseValidation<T, SELF> {
+public abstract class ObjectConditionBinder<T, SELF extends ObjectConditionBinder<T, SELF>> extends ConditionBinder<T, SELF> {
 
-    AbstractObjectCondition(Class<?> selfType) {
+    ObjectConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCond
     }
 
     @Override
-    public SELF withTermDeeply(Function<T, AbstractBaseValidation<T, SELF>> validator) {
+    public SELF withTermDeeply(Function<T, ConditionBinder<T, SELF>> validator) {
         return super.withTermDeeply(validator);
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractObjectCondition<T, SELF extends AbstractObjectCond
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 }

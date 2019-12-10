@@ -1,7 +1,7 @@
 package vapidsl.domain.number.bigdecimal;
 
 import vapidsl.common.SingleCondition;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.bigdecimal.impl.BigDecimalValidation;
 
 import java.math.BigDecimal;
@@ -9,9 +9,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class AbstractBigDecimalCondition extends AbstractBaseValidation<BigDecimal, BigDecimalValidation> {
+public abstract class BigDecimalConditionBinder extends ConditionBinder<BigDecimal, BigDecimalValidation> {
 
-    AbstractBigDecimalCondition(Class<?> selfType) {
+    BigDecimalConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -101,7 +101,7 @@ public class AbstractBigDecimalCondition extends AbstractBaseValidation<BigDecim
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> BigDecimalValidation inspectingDeeply(Function<BigDecimal, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> BigDecimalValidation inspectingDeeply(Function<BigDecimal, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 }

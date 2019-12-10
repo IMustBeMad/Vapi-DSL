@@ -3,12 +3,12 @@ package vapidsl.domain.object.impl;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.object.AbstractObjectClause;
+import vapidsl.domain.object.ObjectClauseBinder;
 import vapidsl.common.ValidationError;
 
 import java.util.List;
 
-public class ObjectValidation<T> extends AbstractObjectClause<T, ObjectValidation<T>> {
+public class ObjectValidation<T> extends ObjectClauseBinder<T, ObjectValidation<T>> {
 
     public ObjectValidation(T obj, MatchMode matchMode, PurposeMode purposeMode) {
         super(ObjectValidation.class);

@@ -1,10 +1,12 @@
 package vapidsl.domain.object;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.FlowType;
 
 import java.util.Objects;
 
+@UtilityClass
 public class ObjectConditions {
 
     public static <T> SingleCondition<T> isNull() {

@@ -1,16 +1,16 @@
 package vapidsl.domain.string;
 
 import vapidsl.common.SingleCondition;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.string.impl.StringValidation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractStringCondition extends AbstractBaseValidation<String, StringValidation> {
+public abstract class StringConditionBinder extends ConditionBinder<String, StringValidation> {
 
-    AbstractStringCondition(Class<?> selfType) {
+    StringConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractStringCondition extends AbstractBaseValidation<Str
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> StringValidation inspectingDeeply(Function<String, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> StringValidation inspectingDeeply(Function<String, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 }

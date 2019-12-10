@@ -1,11 +1,13 @@
 package vapidsl.domain.list;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.collections4.CollectionUtils;
 import vapidsl.common.SingleCondition;
 
 import java.util.HashSet;
 import java.util.List;
 
+@UtilityClass
 public class ListConditions {
 
     public static <T> SingleCondition<List<T>> isEqualTo(List<T> otherList) {

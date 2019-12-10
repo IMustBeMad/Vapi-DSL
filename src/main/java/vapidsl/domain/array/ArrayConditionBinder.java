@@ -4,7 +4,7 @@ import vapidsl.common.Condition;
 import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondition<T, SELF>> extends AbstractBaseValidation<T[], SELF> {
+public abstract class ArrayConditionBinder<T, SELF extends ArrayConditionBinder<T, SELF>> extends ConditionBinder<T[], SELF> {
 
-    AbstractArrayCondition(Class<?> selfType) {
+    ArrayConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
         return self;
     }
 
-    public <OTHER extends AbstractBaseValidation<T, OTHER>> SELF everyDeeply(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
+    public <OTHER extends ConditionBinder<T, OTHER>> SELF everyDeeply(Function<T, ConditionBinder<T, OTHER>> validator) {
         LinkedCondition<T[]> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND);
         this.registerCondition(linkedCondition);
 
@@ -99,7 +99,7 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
     }
 
     @Override
-    public SELF withTermDeeply(Function<T[], AbstractBaseValidation<T[], SELF>> validator) {
+    public SELF withTermDeeply(Function<T[], ConditionBinder<T[], SELF>> validator) {
         return super.withTermDeeply(validator);
     }
 
@@ -131,19 +131,19 @@ public abstract class AbstractArrayCondition<T, SELF extends AbstractArrayCondit
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<T[], R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> SELF inspectingDeeply(Function<T[], R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 
-    private <OTHER extends AbstractBaseValidation<T, OTHER>> List<Condition<T[]>> toSerialCondition(Function<T, AbstractBaseValidation<T, OTHER>> validator) {
+    private <OTHER extends ConditionBinder<T, OTHER>> List<Condition<T[]>> toSerialCondition(Function<T, ConditionBinder<T, OTHER>> validator) {
         return Arrays.stream(this.obj)
-                     .map(it -> this.toCondition(() -> validator.apply(it)))
+                     .map(it -> MAPPER.toCondition(() -> validator.apply(it)))
                      .collect(Collectors.toList());
     }
 
     private List<Condition<T[]>> toSerialCondition(Predicate<T> predicate) {
         return Arrays.stream(this.obj)
-                     .map(it -> this.toCondition(it, predicate))
+                     .map(it -> MAPPER.toCondition(it, predicate))
                      .collect(Collectors.toList());
     }
 }

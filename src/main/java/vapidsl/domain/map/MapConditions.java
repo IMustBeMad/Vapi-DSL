@@ -1,9 +1,11 @@
 package vapidsl.domain.map;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
 import java.util.Map;
 
+@UtilityClass
 public class MapConditions {
 
     public static <K, V> SingleCondition<Map<K, V>> isEmpty() {

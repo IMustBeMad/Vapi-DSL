@@ -15,11 +15,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidation<T, SELF>> extends BaseDataHolder<T, SELF> {
+public abstract class ConditionBinder<T, SELF extends ConditionBinder<T, SELF>> extends Binder<T, SELF> {
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractBaseValidation.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConditionBinder.class);
 
-    protected AbstractBaseValidation(Class<?> selfType) {
+    protected ConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -59,8 +59,8 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected SELF withTermDeeply(Function<T, AbstractBaseValidation<T, SELF>> validator) {
-        this.memoize(this.toCondition(() -> validator.apply(this.obj)));
+    protected SELF withTermDeeply(Function<T, ConditionBinder<T, SELF>> validator) {
+        this.memoize(MAPPER.toCondition(() -> validator.apply(this.obj)));
 
         return self;
     }
@@ -77,7 +77,7 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected AbstractBaseValidation<T, SELF> or() {
+    protected ConditionBinder<T, SELF> or() {
         this.registerCluster();
 
         return self;
@@ -101,8 +101,8 @@ public abstract class AbstractBaseValidation<T, SELF extends AbstractBaseValidat
         return self;
     }
 
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
-        this.memoize(this.toCondition(() -> validator.apply(mapper.apply(this.obj))));
+    protected <R, OTHER extends ConditionBinder<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
+        this.memoize(MAPPER.toCondition(() -> validator.apply(mapper.apply(this.obj))));
 
         return self;
     }

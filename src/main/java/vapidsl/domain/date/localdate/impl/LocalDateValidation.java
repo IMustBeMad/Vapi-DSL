@@ -4,15 +4,15 @@ import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.date.localdate.AbstractDateClause;
+import vapidsl.domain.date.localdate.LocalDateClauseBinder;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class DateValidation extends AbstractDateClause {
+public class LocalDateValidation extends LocalDateClauseBinder {
 
-    public DateValidation(LocalDate date, MatchMode matchMode, PurposeMode purposeMode) {
-        super(DateValidation.class);
+    public LocalDateValidation(LocalDate date, MatchMode matchMode, PurposeMode purposeMode) {
+        super(LocalDateValidation.class);
         this.obj = date;
         this.modeManager = new ModeManager(matchMode, purposeMode);
     }
@@ -31,7 +31,7 @@ public class DateValidation extends AbstractDateClause {
      * {@inheritDoc}
      */
     @Override
-    public DateValidation onError(String error) {
+    public LocalDateValidation onError(String error) {
         return super.onError(error);
     }
 
@@ -39,7 +39,7 @@ public class DateValidation extends AbstractDateClause {
      * {@inheritDoc}
      */
     @Override
-    public DateValidation onError(String field, String error) {
+    public LocalDateValidation onError(String field, String error) {
         return super.onError(field, error);
     }
 
@@ -47,7 +47,7 @@ public class DateValidation extends AbstractDateClause {
      * {@inheritDoc}
      */
     @Override
-    public DateValidation groupError(String error) {
+    public LocalDateValidation groupError(String error) {
         return super.groupError(error);
     }
 }

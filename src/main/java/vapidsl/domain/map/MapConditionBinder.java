@@ -4,16 +4,16 @@ import vapidsl.common.Condition;
 import vapidsl.common.LinkedCondition;
 import vapidsl.common.SingleCondition;
 import vapidsl.dict.Clause;
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapCondition<K, V, SELF>> extends AbstractBaseValidation<Map<K, V>, SELF> {
+public abstract class MapConditionBinder<K, V, SELF extends MapConditionBinder<K, V, SELF>> extends ConditionBinder<Map<K, V>, SELF> {
 
-    AbstractMapCondition(Class<?> selfType) {
+    MapConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
         return self;
     }
 
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF everyDeeply(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> SELF everyDeeply(BiFunction<? super K, ? super V, ConditionBinder<R, OTHER>> validator) {
         LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
         registerCondition(linkedCondition);
 
@@ -113,21 +113,21 @@ public abstract class AbstractMapCondition<K, V, SELF extends AbstractMapConditi
     }
 
     @Override
-    public <R, OTHER extends AbstractBaseValidation<R, OTHER>> SELF inspectingDeeply(Function<Map<K, V>, R> mapper, Function<R, AbstractBaseValidation<R, OTHER>> validator) {
+    public <R, OTHER extends ConditionBinder<R, OTHER>> SELF inspectingDeeply(Function<Map<K, V>, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
         return super.inspectingDeeply(mapper, validator);
     }
 
-    private <R, OTHER extends AbstractBaseValidation<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, AbstractBaseValidation<R, OTHER>> validator) {
+    private <R, OTHER extends ConditionBinder<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, ConditionBinder<R, OTHER>> validator) {
         return this.obj.entrySet()
                        .stream()
-                       .map(it -> this.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
+                       .map(it -> MAPPER.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
                        .collect(Collectors.toList());
     }
 
     private List<Condition<Map<K, V>>> toSerialCondition(BiPredicate<? super K, ? super V> predicate) {
         return this.obj.entrySet()
                        .stream()
-                       .map(it -> this.toCondition(it, predicate))
+                       .map(it -> MAPPER.toCondition(it, predicate))
                        .collect(Collectors.toList());
     }
 }

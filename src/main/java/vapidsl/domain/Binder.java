@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 
-public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
+public abstract class Binder<T, SELF extends Binder<T, SELF>> {
 
     protected SELF self;
 
@@ -32,12 +32,14 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
     private @Getter(AccessLevel.PACKAGE) ValidationResult result;
 
+    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
+
+    protected final ConditionMapper<T> MAPPER = new ConditionMapper<>();
+
     @SuppressWarnings("unchecked")
-    BaseDataHolder(Class<?> selfType) {
+    Binder(Class<?> selfType) {
         this.self = (SELF) selfType.cast(this);
     }
-
-    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
     protected List<ValidationError> examine() {
         return examine(ErrorMode.THROW);
@@ -67,18 +69,6 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
 
     protected void registerCondition(LinkedCondition<T> condition) {
         this.memoize(condition);
-    }
-
-    protected <R> SingleCondition<T> toCondition(R obj, Predicate<R> predicate) {
-        return new SingleCondition<>(it -> predicate.test(obj));
-    }
-
-    protected <K, V> SingleCondition<T> toCondition(Map.Entry<K, V> obj, BiPredicate<? super K, ? super V> biPredicate) {
-        return new SingleCondition<>(it -> biPredicate.test(obj.getKey(), obj.getValue()));
-    }
-
-    protected <R, OTHER extends AbstractBaseValidation<R, OTHER>> ValidationCondition<T> toCondition(Supplier<AbstractBaseValidation<R, OTHER>> validationSupplier) {
-        return new ValidationCondition<>(() -> validationSupplier.get().examine(ErrorMode.RETURN));
     }
 
     void memoize(Condition<T> condition) {
@@ -120,6 +110,21 @@ public abstract class BaseDataHolder<T, SELF extends BaseDataHolder<T, SELF>> {
         public ModeManager(MatchMode matchMode, PurposeMode purposeMode) {
             this.matchMode = matchMode;
             this.purposeMode = purposeMode;
+        }
+    }
+
+    protected static class ConditionMapper<T> {
+
+        public <R> SingleCondition<T> toCondition(R obj, Predicate<R> predicate) {
+            return new SingleCondition<>(it -> predicate.test(obj));
+        }
+
+        public <K, V> SingleCondition<T> toCondition(Map.Entry<K, V> obj, BiPredicate<? super K, ? super V> biPredicate) {
+            return new SingleCondition<>(it -> biPredicate.test(obj.getKey(), obj.getValue()));
+        }
+
+        public <R, OTHER extends ConditionBinder<R, OTHER>> ValidationCondition<T> toCondition(Supplier<ConditionBinder<R, OTHER>> validationSupplier) {
+            return new ValidationCondition<>(() -> validationSupplier.get().examine(ErrorMode.RETURN));
         }
     }
 }

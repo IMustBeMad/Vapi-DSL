@@ -1,11 +1,11 @@
 package vapidsl.domain.bool;
 
-import vapidsl.domain.AbstractBaseValidation;
+import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.bool.impl.BoolValidation;
 
-public abstract class AbstractBoolCondition extends AbstractBaseValidation<Boolean, BoolValidation> {
+public abstract class BoolConditionBinder extends ConditionBinder<Boolean, BoolValidation> {
 
-    AbstractBoolCondition(Class<?> selfType) {
+    BoolConditionBinder(Class<?> selfType) {
         super(selfType);
     }
 

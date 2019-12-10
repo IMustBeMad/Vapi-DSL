@@ -11,7 +11,7 @@ import vapidsl.Validation;
 import vapidsl.ValidatorTest;
 import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
-import vapidsl.domain.date.localdate.DateConditions;
+import vapidsl.domain.date.localdate.LocalDateConditions;
 import vapidsl.domain.object.ObjectConditions;
 
 import java.time.LocalDate;
@@ -252,14 +252,14 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_pass_when_satisfiesAny() {
             Validation.succeedIf(LocalDate.now())
-                      .satisfiesAny(DateConditions.isBefore(LocalDate.now()), DateConditions.isEqualTo(LocalDate.now()))
+                      .satisfiesAny(LocalDateConditions.isBefore(LocalDate.now()), LocalDateConditions.isEqualTo(LocalDate.now()))
                       .examine();
         }
 
         @Test
         public void should_fail_when_notSatisfiesAny() {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(LocalDate.now())
-                                                          .satisfiesAny(DateConditions.isBefore(LocalDate.now()), DateConditions.isNoEqualTo(LocalDate.now())).onError(NOT_SATISFIES)
+                                                          .satisfiesAny(LocalDateConditions.isBefore(LocalDate.now()), LocalDateConditions.isNoEqualTo(LocalDate.now())).onError(NOT_SATISFIES)
                                                           .examine())
                       .hasMessage(NOT_SATISFIES);
         }
@@ -268,8 +268,8 @@ public class DateTest extends ValidatorTest {
         public void should_pass_when_satisfiesEvery() {
             Validation.succeedIf(LocalDate.now())
                       .satisfiesEvery(
-                              DateConditions.isEqualTo(LocalDate.now()),
-                              DateConditions.isAfter(LocalDate.now().minusDays(1))
+                              LocalDateConditions.isEqualTo(LocalDate.now()),
+                              LocalDateConditions.isAfter(LocalDate.now().minusDays(1))
                       )
                       .examine();
         }
@@ -278,8 +278,8 @@ public class DateTest extends ValidatorTest {
         public void should_fail_when_notSatisfiesEvery() {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(LocalDate.now())
                                                           .satisfiesEvery(
-                                                                  DateConditions.isEqualTo(LocalDate.now()),
-                                                                  DateConditions.isBefore(LocalDate.now().minusDays(1))
+                                                                  LocalDateConditions.isEqualTo(LocalDate.now()),
+                                                                  LocalDateConditions.isBefore(LocalDate.now().minusDays(1))
                                                           ).onError(NOT_SATISFIES)
                                                           .examine())
                       .hasMessage(NOT_SATISFIES);
@@ -317,7 +317,7 @@ public class DateTest extends ValidatorTest {
             DateHolder dateHolder = new DateHolder(LocalDate.now(), LocalDate.now());
 
             Validation.succeedIf(dateHolder)
-                      .inspecting(DateHolder::getStartDate, () -> DateConditions.isEqualTo(LocalDate.now()))
+                      .inspecting(DateHolder::getStartDate, () -> LocalDateConditions.isEqualTo(LocalDate.now()))
                       .examine();
         }
 
@@ -326,7 +326,7 @@ public class DateTest extends ValidatorTest {
             DateHolder dateHolder = new DateHolder(LocalDate.now(), LocalDate.now());
 
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(dateHolder)
-                                                          .inspecting(DateHolder::getStartDate, () -> DateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(IS_NOT_EMPTY)
+                                                          .inspecting(DateHolder::getStartDate, () -> LocalDateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(IS_NOT_EMPTY)
                                                           .examine())
                       .hasMessage(IS_NOT_EMPTY);
         }
@@ -443,7 +443,7 @@ public class DateTest extends ValidatorTest {
             Assertions.assertThat(Validation.failIf(holder)
                                             .inspecting(DateHolder::getStartDate, ObjectConditions::isNotNull)
                                             .inspecting(DateHolder::getEndDate, ObjectConditions::isNotNull)
-                                            .inspecting(DateHolder::getStartDate, () -> DateConditions.isBefore(holder.getEndDate()))
+                                            .inspecting(DateHolder::getStartDate, () -> LocalDateConditions.isBefore(holder.getEndDate()))
                                             .groupError("start date is before end date")
                                             .examine(ErrorMode.RETURN))
                       .extracting(ValidationError::getReasonCode)
@@ -567,14 +567,14 @@ public class DateTest extends ValidatorTest {
         @Test
         public void should_pass_when_notSatisfiesAny() {
             Validation.failIf(LocalDate.now())
-                      .satisfiesAny(ObjectConditions.isNull(), DateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(NOT_SATISFIES)
+                      .satisfiesAny(ObjectConditions.isNull(), LocalDateConditions.isEqualTo(LocalDate.now().plusDays(1))).onError(NOT_SATISFIES)
                       .examine();
         }
 
         @Test
         public void should_fail_when_satisfiesEvery() {
             Assertions.assertThatThrownBy(() -> Validation.failIf(LocalDate.now())
-                                                          .satisfiesEvery(ObjectConditions.isNotNull(), DateConditions.isEqualTo(LocalDate.now()))
+                                                          .satisfiesEvery(ObjectConditions.isNotNull(), LocalDateConditions.isEqualTo(LocalDate.now()))
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -584,7 +584,7 @@ public class DateTest extends ValidatorTest {
             Validation.failIf(LocalDate.now())
                       .satisfiesEvery(
                               ObjectConditions.isNull(),
-                              DateConditions.isAfterOrEqual(LocalDate.now().plusDays(1))
+                              LocalDateConditions.isAfterOrEqual(LocalDate.now().plusDays(1))
                       ).onError(NOT_SATISFIES)
                       .examine();
         }

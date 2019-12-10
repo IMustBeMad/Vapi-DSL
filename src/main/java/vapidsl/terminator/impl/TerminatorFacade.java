@@ -4,7 +4,7 @@ import vapidsl.common.ConditionCluster;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.dict.TerminationMode;
-import vapidsl.domain.BaseDataHolder;
+import vapidsl.domain.Binder;
 import vapidsl.result.ValidationResult;
 import vapidsl.terminator.Terminator;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public enum TerminatorFacade {
     INSTANCE;
 
-    public <T> ValidationResult terminate(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
+    public <T> ValidationResult terminate(Binder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters, T obj) {
         TerminationMode terminationMode = getTerminationMode(modeManager, conditionClusters);
 
         return getValidationResult(terminationMode, conditionClusters, obj);
@@ -66,7 +66,7 @@ public enum TerminatorFacade {
         return clusters.size() == 1;
     }
 
-    private <T> TerminationMode getTerminationMode(BaseDataHolder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters) {
+    private <T> TerminationMode getTerminationMode(Binder.ModeManager modeManager, List<ConditionCluster<T>> conditionClusters) {
         boolean singleGroup = isSingleGroup(conditionClusters);
         PurposeMode purposeMode = modeManager.getPurposeMode();
 

@@ -4,11 +4,11 @@ import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.number.biginteger.AbstractLongClause;
+import vapidsl.domain.number.biginteger.LongClauseBinder;
 
 import java.util.List;
 
-public class LongValidation extends AbstractLongClause {
+public class LongValidation extends LongClauseBinder {
 
     public LongValidation(Long value, MatchMode matchMode, PurposeMode purposeMode) {
         super(LongValidation.class);
