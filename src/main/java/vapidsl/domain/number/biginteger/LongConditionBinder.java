@@ -15,39 +15,39 @@ public abstract class LongConditionBinder extends ConditionBinder<Long, LongVali
     }
 
     public LongValidation isGt(Long otherLong) {
-        this.registerCondition(LongConditions.isGt(otherLong));
+        this.registrar.registerCondition(LongConditions.isGt(otherLong));
 
         return self;
     }
 
     public LongValidation isGte(Long otherLong) {
-        this.registerCondition(LongConditions.isGte(otherLong));
+        this.registrar.registerCondition(LongConditions.isGte(otherLong));
 
         return self;
     }
 
     public LongValidation isLt(Long otherLong) {
-        this.registerCondition(LongConditions.isLt(otherLong));
+        this.registrar.registerCondition(LongConditions.isLt(otherLong));
 
         return self;
     }
 
     public LongValidation isLte(Long otherLong) {
-        this.registerCondition(LongConditions.isLte(otherLong));
+        this.registrar.registerCondition(LongConditions.isLte(otherLong));
 
         return self;
     }
 
     @Override
     public LongValidation isEqualTo(Long otherLong) {
-        this.registerCondition(LongConditions.isEqualTo(otherLong));
+        this.registrar.registerCondition(LongConditions.isEqualTo(otherLong));
 
         return self;
     }
 
     @Override
     public LongValidation isNotEqualTo(Long otherLong) {
-        registerCondition(LongConditions.isNotEqualTo(otherLong));
+        this.registrar.registerCondition(LongConditions.isNotEqualTo(otherLong));
 
         return self;
     }

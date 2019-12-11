@@ -16,25 +16,25 @@ public abstract class LocalDateConditionBinder extends ConditionBinder<LocalDate
     }
 
     public LocalDateValidation isAfter(LocalDate otherDate) {
-        this.registerCondition(LocalDateConditions.isAfter(otherDate));
+        this.registrar.registerCondition(LocalDateConditions.isAfter(otherDate));
 
         return self;
     }
 
     public LocalDateValidation isBefore(LocalDate otherDate) {
-        this.registerCondition(LocalDateConditions.isBefore(otherDate));
+        this.registrar.registerCondition(LocalDateConditions.isBefore(otherDate));
 
         return self;
     }
 
     public LocalDateValidation isAfterOrEqual(LocalDate otherDate) {
-        this.registerCondition(LocalDateConditions.isAfterOrEqual(otherDate));
+        this.registrar.registerCondition(LocalDateConditions.isAfterOrEqual(otherDate));
 
         return self;
     }
 
     public LocalDateValidation isBeforeOrEqual(LocalDate otherDate) {
-        this.registerCondition(LocalDateConditions.isBeforeOrEqual(otherDate));
+        this.registrar.registerCondition(LocalDateConditions.isBeforeOrEqual(otherDate));
 
         return self;
     }

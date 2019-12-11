@@ -15,25 +15,25 @@ public abstract class IntConditionBinder extends ConditionBinder<Integer, IntVal
     }
 
     public IntValidation isGt(Integer otherInteger) {
-        this.registerCondition(IntConditions.isGt(otherInteger));
+        this.registrar.registerCondition(IntConditions.isGt(otherInteger));
 
         return self;
     }
 
     public IntValidation isGte(Integer otherInteger) {
-        this.registerCondition(IntConditions.isGte(otherInteger));
+        this.registrar.registerCondition(IntConditions.isGte(otherInteger));
 
         return self;
     }
 
     public IntValidation isLt(Integer otherInteger) {
-        this.registerCondition(IntConditions.isLt(otherInteger));
+        this.registrar.registerCondition(IntConditions.isLt(otherInteger));
 
         return self;
     }
 
     public IntValidation isLte(Integer otherInteger) {
-        this.registerCondition(IntConditions.isLte(otherInteger));
+        this.registrar.registerCondition(IntConditions.isLte(otherInteger));
 
         return self;
     }

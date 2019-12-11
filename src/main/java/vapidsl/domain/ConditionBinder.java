@@ -24,61 +24,61 @@ public abstract class ConditionBinder<T, SELF extends ConditionBinder<T, SELF>> 
     }
 
     protected SELF isNull() {
-        this.registerCondition(ObjectConditions.isNull());
+        this.registrar.registerCondition(ObjectConditions.isNull());
 
         return self;
     }
 
     protected SELF isNotNull() {
-        this.registerCondition(ObjectConditions.isNotNull());
+        this.registrar.registerCondition(ObjectConditions.isNotNull());
 
         return self;
     }
 
     protected SELF isEqualTo(T otherObj) {
-        this.registerCondition(ObjectConditions.isEqualTo(otherObj));
+        this.registrar.registerCondition(ObjectConditions.isEqualTo(otherObj));
 
         return self;
     }
 
     protected SELF isNotEqualTo(T otherObj) {
-        this.registerCondition(ObjectConditions.isNotEqualTo(otherObj));
+        this.registrar.registerCondition(ObjectConditions.isNotEqualTo(otherObj));
 
         return self;
     }
 
     protected SELF withTerm(Predicate<T> predicate) {
-        this.memoize(new SingleCondition<>(predicate));
+        this.registrar.registerCondition(new SingleCondition<>(predicate));
 
         return self;
     }
 
     protected SELF withTerm(Supplier<Boolean> supplier) {
-        this.memoize(new SingleCondition<>(it -> supplier.get()));
+        this.registrar.registerCondition(new SingleCondition<>(it -> supplier.get()));
 
         return self;
     }
 
     protected SELF withTermDeeply(Function<T, ConditionBinder<T, SELF>> validator) {
-        this.memoize(MAPPER.toCondition(() -> validator.apply(this.obj)));
+        this.registrar.registerCondition(this.mapper.toCondition(() -> validator.apply(this.obj)));
 
         return self;
     }
 
     protected SELF satisfiesAny(SingleCondition<T>... conditions) {
-        this.memoize(new LinkedCondition<>(() -> List.of(conditions), Clause.OR));
+        this.registrar.registerCondition(new LinkedCondition<>(() -> List.of(conditions), Clause.OR));
 
         return self;
     }
 
     protected SELF satisfiesEvery(SingleCondition<T>... conditions) {
-        this.memoize(new LinkedCondition<>(() -> List.of(conditions), Clause.AND));
+        this.registrar.registerCondition(new LinkedCondition<>(() -> List.of(conditions), Clause.AND));
 
         return self;
     }
 
     protected ConditionBinder<T, SELF> or() {
-        this.registerCluster();
+        this.registrar.registerCluster();
 
         return self;
     }
@@ -90,19 +90,19 @@ public abstract class ConditionBinder<T, SELF extends ConditionBinder<T, SELF>> 
     }
 
     protected <R> SELF inspecting(Function<T, R> mapper, Predicate<R> predicate) {
-        this.memoize(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it))));
+        this.registrar.registerCondition(new SingleCondition<>(it -> predicate.test(mapper.apply((T) it))));
 
         return self;
     }
 
     protected <R> SELF inspecting(Function<T, R> mapper, Supplier<SingleCondition<R>> condition) {
-        this.memoize(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it))));
+        this.registrar.registerCondition(new SingleCondition<>(it -> condition.get().getPredicate().test(mapper.apply((T) it))));
 
         return self;
     }
 
     protected <R, OTHER extends ConditionBinder<R, OTHER>> SELF inspectingDeeply(Function<T, R> mapper, Function<R, ConditionBinder<R, OTHER>> validator) {
-        this.memoize(MAPPER.toCondition(() -> validator.apply(mapper.apply(this.obj))));
+        this.registrar.registerCondition(this.mapper.toCondition(() -> validator.apply(mapper.apply(this.obj))));
 
         return self;
     }

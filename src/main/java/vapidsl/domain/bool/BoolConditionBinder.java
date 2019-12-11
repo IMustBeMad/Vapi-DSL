@@ -10,13 +10,13 @@ public abstract class BoolConditionBinder extends ConditionBinder<Boolean, BoolV
     }
 
     public BoolValidation isTrue() {
-        this.registerCondition(BoolConditions.isTrue());
+        this.registrar.registerCondition(BoolConditions.isTrue());
 
         return self;
     }
 
     public BoolValidation isFalse() {
-        this.registerCondition(BoolConditions.isFalse());
+        this.registrar.registerCondition(BoolConditions.isFalse());
 
         return self;
     }

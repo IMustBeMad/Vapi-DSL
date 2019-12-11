@@ -16,39 +16,39 @@ public abstract class BigDecimalConditionBinder extends ConditionBinder<BigDecim
     }
 
     public BigDecimalValidation isGt(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isGt(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isGt(otherBigDecimal));
 
         return self;
     }
 
     public BigDecimalValidation isGte(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isGte(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isGte(otherBigDecimal));
 
         return self;
     }
 
     public BigDecimalValidation isLt(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isLt(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isLt(otherBigDecimal));
 
         return self;
     }
 
     public BigDecimalValidation isLte(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isLte(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isLte(otherBigDecimal));
 
         return self;
     }
 
     @Override
     public BigDecimalValidation isEqualTo(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isEqualTo(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isEqualTo(otherBigDecimal));
 
         return self;
     }
 
     @Override
     public BigDecimalValidation isNotEqualTo(BigDecimal otherBigDecimal) {
-        this.registerCondition(BigDecimalConditions.isNotEqualTo(otherBigDecimal));
+        this.registrar.registerCondition(BigDecimalConditions.isNotEqualTo(otherBigDecimal));
 
         return self;
     }

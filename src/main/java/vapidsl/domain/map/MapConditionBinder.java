@@ -18,39 +18,37 @@ public abstract class MapConditionBinder<K, V, SELF extends MapConditionBinder<K
     }
 
     public SELF isEmpty() {
-        this.registerCondition(MapConditions.isEmpty());
+        this.registrar.registerCondition(MapConditions.isEmpty());
 
         return self;
     }
 
     public SELF isNotEmpty() {
-        this.registerCondition(MapConditions.isNotEmpty());
+        this.registrar.registerCondition(MapConditions.isNotEmpty());
 
         return self;
     }
 
     public SELF hasSize(int size) {
-        this.registerCondition(MapConditions.hasSize(size));
+        this.registrar.registerCondition(MapConditions.hasSize(size));
 
         return self;
     }
 
     public SELF containsKey(K keyValue) {
-        this.registerCondition(MapConditions.containsKey(keyValue));
+        this.registrar.registerCondition(MapConditions.containsKey(keyValue));
 
         return self;
     }
 
     public SELF every(BiPredicate<? super K, ? super V> predicate) {
-        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND);
-        registerCondition(linkedCondition);
+        this.registrar.registerCondition(new LinkedCondition<>(() -> toSerialCondition(predicate), Clause.AND));
 
         return self;
     }
 
     public <R, OTHER extends ConditionBinder<R, OTHER>> SELF everyDeeply(BiFunction<? super K, ? super V, ConditionBinder<R, OTHER>> validator) {
-        LinkedCondition<Map<K, V>> linkedCondition = new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND);
-        registerCondition(linkedCondition);
+        this.registrar.registerCondition(new LinkedCondition<>(() -> toSerialCondition(validator), Clause.AND));
 
         return self;
     }
@@ -120,14 +118,14 @@ public abstract class MapConditionBinder<K, V, SELF extends MapConditionBinder<K
     private <R, OTHER extends ConditionBinder<R, OTHER>> List<Condition<Map<K, V>>> toSerialCondition(BiFunction<? super K, ? super V, ConditionBinder<R, OTHER>> validator) {
         return this.obj.entrySet()
                        .stream()
-                       .map(it -> MAPPER.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
+                       .map(it -> this.mapper.toCondition(() -> validator.apply(it.getKey(), it.getValue())))
                        .collect(Collectors.toList());
     }
 
     private List<Condition<Map<K, V>>> toSerialCondition(BiPredicate<? super K, ? super V> predicate) {
         return this.obj.entrySet()
                        .stream()
-                       .map(it -> MAPPER.toCondition(it, predicate))
+                       .map(it -> this.mapper.toCondition(it, predicate))
                        .collect(Collectors.toList());
     }
 }

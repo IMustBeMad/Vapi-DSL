@@ -19,52 +19,49 @@ public abstract class ListConditionBinder<T, SELF extends ListConditionBinder<T,
     }
 
     public SELF contains(T element) {
-        this.registerCondition(ListConditions.contains(element));
+        this.registrar.registerCondition(ListConditions.contains(element));
 
         return self;
     }
 
     public SELF hasSize(int size) {
-        this.registerCondition(ListConditions.hasSize(size));
+        this.registrar.registerCondition(ListConditions.hasSize(size));
 
         return self;
     }
 
     public SELF hasNoDuplicates() {
-        this.registerCondition(ListConditions.hasNoDuplicates());
+        this.registrar.registerCondition(ListConditions.hasNoDuplicates());
 
         return self;
     }
 
     public SELF isEmpty() {
-        this.registerCondition(ListConditions.isEmpty());
+        this.registrar.registerCondition(ListConditions.isEmpty());
 
         return self;
     }
 
     public SELF isNotEmpty() {
-        this.registerCondition(ListConditions.isNotEmpty());
+        this.registrar.registerCondition(ListConditions.isNotEmpty());
 
         return self;
     }
 
     public SELF every(Supplier<SingleCondition<T>> condition) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(condition.get().getPredicate()), Clause.AND);
-        this.registerCondition(linkedCondition);
+        this.registrar.registerCondition(new LinkedCondition<>(() -> this.toSerialCondition(condition.get().getPredicate()), Clause.AND));
 
         return self;
     }
 
     public SELF every(Predicate<T> predicate) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(predicate), Clause.AND);
-        this.registerCondition(linkedCondition);
+        this.registrar.registerCondition(new LinkedCondition<>(() -> this.toSerialCondition(predicate), Clause.AND));
 
         return self;
     }
 
     public <OTHER extends ConditionBinder<T, OTHER>> SELF everyDeeply(Function<T, ConditionBinder<T, OTHER>> validator) {
-        LinkedCondition<List<T>> linkedCondition = new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND);
-        this.registerCondition(linkedCondition);
+        this.registrar.registerCondition(new LinkedCondition<>(() -> this.toSerialCondition(validator), Clause.AND));
 
         return self;
     }
@@ -81,14 +78,14 @@ public abstract class ListConditionBinder<T, SELF extends ListConditionBinder<T,
 
     @Override
     public SELF isEqualTo(List<T> otherList) {
-        this.registerCondition(ListConditions.isEqualTo(otherList));
+        this.registrar.registerCondition(ListConditions.isEqualTo(otherList));
 
         return self;
     }
 
     @Override
     public SELF isNotEqualTo(List<T> otherList) {
-        this.registerCondition(ListConditions.isNotEqualTo(otherList));
+        this.registrar.registerCondition(ListConditions.isNotEqualTo(otherList));
 
         return self;
     }
@@ -137,13 +134,13 @@ public abstract class ListConditionBinder<T, SELF extends ListConditionBinder<T,
 
     private <OTHER extends ConditionBinder<T, OTHER>> List<Condition<List<T>>> toSerialCondition(Function<T, ConditionBinder<T, OTHER>> validator) {
         return this.obj.stream()
-                       .map(it -> MAPPER.toCondition(() -> validator.apply(it)))
+                       .map(it -> this.mapper.toCondition(() -> validator.apply(it)))
                        .collect(Collectors.toList());
     }
 
     private List<Condition<List<T>>> toSerialCondition(Predicate<T> predicate) {
         return this.obj.stream()
-                       .map(it -> MAPPER.toCondition(it, predicate))
+                       .map(it -> this.mapper.toCondition(it, predicate))
                        .collect(Collectors.toList());
     }
 }

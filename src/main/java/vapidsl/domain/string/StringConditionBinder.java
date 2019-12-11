@@ -15,31 +15,31 @@ public abstract class StringConditionBinder extends ConditionBinder<String, Stri
     }
 
     public StringValidation matches(String pattern) {
-        this.registerCondition(StringConditions.matches(pattern));
+        this.registrar.registerCondition(StringConditions.matches(pattern));
 
         return self;
     }
 
     public StringValidation isEmpty() {
-        this.registerCondition(StringConditions.isEmpty());
+        this.registrar.registerCondition(StringConditions.isEmpty());
 
         return self;
     }
 
     public StringValidation isNotEmpty() {
-        this.registerCondition(StringConditions.isNotEmpty());
+        this.registrar.registerCondition(StringConditions.isNotEmpty());
 
         return self;
     }
 
     public StringValidation startsWith(String prefix) {
-        this.registerCondition(StringConditions.startsWith(prefix));
+        this.registrar.registerCondition(StringConditions.startsWith(prefix));
 
         return self;
     }
 
     public StringValidation hasLength(int length) {
-        this.registerCondition(StringConditions.hasLength(length));
+        this.registrar.registerCondition(StringConditions.hasLength(length));
 
         return self;
     }

@@ -28,13 +28,14 @@ public abstract class Binder<T, SELF extends Binder<T, SELF>> {
     protected T obj;
     protected ModeManager modeManager;
 
+    protected final ConditionMapper<T> mapper = new ConditionMapper<>();
+    protected final Registrar registrar = new Registrar();
+
     private @Getter(AccessLevel.PACKAGE) ConditionCluster<T> currentCluster = new ConditionCluster<>();
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
     private @Getter(AccessLevel.PACKAGE) ValidationResult result;
 
     private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
-
-    protected final ConditionMapper<T> MAPPER = new ConditionMapper<>();
 
     @SuppressWarnings("unchecked")
     Binder(Class<?> selfType) {
@@ -63,39 +64,12 @@ public abstract class Binder<T, SELF extends Binder<T, SELF>> {
                                 : reason;
     }
 
-    protected void registerCondition(SingleCondition<T> condition) {
-        this.memoize(copyCondition(condition));
-    }
-
-    protected void registerCondition(LinkedCondition<T> condition) {
-        this.memoize(condition);
-    }
-
-    void memoize(Condition<T> condition) {
-        this.currentCondition = condition;
-        this.currentCluster.add(condition);
-    }
-
-    void registerCluster() {
-        ConditionCluster<T> conditionCluster = new ConditionCluster<>();
-
-        this.conditionClusters.add(conditionCluster);
-        this.currentCluster = conditionCluster;
-    }
-
     private void terminate() {
         this.result = TerminatorFacade.INSTANCE.terminate(this.modeManager, this.conditionClusters, this.obj);
 
         if (this.modeManager.getErrorMode() == ErrorMode.THROW && !this.result.isValid()) {
             throw ValidationException.withError(getValidationResult(this.result));
         }
-    }
-
-    private SingleCondition<T> copyCondition(SingleCondition<T> condition) {
-        SingleCondition<T> singleCondition = new SingleCondition<>();
-        singleCondition.setPredicate(condition.getPredicate());
-
-        return singleCondition;
     }
 
     @Getter
@@ -110,6 +84,21 @@ public abstract class Binder<T, SELF extends Binder<T, SELF>> {
         public ModeManager(MatchMode matchMode, PurposeMode purposeMode) {
             this.matchMode = matchMode;
             this.purposeMode = purposeMode;
+        }
+    }
+
+    protected class Registrar {
+
+        public void registerCondition(Condition<T> condition) {
+            currentCondition = condition;
+            currentCluster.add(condition);
+        }
+
+        void registerCluster() {
+            ConditionCluster<T> conditionCluster = new ConditionCluster<>();
+
+            conditionClusters.add(conditionCluster);
+            currentCluster = conditionCluster;
         }
     }
 
