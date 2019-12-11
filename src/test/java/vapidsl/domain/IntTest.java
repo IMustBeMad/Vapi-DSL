@@ -8,7 +8,7 @@ import vapidsl.Validation;
 import vapidsl.ValidatorTest;
 import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
-import vapidsl.domain.number.biginteger.LongConditions;
+import vapidsl.domain.number.integer.IntConditions;
 import vapidsl.domain.object.ObjectConditions;
 
 import java.math.BigDecimal;
@@ -16,12 +16,12 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({LongTest.SucceedIfTest.class, LongTest.FailedIfTest.class})
-public class LongTest extends ValidatorTest {
-    
-    private static final Long TEN = 10L;
-    private static final Long ONE = 1L;
-    private static final Long ZERO = 0L;
+@Suite.SuiteClasses({IntTest.SucceedIfTest.class, IntTest.FailedIfTest.class})
+public class IntTest extends ValidatorTest {
+
+    private static final Integer TEN = 10;
+    private static final Integer ONE = 1;
+    private static final Integer ZERO = 0;
 
     public static class SucceedIfTest {
 
@@ -111,7 +111,7 @@ public class LongTest extends ValidatorTest {
 
         @Test
         public void should_fail_when_isNull() {
-            Long number = null;
+            Integer number = null;
 
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(number)
                                                           .isNotNull().onError(IS_NULL)
@@ -196,7 +196,7 @@ public class LongTest extends ValidatorTest {
         @Test
         public void should_pass_when_satisfiesAny() {
             Validation.succeedIf(ONE)
-                      .satisfiesAny(LongConditions.isEqualTo(ONE), LongConditions.isGt(TEN))
+                      .satisfiesAny(IntConditions.isEqualTo(ONE), IntConditions.isGt(TEN))
                       .examine();
         }
 
@@ -204,8 +204,8 @@ public class LongTest extends ValidatorTest {
         public void should_fail_when_notSatisfiesAny() {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(TEN)
                                                           .satisfiesAny(
-                                                                  LongConditions.isEqualTo(ONE),
-                                                                  LongConditions.isGt(TEN)
+                                                                  IntConditions.isEqualTo(ONE),
+                                                                  IntConditions.isGt(TEN)
                                                           )
                                                           .onError(NOT_SATISFIES)
                                                           .examine())
@@ -216,8 +216,8 @@ public class LongTest extends ValidatorTest {
         public void should_pass_when_satisfiesEvery() {
             Validation.succeedIf(ONE)
                       .satisfiesEvery(
-                              LongConditions.isLt(TEN),
-                              LongConditions.isGte(ONE)
+                              IntConditions.isLt(TEN),
+                              IntConditions.isGte(ONE)
                       )
                       .examine();
         }
@@ -226,8 +226,8 @@ public class LongTest extends ValidatorTest {
         public void should_fail_when_notSatisfiesEvery() {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(TEN)
                                                           .satisfiesEvery(
-                                                                  LongConditions.isLt(TEN),
-                                                                  LongConditions.isGte(ONE)
+                                                                  IntConditions.isLt(TEN),
+                                                                  IntConditions.isGte(ONE)
                                                           ).onError(NOT_SATISFIES)
                                                           .examine())
                       .hasMessage(NOT_SATISFIES);
@@ -259,14 +259,14 @@ public class LongTest extends ValidatorTest {
         @Test
         public void should_pass_when_inspectingSupplierPasses() {
             Validation.succeedIf(TEN)
-                      .inspecting(it -> ONE, () -> LongConditions.isEqualTo(ONE))
+                      .inspecting(it -> ONE, () -> IntConditions.isEqualTo(ONE))
                       .examine();
         }
 
         @Test
         public void should_fail_when_inspectingSupplierNotPasses() {
             Assertions.assertThatThrownBy(() -> Validation.succeedIf(ONE)
-                                                          .inspecting(Function.identity(), () -> LongConditions.isEqualTo(TEN)).onError(IS_NOT_EQUAL)
+                                                          .inspecting(Function.identity(), () -> IntConditions.isEqualTo(TEN)).onError(IS_NOT_EQUAL)
                                                           .examine())
                       .hasMessage(IS_NOT_EQUAL);
         }
@@ -309,7 +309,7 @@ public class LongTest extends ValidatorTest {
 
         @Test
         public void should_pass_when_firstGroupMatches() {
-            Long number = null;
+            Integer number = null;
 
             Validation.succeedIf(number)
                       .isNull().onError(IS_NOT_NULL)
@@ -370,7 +370,7 @@ public class LongTest extends ValidatorTest {
 
         @Test
         public void should_fail_when_isNull() {
-            Long number = null;
+            Integer number = null;
 
             Assertions.assertThatThrownBy(() -> Validation.failIf(number)
                                                           .isNull()
@@ -395,7 +395,7 @@ public class LongTest extends ValidatorTest {
 
         @Test
         public void should_pass_when_isNull() {
-            Long number = null;
+            Integer number = null;
 
             Validation.failIf(number)
                       .isNotNull().onError(IS_NULL)
@@ -473,14 +473,14 @@ public class LongTest extends ValidatorTest {
         @Test
         public void should_pass_when_notSatisfiesAny() {
             Validation.failIf(TEN)
-                      .satisfiesAny(ObjectConditions.isNull(), LongConditions.isEqualTo(ONE)).onError(NOT_SATISFIES)
+                      .satisfiesAny(ObjectConditions.isNull(), IntConditions.isEqualTo(ONE)).onError(NOT_SATISFIES)
                       .examine();
         }
 
         @Test
         public void should_fail_when_satisfiesEvery() {
             Assertions.assertThatThrownBy(() -> Validation.failIf(TEN)
-                                                          .satisfiesEvery(ObjectConditions.isNotNull(), LongConditions.isEqualTo(TEN))
+                                                          .satisfiesEvery(ObjectConditions.isNotNull(), IntConditions.isEqualTo(TEN))
                                                           .examine())
                       .hasMessage(DEFAULT_EXCEPTION);
         }
@@ -490,7 +490,7 @@ public class LongTest extends ValidatorTest {
             Validation.failIf(TEN)
                       .satisfiesEvery(
                               ObjectConditions.isNull(),
-                              LongConditions.isLte(ONE)
+                              IntConditions.isLte(ONE)
                       ).onError(NOT_SATISFIES)
                       .examine();
         }
@@ -563,7 +563,7 @@ public class LongTest extends ValidatorTest {
 
         @Test
         public void should_fail_when_firstGroupMatches() {
-            Long number = null;
+            Integer number = null;
 
             Assertions.assertThatThrownBy(() -> Validation.failIf(number)
                                                           .isNull().onError(IS_NULL)

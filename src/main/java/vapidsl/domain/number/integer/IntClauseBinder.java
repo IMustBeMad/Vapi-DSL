@@ -7,7 +7,7 @@ public abstract class IntClauseBinder extends IntConditionBinder {
     }
 
     @Override
-    protected IntConditionBinder or() {
+    public IntConditionBinder or() {
         return (IntConditionBinder) super.or();
     }
 }
