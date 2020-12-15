@@ -19,17 +19,6 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
-  <distributionManagement>
-    <repository>
-      <id>nexus</id>
-      <url>http://dev3:8081/nexus/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>nexus</id>
-      <url>http://dev3:8081/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
