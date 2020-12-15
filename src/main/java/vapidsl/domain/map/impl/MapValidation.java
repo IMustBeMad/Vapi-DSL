@@ -4,18 +4,18 @@ import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.BaseDataHolder;
-import vapidsl.domain.map.AbstractMapClause;
+import vapidsl.domain.Binder;
+import vapidsl.domain.map.MapClauseBinder;
 
 import java.util.List;
 import java.util.Map;
 
-public class MapValidation<K, V> extends AbstractMapClause<K, V, MapValidation<K, V>> {
+public class MapValidation<K, V> extends MapClauseBinder<K, V, MapValidation<K, V>> {
 
     public MapValidation(Map<K, V> map, MatchMode matchMode, PurposeMode purposeMode) {
         super(MapValidation.class);
         this.obj = map;
-        this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
+        this.modeManager = new Binder.ModeManager(matchMode, purposeMode);
     }
 
     @Override

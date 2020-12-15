@@ -5,7 +5,8 @@ import vapidsl.common.ValidationError;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 
 public class ValidationException extends RuntimeException {
 

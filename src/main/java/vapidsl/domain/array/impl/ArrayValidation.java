@@ -3,18 +3,18 @@ package vapidsl.domain.array.impl;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.array.AbstractArrayClause;
+import vapidsl.domain.array.ArrayClauseBinder;
 import vapidsl.common.ValidationError;
-import vapidsl.domain.BaseDataHolder;
+import vapidsl.domain.Binder;
 
 import java.util.List;
 
-public class ArrayValidation<T> extends AbstractArrayClause<T, ArrayValidation<T>> {
+public class ArrayValidation<T> extends ArrayClauseBinder<T, ArrayValidation<T>> {
 
     public ArrayValidation(T[] array, MatchMode matchMode, PurposeMode purposeMode) {
         super(ArrayValidation.class);
         this.obj = array;
-        this.modeManager = new BaseDataHolder.ModeManager(matchMode, purposeMode);
+        this.modeManager = new Binder.ModeManager(matchMode, purposeMode);
     }
 
     @Override

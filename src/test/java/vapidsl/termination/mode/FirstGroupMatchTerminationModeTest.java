@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import vapidsl.Validation;
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
-import vapidsl.common.ValidationError;
 
 import java.util.List;
 

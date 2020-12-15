@@ -4,12 +4,12 @@ import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.number.bigdecimal.AbstractBigDecimalClause;
+import vapidsl.domain.number.bigdecimal.BigDecimalClauseBinder;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class BigDecimalValidation extends AbstractBigDecimalClause {
+public class BigDecimalValidation extends BigDecimalClauseBinder {
 
     public BigDecimalValidation(BigDecimal value, MatchMode matchMode, PurposeMode purposeMode) {
         super(BigDecimalValidation.class);

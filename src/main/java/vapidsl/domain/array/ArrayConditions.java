@@ -10,7 +10,7 @@ public class ArrayConditions {
         return new SingleCondition<>(array -> Arrays.asList(array).contains(element));
     }
 
-    public static <T> SingleCondition<T[]> ofSize(int size) {
+    public static <T> SingleCondition<T[]> hasSize(int size) {
         return new SingleCondition<>(array -> array.length == size);
     }
 
@@ -20,5 +20,13 @@ public class ArrayConditions {
 
     public static <T> SingleCondition<T[]> isNotEmpty() {
         return new SingleCondition<>(array -> array.length > 0);
+    }
+
+    public static <T> SingleCondition<T[]> isEqualTo(T[] otherArray) {
+        return new SingleCondition<>(array -> Arrays.equals(array, otherArray));
+    }
+
+    public static <T> SingleCondition<T[]> isNotEqualTo(T[] otherArray) {
+        return new SingleCondition<>(array -> !Arrays.equals(array, otherArray));
     }
 }

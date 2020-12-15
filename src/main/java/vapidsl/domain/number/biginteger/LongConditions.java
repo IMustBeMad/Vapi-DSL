@@ -1,7 +1,9 @@
 package vapidsl.domain.number.biginteger;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
+@UtilityClass
 public class LongConditions {
 
     public static SingleCondition<Long> isEqualTo(Long otherLong) {

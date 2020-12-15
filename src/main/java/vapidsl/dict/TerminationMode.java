@@ -1,6 +1,7 @@
 package vapidsl.dict;
 
 import vapidsl.common.ConditionCluster;
+import vapidsl.domain.ConditionBinder;
 
 /**
  * The {@code TerminationMode} enum represents a mode
@@ -26,8 +27,8 @@ public enum TerminationMode {
      * Allows to fail the validation when none of the groups ({@link ConditionCluster}) have all the conditions matched.
      * First encountered errors/group errors will be gathered and returned.
      * <p>
-     * {@see AbstractBaseValidation#onError(String)}
-     * {@see AbstractBaseValidation#groupError(String)}
+     * {@link ConditionBinder#onError(String)}
+     * {@link ConditionBinder#groupError(String)}
      */
     NONE_GROUP_MATCH,
 
@@ -35,8 +36,8 @@ public enum TerminationMode {
      * Allows to fail the validation on first matched condition group ({@link ConditionCluster}).
      * All condition errors or a group error will be returned.
      * <p>
-     * {@see AbstractBaseValidation#onError(String)}
-     * {@see AbstractBaseValidation#groupError(String)}
+     * {@link ConditionBinder#onError(String)}
+     * {@link ConditionBinder#groupError(String)}
      */
     LAZY_GROUP_MATCH
 }

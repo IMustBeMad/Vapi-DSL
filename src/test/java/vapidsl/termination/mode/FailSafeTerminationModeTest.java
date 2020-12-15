@@ -4,12 +4,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import vapidsl.Validation;
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
+import vapidsl.domain.date.localdate.LocalDateConditions;
 import vapidsl.domain.list.ListConditions;
-import vapidsl.common.ValidationError;
 import vapidsl.exception.ValidationException;
-import vapidsl.domain.date.DateConditions;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,8 +30,8 @@ public class FailSafeTerminationModeTest {
         String allOfClauseError = "incorrect.all.of";
 
         List<ValidationError> messages = Validation.succeedIf(testList, MatchMode.EAGER)
-                                                   .ofSize(4).onError(sizeError)
-                                                   .satisfiesAll(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
+                                                   .hasSize(4).onError(sizeError)
+                                                   .satisfiesEvery(ListConditions.hasNoDuplicates(), ListConditions.isEmpty()).onError(allOfClauseError)
                                                    .inspecting(it -> it.get(0), it -> it.matches("test.*"))
                                                    .examine(ErrorMode.RETURN);
 
@@ -49,7 +49,7 @@ public class FailSafeTerminationModeTest {
         assertThatThrownBy(() -> Validation.succeedIf(date, MatchMode.EAGER)
                                            .isBefore(now().plusDays(10))
                                            .isEqualTo(now().minusDays(3)).onError(errorEqual)
-                                           .satisfiesAny(DateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
+                                           .satisfiesAny(LocalDateConditions.isAfter(now().plusDays(1)), isEqualTo(now())).onError(anyOfErrorClause)
                                            .groupError(groupError)
                                            .examine())
                 .isInstanceOf(ValidationException.class)

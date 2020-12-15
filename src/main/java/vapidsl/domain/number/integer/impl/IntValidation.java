@@ -1,14 +1,14 @@
 package vapidsl.domain.number.integer.impl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.number.integer.AbstractIntClause;
-import vapidsl.common.ValidationError;
+import vapidsl.domain.number.integer.IntClauseBinder;
 
 import java.util.List;
 
-public class IntValidation extends AbstractIntClause {
+public class IntValidation extends IntClauseBinder {
 
     public IntValidation(Integer value, MatchMode matchMode, PurposeMode purposeMode) {
         super(IntValidation.class);

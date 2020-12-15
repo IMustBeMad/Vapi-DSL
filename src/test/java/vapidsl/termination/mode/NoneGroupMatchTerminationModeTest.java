@@ -32,7 +32,7 @@ public class NoneGroupMatchTerminationModeTest {
                   .or()
                   .inspecting(it -> it.get(0), ObjectConditions::isNull).onError("is.not.null")
                   .or()
-                  .ofSize(2).onError("incorrect.size")
+                  .hasSize(2).onError("incorrect.size")
                   .examine();
     }
 }

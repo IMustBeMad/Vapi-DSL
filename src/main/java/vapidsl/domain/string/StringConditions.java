@@ -1,7 +1,9 @@
 package vapidsl.domain.string;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
+@UtilityClass
 public class StringConditions {
 
     public static SingleCondition<String> matches(String pattern) {
@@ -36,7 +38,7 @@ public class StringConditions {
         return new SingleCondition<>(it -> it.startsWith(prefix));
     }
 
-    public static SingleCondition<String> ofLength(int length) {
+    public static SingleCondition<String> hasLength(int length) {
         return new SingleCondition<>(it -> it.length() == length);
     }
 }

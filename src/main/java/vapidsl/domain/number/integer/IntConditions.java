@@ -1,7 +1,9 @@
 package vapidsl.domain.number.integer;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
+@UtilityClass
 public class IntConditions {
 
     public static SingleCondition<Integer> isEqualTo(Integer otherInt) {

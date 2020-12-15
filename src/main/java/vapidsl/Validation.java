@@ -2,25 +2,25 @@ package vapidsl;
 
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
-import vapidsl.domain.array.AbstractArrayCondition;
+import vapidsl.domain.array.ArrayConditionBinder;
 import vapidsl.domain.array.impl.ArrayValidation;
-import vapidsl.domain.bool.AbstractBoolCondition;
+import vapidsl.domain.bool.BoolConditionBinder;
 import vapidsl.domain.bool.impl.BoolValidation;
-import vapidsl.domain.date.AbstractDateCondition;
-import vapidsl.domain.date.impl.DateValidation;
-import vapidsl.domain.list.AbstractListCondition;
+import vapidsl.domain.date.localdate.LocalDateConditionBinder;
+import vapidsl.domain.date.localdate.impl.LocalDateValidation;
+import vapidsl.domain.list.ListConditionBinder;
 import vapidsl.domain.list.impl.ListValidation;
-import vapidsl.domain.map.AbstractMapCondition;
+import vapidsl.domain.map.MapConditionBinder;
 import vapidsl.domain.map.impl.MapValidation;
-import vapidsl.domain.number.bigdecimal.AbstractBigDecimalCondition;
+import vapidsl.domain.number.bigdecimal.BigDecimalConditionBinder;
 import vapidsl.domain.number.bigdecimal.impl.BigDecimalValidation;
-import vapidsl.domain.number.biginteger.AbstractLongCondition;
+import vapidsl.domain.number.biginteger.LongConditionBinder;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
-import vapidsl.domain.number.integer.AbstractIntCondition;
+import vapidsl.domain.number.integer.IntConditionBinder;
 import vapidsl.domain.number.integer.impl.IntValidation;
-import vapidsl.domain.object.AbstractObjectCondition;
+import vapidsl.domain.object.ObjectConditionBinder;
 import vapidsl.domain.object.impl.ObjectValidation;
-import vapidsl.domain.string.AbstractStringCondition;
+import vapidsl.domain.string.StringConditionBinder;
 import vapidsl.domain.string.impl.StringValidation;
 
 import java.math.BigDecimal;
@@ -30,123 +30,123 @@ import java.util.Map;
 
 public class Validation {
 
-    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> failIf(T obj) {
+    public static <T> ObjectConditionBinder<T, ObjectValidation<T>> failIf(T obj) {
         return new ObjectValidation<>(obj, null, PurposeMode.FAIL);
     }
 
-    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> succeedIf(T obj) {
+    public static <T> ObjectConditionBinder<T, ObjectValidation<T>> succeedIf(T obj) {
         return new ObjectValidation<>(obj, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T> AbstractObjectCondition<T, ObjectValidation<T>> succeedIf(T obj, MatchMode matchMode) {
+    public static <T> ObjectConditionBinder<T, ObjectValidation<T>> succeedIf(T obj, MatchMode matchMode) {
         return new ObjectValidation<>(obj, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractStringCondition failIf(String value) {
+    public static StringConditionBinder failIf(String value) {
         return new StringValidation(value, null, PurposeMode.FAIL);
     }
 
-    public static AbstractStringCondition succeedIf(String value) {
+    public static StringConditionBinder succeedIf(String value) {
         return new StringValidation(value, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractStringCondition succeedIf(String value, MatchMode matchMode) {
+    public static StringConditionBinder succeedIf(String value, MatchMode matchMode) {
         return new StringValidation(value, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractIntCondition failIf(Integer integer) {
+    public static IntConditionBinder failIf(Integer integer) {
         return new IntValidation(integer, null, PurposeMode.FAIL);
     }
 
-    public static AbstractIntCondition succeedIf(Integer integer) {
+    public static IntConditionBinder succeedIf(Integer integer) {
         return new IntValidation(integer, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractIntCondition succeedIf(Integer integer, MatchMode matchMode) {
+    public static IntConditionBinder succeedIf(Integer integer, MatchMode matchMode) {
         return new IntValidation(integer, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractLongCondition failIf(Long aLong) {
+    public static LongConditionBinder failIf(Long aLong) {
         return new LongValidation(aLong, null, PurposeMode.FAIL);
     }
 
-    public static AbstractLongCondition succeedIf(Long aLong) {
+    public static LongConditionBinder succeedIf(Long aLong) {
         return new LongValidation(aLong, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractLongCondition succeedIf(Long aLong, MatchMode matchMode) {
+    public static LongConditionBinder succeedIf(Long aLong, MatchMode matchMode) {
         return new LongValidation(aLong, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractBigDecimalCondition failIf(BigDecimal bigDecimal) {
+    public static BigDecimalConditionBinder failIf(BigDecimal bigDecimal) {
         return new BigDecimalValidation(bigDecimal, null, PurposeMode.FAIL);
     }
 
-    public static AbstractBigDecimalCondition succeedIf(BigDecimal bigDecimal) {
+    public static BigDecimalConditionBinder succeedIf(BigDecimal bigDecimal) {
         return new BigDecimalValidation(bigDecimal, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractBigDecimalCondition succeedIf(BigDecimal bigDecimal, MatchMode matchMode) {
+    public static BigDecimalConditionBinder succeedIf(BigDecimal bigDecimal, MatchMode matchMode) {
         return new BigDecimalValidation(bigDecimal, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractBoolCondition failIf(Boolean bool) {
+    public static BoolConditionBinder failIf(Boolean bool) {
         return new BoolValidation(bool, null, PurposeMode.FAIL);
     }
 
-    public static AbstractBoolCondition succeedIf(Boolean bool) {
+    public static BoolConditionBinder succeedIf(Boolean bool) {
         return new BoolValidation(bool, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractBoolCondition succeedIf(Boolean bool, MatchMode matchMode) {
+    public static BoolConditionBinder succeedIf(Boolean bool, MatchMode matchMode) {
         return new BoolValidation(bool, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static AbstractDateCondition failIf(LocalDate date) {
-        return new DateValidation(date, null, PurposeMode.FAIL);
+    public static LocalDateConditionBinder failIf(LocalDate date) {
+        return new LocalDateValidation(date, null, PurposeMode.FAIL);
     }
 
-    public static AbstractDateCondition succeedIf(LocalDate date) {
-        return new DateValidation(date, MatchMode.LAZY, PurposeMode.SUCCESS);
+    public static LocalDateConditionBinder succeedIf(LocalDate date) {
+        return new LocalDateValidation(date, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static AbstractDateCondition succeedIf(LocalDate date, MatchMode matchMode) {
-        return new DateValidation(date, matchMode, PurposeMode.SUCCESS);
+    public static LocalDateConditionBinder succeedIf(LocalDate date, MatchMode matchMode) {
+        return new LocalDateValidation(date, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <T> AbstractListCondition<T, ListValidation<T>> failIf(List<T> list) {
+    public static <T> ListConditionBinder<T, ListValidation<T>> failIf(List<T> list) {
         return new ListValidation<>(list, null, PurposeMode.FAIL);
     }
 
-    public static <T> AbstractListCondition<T, ListValidation<T>> succeedIf(List<T> list) {
+    public static <T> ListConditionBinder<T, ListValidation<T>> succeedIf(List<T> list) {
         return new ListValidation<>(list, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T> AbstractListCondition<T, ListValidation<T>> succeedIf(List<T> list, MatchMode matchMode) {
+    public static <T> ListConditionBinder<T, ListValidation<T>> succeedIf(List<T> list, MatchMode matchMode) {
         return new ListValidation<>(list, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> failIf(Map<K, V> map) {
+    public static <K, V> MapConditionBinder<K, V, MapValidation<K, V>> failIf(Map<K, V> map) {
         return new MapValidation<>(map, null, PurposeMode.FAIL);
     }
 
-    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map) {
+    public static <K, V> MapConditionBinder<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map) {
         return new MapValidation<>(map, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <K, V> AbstractMapCondition<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map, MatchMode matchMode) {
+    public static <K, V> MapConditionBinder<K, V, MapValidation<K, V>> succeedIf(Map<K, V> map, MatchMode matchMode) {
         return new MapValidation<>(map, matchMode, PurposeMode.SUCCESS);
     }
 
-    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> failIf(T[] array) {
+    public static <T> ArrayConditionBinder<T, ArrayValidation<T>> failIf(T[] array) {
         return new ArrayValidation<>(array, null, PurposeMode.FAIL);
     }
 
-    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> succeedIf(T[] array) {
+    public static <T> ArrayConditionBinder<T, ArrayValidation<T>> succeedIf(T[] array) {
         return new ArrayValidation<>(array, MatchMode.LAZY, PurposeMode.SUCCESS);
     }
 
-    public static <T> AbstractArrayCondition<T, ArrayValidation<T>> succeedIf(T[] array, MatchMode matchMode) {
+    public static <T> ArrayConditionBinder<T, ArrayValidation<T>> succeedIf(T[] array, MatchMode matchMode) {
         return new ArrayValidation<>(array, matchMode, PurposeMode.SUCCESS);
     }
 }

@@ -1,9 +1,11 @@
 package vapidsl.domain.number.bigdecimal;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
 import java.math.BigDecimal;
 
+@UtilityClass
 public class BigDecimalConditions {
 
     public static SingleCondition<BigDecimal> isEqualTo(BigDecimal otherBigDecimal) {
