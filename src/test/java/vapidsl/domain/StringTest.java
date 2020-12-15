@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import vapidsl.Validation;
-import vapidsl.dict.MatchMode;
 import vapidsl.ValidatorTest;
+import vapidsl.dict.MatchMode;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({StringTest.SucceedIfTest.class, StringTest.FailedIfTest.class})

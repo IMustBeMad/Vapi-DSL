@@ -1,10 +1,10 @@
 package vapidsl.domain.number.integer.impl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.domain.number.integer.IntClauseBinder;
-import vapidsl.common.ValidationError;
 
 import java.util.List;
 

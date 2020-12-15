@@ -1,10 +1,10 @@
 package vapidsl.domain.object.impl;
 
+import vapidsl.common.ValidationError;
 import vapidsl.dict.ErrorMode;
 import vapidsl.dict.MatchMode;
 import vapidsl.dict.PurposeMode;
 import vapidsl.domain.object.ObjectClauseBinder;
-import vapidsl.common.ValidationError;
 
 import java.util.List;
 
