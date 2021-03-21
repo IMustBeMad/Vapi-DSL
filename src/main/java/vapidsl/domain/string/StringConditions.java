@@ -10,11 +10,11 @@ public class StringConditions {
         return new SingleCondition<>(it -> it.matches(pattern));
     }
 
-    public static SingleCondition<String> equals(String otherString) {
+    public static SingleCondition<String> isEqual(String otherString) {
         return new SingleCondition<>(it -> it.equals(otherString));
     }
 
-    public static SingleCondition<String> notEquals(String otherString) {
+    public static SingleCondition<String> isNotEqual(String otherString) {
         return new SingleCondition<>(it -> !it.equals(otherString));
     }
 
