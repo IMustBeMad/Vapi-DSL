@@ -30,6 +30,8 @@ import java.util.Map;
 
 public class Validation {
 
+    private Validation() {}
+
     public static <T> ObjectConditionBinder<T, ObjectValidation<T>> failIf(T obj) {
         return new ObjectValidation<>(obj, null, PurposeMode.FAIL);
     }
