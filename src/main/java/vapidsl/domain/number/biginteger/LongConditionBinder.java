@@ -4,6 +4,7 @@ import vapidsl.common.SingleCondition;
 import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.biginteger.impl.LongValidation;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -68,7 +69,7 @@ public abstract class LongConditionBinder extends ConditionBinder<Long, LongVali
     }
 
     @Override
-    public LongValidation withTerm(Supplier<Boolean> supplier) {
+    public LongValidation withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

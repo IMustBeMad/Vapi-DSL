@@ -11,6 +11,7 @@ import vapidsl.domain.object.ObjectConditions;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -53,8 +54,8 @@ public abstract class ConditionBinder<T, SELF extends ConditionBinder<T, SELF>> 
         return self;
     }
 
-    protected SELF withTerm(Supplier<Boolean> supplier) {
-        this.registrar.registerCondition(new SingleCondition<>(it -> supplier.get()));
+    protected SELF withTerm(BooleanSupplier supplier) {
+        this.registrar.registerCondition(new SingleCondition<>(it -> supplier.getAsBoolean()));
 
         return self;
     }

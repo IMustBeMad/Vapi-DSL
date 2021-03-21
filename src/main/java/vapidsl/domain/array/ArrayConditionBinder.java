@@ -8,6 +8,7 @@ import vapidsl.domain.ConditionBinder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -91,7 +92,7 @@ public abstract class ArrayConditionBinder<T, SELF extends ArrayConditionBinder<
     }
 
     @Override
-    public SELF withTerm(Supplier<Boolean> supplier) {
+    public SELF withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

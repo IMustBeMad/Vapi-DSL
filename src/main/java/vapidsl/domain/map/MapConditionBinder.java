@@ -79,7 +79,7 @@ public abstract class MapConditionBinder<K, V, SELF extends MapConditionBinder<K
     }
 
     @Override
-    public SELF withTerm(Supplier<Boolean> supplier) {
+    public SELF withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

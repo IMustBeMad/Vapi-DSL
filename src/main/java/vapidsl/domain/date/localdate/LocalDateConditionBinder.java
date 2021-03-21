@@ -5,6 +5,7 @@ import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.date.localdate.impl.LocalDateValidation;
 
 import java.time.LocalDate;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -65,7 +66,7 @@ public abstract class LocalDateConditionBinder extends ConditionBinder<LocalDate
     }
 
     @Override
-    public LocalDateValidation withTerm(Supplier<Boolean> supplier) {
+    public LocalDateValidation withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 
