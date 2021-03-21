@@ -1,9 +1,11 @@
 package vapidsl.domain.array;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
 import java.util.Arrays;
 
+@UtilityClass
 public class ArrayConditions {
 
     public static <T> SingleCondition<T[]> contains(T element) {

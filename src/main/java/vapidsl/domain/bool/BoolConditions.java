@@ -1,7 +1,9 @@
 package vapidsl.domain.bool;
 
+import lombok.experimental.UtilityClass;
 import vapidsl.common.SingleCondition;
 
+@UtilityClass
 public class BoolConditions {
 
     public static SingleCondition<Boolean> isTrue() {
