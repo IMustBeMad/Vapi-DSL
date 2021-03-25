@@ -24,14 +24,16 @@ public List<ValidationError> testTheGeneral(String name, String rank) {
 ```
 
 ```java
-List<String> clones = List.of("CT-1509", "CT-2504", "CT-2110");
+public void executeOrder66() {
+    List<String> clones = List.of("CT-1509", "CT-2504", "CT-2110");
 
-Validation.failIf(clones)
-          .contains("Anakin Skywalker").onError("you.were.the.chosen.one")
-          .or()
-          .hasNoDuplicates()
-          .every(() -> StringConditions.startsWith("CT"))
-          .satisfiesAny(ListConditions.isEmpty(), ListConditions.isEqualTo(List.of("Boba Fett")))
-          .groupError("hello.there")
-          .examine(ErrorMode.THROW);
+    Validation.failIf(clones)
+              .contains("Anakin Skywalker").onError("you.were.the.chosen.one")
+              .or()
+              .hasNoDuplicates()
+              .every(() -> StringConditions.startsWith("CT"))
+              .satisfiesAny(ListConditions.isEmpty(), ListConditions.isEqualTo(List.of("Boba Fett")))
+              .groupError("hello.there")
+              .examine(ErrorMode.THROW);
+}
 ```
