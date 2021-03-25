@@ -5,6 +5,6 @@ Fluent business validation DSL
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=IMustBeMad_Vapi-DSL&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=IMustBeMad_Vapi-DSL)
 
 ## In a nutshell
-* Expressive and self-documented logic
-* Unified business layer validation style
-* Encouraged single responsibility for each validated entity
+* Provides expressive and self-documented logic
+* Unifies business layer validation style
+* Encourages single responsibility for each validated entity
