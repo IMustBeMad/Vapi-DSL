@@ -5,6 +5,7 @@ import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.bigdecimal.impl.BigDecimalValidation;
 
 import java.math.BigDecimal;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -69,7 +70,7 @@ public abstract class BigDecimalConditionBinder extends ConditionBinder<BigDecim
     }
 
     @Override
-    public BigDecimalValidation withTerm(Supplier<Boolean> supplier) {
+    public BigDecimalValidation withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

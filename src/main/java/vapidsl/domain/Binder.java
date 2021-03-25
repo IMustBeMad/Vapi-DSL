@@ -35,7 +35,7 @@ public abstract class Binder<T, SELF extends Binder<T, SELF>> {
     private @Getter(AccessLevel.PACKAGE) Condition<T> currentCondition;
     private @Getter(AccessLevel.PACKAGE) ValidationResult result;
 
-    private List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
+    private final List<ConditionCluster<T>> conditionClusters = new ArrayList<>(Collections.singletonList(this.currentCluster));
 
     @SuppressWarnings("unchecked")
     Binder(Class<?> selfType) {

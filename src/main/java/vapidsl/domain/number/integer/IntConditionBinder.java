@@ -4,6 +4,7 @@ import vapidsl.common.SingleCondition;
 import vapidsl.domain.ConditionBinder;
 import vapidsl.domain.number.integer.impl.IntValidation;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -64,7 +65,7 @@ public abstract class IntConditionBinder extends ConditionBinder<Integer, IntVal
     }
 
     @Override
-    public IntValidation withTerm(Supplier<Boolean> supplier) {
+    public IntValidation withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

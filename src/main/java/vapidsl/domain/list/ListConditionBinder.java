@@ -7,6 +7,7 @@ import vapidsl.dict.Clause;
 import vapidsl.domain.ConditionBinder;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -96,7 +97,7 @@ public abstract class ListConditionBinder<T, SELF extends ListConditionBinder<T,
     }
 
     @Override
-    public SELF withTerm(Supplier<Boolean> supplier) {
+    public SELF withTerm(BooleanSupplier supplier) {
         return super.withTerm(supplier);
     }
 

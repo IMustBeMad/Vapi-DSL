@@ -41,4 +41,8 @@ public class StringConditions {
     public static SingleCondition<String> hasLength(int length) {
         return new SingleCondition<>(it -> it.length() == length);
     }
+
+    public static SingleCondition<String> contains(String text) {
+        return new SingleCondition<>(it -> it.contains(text));
+    }
 }
