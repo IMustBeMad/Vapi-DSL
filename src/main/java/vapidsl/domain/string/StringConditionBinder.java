@@ -45,6 +45,12 @@ public abstract class StringConditionBinder extends ConditionBinder<String, Stri
         return self;
     }
 
+    public StringValidation contains(String text) {
+        this.registrar.registerCondition(StringConditions.contains(text));
+
+        return self;
+    }
+
     @Override
     public StringValidation isNull() {
         return super.isNull();
