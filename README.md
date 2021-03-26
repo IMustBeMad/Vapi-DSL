@@ -14,13 +14,13 @@ Fluent business validation DSL
 
 ```java
 public List<ValidationError> testTheGeneral(String name, String rank) {
-    Validation.succeedIf("General Kenobi")
-              .isEqualTo(String.format("%s %s", name, rank)).onError("do.not.try.it")
-              .or()
-              .startsWith(rank)
-              .contains(name)
-              .groupError("fine.addition.to.my.collection")
-              .examine();
+    return Validation.succeedIf("General Kenobi")
+                      .isEqualTo(String.format("%s %s", name, rank)).onError("do.not.try.it")
+                      .or()
+                      .startsWith(rank)
+                      .contains(name)
+                      .groupError("fine.addition.to.my.collection")
+                      .examine();
 }
 ```
 
